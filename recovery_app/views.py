@@ -5,6 +5,8 @@ from .models import Review, ServiceRequest
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.db import models
+from django.utils.html import strip_tags
+from django.views.decorators.http import require_http_methods
 
 def home(request):
     reviews = Review.objects.filter(is_approved=True)[:6]
@@ -27,42 +29,43 @@ def services(request):
     }
     return render(request, 'service_page.html', context)
 
+@require_http_methods(["GET", "POST"])
 def contact(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         phone = request.POST.get('phone')
-        email = request.POST.get('email', '')
+        email = request.POST.get('email')
+        car_brand = request.POST.get('car_brand')
         message = request.POST.get('message')
 
-        # Создаем заявку
         service_request = ServiceRequest.objects.create(
             name=name,
             phone=phone,
             email=email,
+            car_brand=car_brand,
             message=message
         )
 
-        # Отправляем email администратору
+        # Отправка уведомления на email
         subject = 'Новая заявка на эвакуацию'
         html_message = render_to_string('email/service_request.html', {
             'service_request': service_request
         })
-        
-        try:
-            send_mail(
-                subject=subject,
-                message='',
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[settings.EMAIL_HOST_USER],
-                html_message=html_message,
-                fail_silently=False,
-            )
-            messages.success(request, 'Ваша заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.')
-        except Exception as e:
-            messages.error(request, 'Произошла ошибка при отправке заявки. Пожалуйста, попробуйте позже.')
-            print(f"Email error: {e}")
+        plain_message = strip_tags(html_message)
+        from_email = settings.DEFAULT_FROM_EMAIL
+        to_email = settings.ADMIN_EMAIL
 
-        return redirect('contact')
+        send_mail(
+            subject,
+            plain_message,
+            from_email,
+            [to_email],
+            html_message=html_message,
+            fail_silently=False,
+        )
+
+        messages.success(request, 'Ваша заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.')
+        return redirect('recovery_app:contact')
 
     context = {
         'whatsapp_number': settings.WHATSAPP_NUMBER,

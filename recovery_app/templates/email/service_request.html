@@ -30,6 +30,9 @@
             font-weight: bold;
             color: #4b5563;
         }
+        .value {
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -40,25 +43,31 @@
         <div class="content">
             <div class="field">
                 <span class="label">Имя:</span>
-                <span>{{ service_request.name }}</span>
+                <span class="value">{{ service_request.name }}</span>
             </div>
             <div class="field">
                 <span class="label">Телефон:</span>
-                <span>{{ service_request.phone }}</span>
+                <span class="value">{{ service_request.phone }}</span>
             </div>
             {% if service_request.email %}
             <div class="field">
                 <span class="label">Email:</span>
-                <span>{{ service_request.email }}</span>
+                <span class="value">{{ service_request.email }}</span>
+            </div>
+            {% endif %}
+            {% if service_request.car_brand %}
+            <div class="field">
+                <span class="label">Марка автомобиля:</span>
+                <span class="value">{{ service_request.car_brand }}</span>
             </div>
             {% endif %}
             <div class="field">
                 <span class="label">Сообщение:</span>
-                <p>{{ service_request.message }}</p>
+                <p class="value">{{ service_request.message }}</p>
             </div>
             <div class="field">
                 <span class="label">Дата создания:</span>
-                <span>{{ service_request.created_at|date:"d.m.Y H:i" }}</span>
+                <span class="value">{{ service_request.created_at|date:"d.m.Y H:i" }}</span>
             </div>
         </div>
     </div>

@@ -29,23 +29,25 @@ class ServiceRequest(models.Model):
         ('cancelled', _('Отменена')),
     ]
 
-    name = models.CharField(_('Имя'), max_length=100)
-    phone = models.CharField(_('Телефон'), max_length=20)
-    email = models.EmailField(_('Email'), blank=True)
-    message = models.TextField(_('Сообщение'))
+    name = models.CharField(max_length=100, verbose_name='Имя')
+    phone = models.CharField(max_length=20, verbose_name='Телефон')
+    email = models.EmailField(blank=True, null=True, verbose_name='Email')
+    car_brand = models.CharField(max_length=100, verbose_name='Марка автомобиля', blank=True, null=True)
+    message = models.TextField(verbose_name='Сообщение')
     status = models.CharField(
         _('Статус'),
         max_length=20,
         choices=STATUS_CHOICES,
         default='new'
     )
-    created_at = models.DateTimeField(_('Дата создания'), auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     updated_at = models.DateTimeField(_('Дата обновления'), auto_now=True)
+    is_processed = models.BooleanField(default=False, verbose_name='Обработано')
 
     class Meta:
-        verbose_name = _('Заявка на эвакуацию')
-        verbose_name_plural = _('Заявки на эвакуацию')
+        verbose_name = 'Заявка на услугу'
+        verbose_name_plural = 'Заявки на услуги'
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.name} - {self.get_status_display()}"
+        return f'Заявка от {self.name} ({self.created_at.strftime("%d.%m.%Y %H:%M")})'

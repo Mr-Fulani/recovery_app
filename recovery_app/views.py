@@ -1,20 +1,35 @@
+# recovery_app/views.py
+"""
+Views for the recovery_app application.
+
+Handles rendering of the homepage with Wagtail HomePage, services, reviews, and contact form with email notifications.
+"""
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.conf import settings
-from .models import Review, ServiceRequest
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.db import models
 from django.utils.html import strip_tags
 from django.views.decorators.http import require_http_methods
+from wagtail.models import Page
+from .models import Review, ServiceRequest
+
 
 def home(request):
+    """
+    Render the homepage using Wagtail's HomePage model and display reviews and statistics.
+    """
+    from recovery_app.models import HomePage
+    # Получите конкретную HomePage, а не базовую Page
+    page = HomePage.objects.live().first()
     reviews = Review.objects.filter(is_approved=True)[:6]
     average_rating = Review.objects.filter(is_approved=True).aggregate(
         avg_rating=models.Avg('rating')
     )['avg_rating'] or 4.8
-    
+
     context = {
+        'page': page,
         'reviews': reviews,
         'average_rating': round(average_rating, 1),
         'total_reviews': Review.objects.filter(is_approved=True).count(),
@@ -23,14 +38,22 @@ def home(request):
     }
     return render(request, 'home_page.html', context)
 
+
 def services(request):
+    """
+    Render the services page.
+    """
     context = {
         'whatsapp_number': settings.WHATSAPP_NUMBER,
     }
     return render(request, 'service_page.html', context)
 
+
 @require_http_methods(["GET", "POST"])
 def contact(request):
+    """
+    Handle the contact form submission, save service request, and send email notification.
+    """
     if request.method == 'POST':
         name = request.POST.get('name')
         phone = request.POST.get('phone')
@@ -72,7 +95,11 @@ def contact(request):
     }
     return render(request, 'contact_page.html', context)
 
+
 def reviews(request):
+    """
+    Handle review submission and render the reviews page with approved reviews.
+    """
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email', '')
@@ -88,7 +115,7 @@ def reviews(request):
         )
 
         messages.success(request, 'Спасибо за ваш отзыв! Он будет опубликован после проверки.')
-        return redirect('reviews')
+        return redirect('recovery_app:reviews')
 
     reviews = Review.objects.filter(is_approved=True)
     context = {

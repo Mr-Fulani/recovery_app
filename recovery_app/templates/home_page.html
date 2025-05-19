@@ -2,13 +2,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block title %}Главная - Эвакуатор{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/main.css' %}">
+<link rel="stylesheet" href="{% static 'recovery_app/css/main.css' %}">
 <style>
-    /* Стили для видео */
+    /*
+     * Styles for the video container and video element.
+     */
     .video-container {
         max-width: 100%;
         overflow: hidden;
@@ -27,10 +28,10 @@
 <section class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-24 mb-12">
     <div class="absolute inset-0 bg-black opacity-30"></div>
     <div class="container mx-auto px-4 text-center relative z-10">
-        <h1 class="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">Круглосуточная эвакуация автомобилей</h1>
+        <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">Круглосуточная эвакуация автомобилей</h1>
         <p class="text-xl md:text-2xl mb-8 animate-fade-in" style="animation-delay: 0.2s;">Быстрая и надежная помощь на дороге 24/7</p>
-        <a href="{% url 'recovery_app:contact' %}" 
-           class="inline-block bg-white text-blue-600 px-10 py-4 rounded-full font-bold text-lg btn-hover-effect animate-fade-in" 
+        <a href="{% url 'recovery_app:contact' %}"
+           class="inline-block bg-white text-blue-600 px-10 py-4 rounded-full font-bold text-lg btn-hover-effect animate-fade-in"
            style="animation-delay: 0.4s;">
             Заказать эвакуатор
         </a>
@@ -40,15 +41,14 @@
 <!-- Video Section -->
 <section class="container mx-auto px-4 mb-12 animate-on-scroll">
     <div class="video-container bg-white shadow-md">
+        {% if page.video %}
         <video autoplay muted loop playsinline class="w-full h-auto">
-            <source src="{% static 'videos/evacuator.mp4' %}" type="video/mp4">
+            <source src="{{ page.video.url }}" type="video/mp4">
             Ваш браузер не поддерживает видео.
         </video>
-        <div class="flex justify-center mt-4">
-            <button id="play-pause" class="bg-blue-600 text-white px-6 py-2 rounded-lg btn-hover-effect">
-                Пауза
-            </button>
-        </div>
+        {% else %}
+        <p class="text-center text-gray-600 py-8">Видео не загружено. Пожалуйста, добавьте видео в админ-панели.</p>
+        {% endif %}
     </div>
 </section>
 
@@ -152,7 +152,7 @@
             <textarea id="message" name="message" rows="4" required
                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input"></textarea>
         </div>
-        <button type="submit" 
+        <button type="submit"
                 class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold btn-hover-effect">
             Отправить заявку
         </button>
@@ -161,24 +161,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/main.js' %}"></script>
-<script>
-    // Управление воспроизведением видео
-    document.addEventListener('DOMContentLoaded', function() {
-        const video = document.querySelector('video');
-        const playPauseBtn = document.getElementById('play-pause');
-
-        if (video && playPauseBtn) {
-            playPauseBtn.addEventListener('click', function() {
-                if (video.paused) {
-                    video.play();
-                    playPauseBtn.textContent = 'Пауза';
-                } else {
-                    video.pause();
-                    playPauseBtn.textContent = 'Воспроизвести';
-                }
-            });
-        }
-    });
-</script>
+<script src="{% static 'recovery_app/js/main.js' %}"></script>
 {% endblock %}

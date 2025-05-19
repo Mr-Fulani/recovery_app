@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #2563eb;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9fafb;
+        }
+        .field {
+            margin-bottom: 15px;
+        }
+        .label {
+            font-weight: bold;
+            color: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Новая заявка на эвакуацию</h1>
+        </div>
+        <div class="content">
+            <div class="field">
+                <span class="label">Имя:</span>
+                <span>{{ service_request.name }}</span>
+            </div>
+            <div class="field">
+                <span class="label">Телефон:</span>
+                <span>{{ service_request.phone }}</span>
+            </div>
+            {% if service_request.email %}
+            <div class="field">
+                <span class="label">Email:</span>
+                <span>{{ service_request.email }}</span>
+            </div>
+            {% endif %}
+            <div class="field">
+                <span class="label">Сообщение:</span>
+                <p>{{ service_request.message }}</p>
+            </div>
+            <div class="field">
+                <span class="label">Дата создания:</span>
+                <span>{{ service_request.created_at|date:"d.m.Y H:i" }}</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Услуги - Эвакуатор{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold text-center mb-12">Наши услуги</h1>
+
+    <!-- Эвакуация легковых авто -->
+    <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+        <div class="flex items-center mb-6">
+            <i class="fas fa-truck text-4xl text-blue-600 mr-4"></i>
+            <h2 class="text-2xl font-bold">Эвакуация легковых авто</h2>
+        </div>
+        <p class="text-gray-600 mb-4">
+            Предоставляем услуги эвакуации легковых автомобилей любой марки и модели. 
+            Наши эвакуаторы оснащены современным оборудованием для бережной погрузки и транспортировки.
+        </p>
+        <ul class="list-disc list-inside text-gray-600 mb-4">
+            <li>Круглосуточная работа</li>
+            <li>Быстрый выезд на место</li>
+            <li>Бережная погрузка</li>
+            <li>Страхование груза</li>
+        </ul>
+        <a href="{% url 'contact' %}" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+            Заказать эвакуацию
+        </a>
+    </div>
+
+    <!-- Техническая помощь -->
+    <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+        <div class="flex items-center mb-6">
+            <i class="fas fa-car text-4xl text-blue-600 mr-4"></i>
+            <h2 class="text-2xl font-bold">Техническая помощь</h2>
+        </div>
+        <p class="text-gray-600 mb-4">
+            Оказываем техническую помощь на дороге в любое время суток. 
+            Наши специалисты помогут решить большинство проблем прямо на месте.
+        </p>
+        <ul class="list-disc list-inside text-gray-600 mb-4">
+            <li>Запуск двигателя</li>
+            <li>Замена колеса</li>
+            <li>Доливка технических жидкостей</li>
+            <li>Несложный ремонт</li>
+        </ul>
+        <a href="{% url 'contact' %}" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+            Вызвать помощь
+        </a>
+    </div>
+
+    <!-- Доставка топлива -->
+    <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+        <div class="flex items-center mb-6">
+            <i class="fas fa-gas-pump text-4xl text-blue-600 mr-4"></i>
+            <h2 class="text-2xl font-bold">Доставка топлива</h2>
+        </div>
+        <p class="text-gray-600 mb-4">
+            Срочная доставка топлива на место поломки. 
+            Доставляем бензин и дизельное топливо в канистрах.
+        </p>
+        <ul class="list-disc list-inside text-gray-600 mb-4">
+            <li>Быстрая доставка</li>
+            <li>Качественное топливо</li>
+            <li>Удобная оплата</li>
+            <li>Работаем 24/7</li>
+        </ul>
+        <a href="{% url 'contact' %}" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+            Заказать топливо
+        </a>
+    </div>
+
+    <!-- Зона обслуживания -->
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <div class="flex items-center mb-6">
+            <i class="fas fa-map-marker-alt text-4xl text-blue-600 mr-4"></i>
+            <h2 class="text-2xl font-bold">Зона обслуживания</h2>
+        </div>
+        <p class="text-gray-600 mb-4">
+            Обслуживаем все районы города и пригорода. 
+            Среднее время прибытия - 30 минут.
+        </p>
+        <div class="aspect-w-16 aspect-h-9 mb-4">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.3716531103516!2d37.618423!3d55.7558!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTXCsDQ1JzIwLjkiTiAzN8KwMzcnMDYuMyJF!5e0!3m2!1sru!2sru!4v1234567890"
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </div>
+    </div>
+</div>
+{% endblock %} 

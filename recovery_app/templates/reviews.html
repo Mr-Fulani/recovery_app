@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Отзывы - Эвакуатор{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <h1 class="text-4xl font-bold text-center mb-12">Отзывы наших клиентов</h1>
+
+    <!-- Статистика -->
+    <div class="bg-white rounded-lg shadow-md p-8 mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+                <div class="text-4xl font-bold text-blue-600 mb-2">{{ average_rating|default:"4.8" }}</div>
+                <p class="text-gray-600">Средний рейтинг</p>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-blue-600 mb-2">{{ total_reviews|default:"127" }}</div>
+                <p class="text-gray-600">Отзывов клиентов</p>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-blue-600 mb-2">{{ total_services|default:"5000+" }}</div>
+                <p class="text-gray-600">Выполненных эвакуаций</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Форма добавления отзыва -->
+    <div class="bg-white rounded-lg shadow-md p-8 mb-12">
+        <h2 class="text-2xl font-bold mb-6">Оставить отзыв</h2>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="name" class="block text-gray-700 mb-2">Ваше имя</label>
+                <input type="text" id="name" name="name" required
+                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+                <label for="email" class="block text-gray-700 mb-2">Email (необязательно)</label>
+                <input type="email" id="email" name="email"
+                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+                <label class="block text-gray-700 mb-2">Оценка</label>
+                <div class="flex space-x-2">
+                    {% for i in "12345"|make_list %}
+                    <label class="cursor-pointer">
+                        <input type="radio" name="rating" value="{{ i }}" required class="hidden">
+                        <i class="far fa-star text-2xl text-yellow-400 hover:text-yellow-500"></i>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div>
+                <label for="text" class="block text-gray-700 mb-2">Ваш отзыв</label>
+                <textarea id="text" name="text" rows="4" required
+                          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+            </div>
+            <button type="submit" 
+                    class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors">
+                Отправить отзыв
+            </button>
+        </form>
+    </div>
+
+    <!-- Список отзывов -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for review in reviews %}
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center mb-4">
+                <div class="text-yellow-400">
+                    {% for i in "12345"|make_list %}
+                        {% if forloop.counter <= review.rating %}
+                            <i class="fas fa-star"></i>
+                        {% else %}
+                            <i class="far fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <p class="text-gray-600 mb-4">{{ review.text }}</p>
+            <div class="font-bold">{{ review.name }}</div>
+            <div class="text-sm text-gray-500">{{ review.created_at|date:"d.m.Y" }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ratingInputs = document.querySelectorAll('input[name="rating"]');
+    const starIcons = document.querySelectorAll('.fa-star');
+
+    ratingInputs.forEach((input, index) => {
+        input.addEventListener('change', function() {
+            starIcons.forEach((star, starIndex) => {
+                if (starIndex <= index) {
+                    star.classList.remove('far');
+                    star.classList.add('fas');
+                } else {
+                    star.classList.remove('fas');
+                    star.classList.add('far');
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %} 

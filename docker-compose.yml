@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   web:
@@ -28,9 +27,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=recovery_db
-      - POSTGRES_USER=recovery_user
-      - POSTGRES_PASSWORD=recovery_password
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - .env
 
 volumes:
   postgres_data: 

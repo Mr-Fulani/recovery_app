@@ -15,12 +15,12 @@
     <header class="bg-white shadow-md">
         <nav class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
-                <a href="{% url 'home' %}" class="text-2xl font-bold text-blue-600">Эвакуатор</a>
+                <a href="{% url 'recovery_app:home' %}" class="text-2xl font-bold text-blue-600">Эвакуатор</a>
                 <div class="hidden md:flex space-x-6">
-                    <a href="{% url 'home' %}" class="text-gray-600 hover:text-blue-600">Главная</a>
-                    <a href="{% url 'services' %}" class="text-gray-600 hover:text-blue-600">Услуги</a>
-                    <a href="{% url 'reviews' %}" class="text-gray-600 hover:text-blue-600">Отзывы</a>
-                    <a href="{% url 'contact' %}" class="text-gray-600 hover:text-blue-600">Контакты</a>
+                    <a href="{% url 'recovery_app:home' %}" class="text-gray-600 hover:text-blue-600">Главная</a>
+                    <a href="{% url 'recovery_app:services' %}" class="text-gray-600 hover:text-blue-600">Услуги</a>
+                    <a href="{% url 'recovery_app:reviews' %}" class="text-gray-600 hover:text-blue-600">Отзывы</a>
+                    <a href="{% url 'recovery_app:contact' %}" class="text-gray-600 hover:text-blue-600">Контакты</a>
                 </div>
                 <div class="md:hidden">
                     <button class="text-gray-600 hover:text-blue-600">
@@ -56,10 +56,10 @@
                 <div>
                     <h3 class="text-xl font-bold mb-4">Быстрые ссылки</h3>
                     <ul class="space-y-2">
-                        <li><a href="{% url 'home' %}" class="hover:text-blue-400">Главная</a></li>
-                        <li><a href="{% url 'services' %}" class="hover:text-blue-400">Услуги</a></li>
-                        <li><a href="{% url 'reviews' %}" class="hover:text-blue-400">Отзывы</a></li>
-                        <li><a href="{% url 'contact' %}" class="hover:text-blue-400">Контакты</a></li>
+                        <li><a href="{% url 'recovery_app:home' %}" class="hover:text-blue-400">Главная</a></li>
+                        <li><a href="{% url 'recovery_app:services' %}" class="hover:text-blue-400">Услуги</a></li>
+                        <li><a href="{% url 'recovery_app:reviews' %}" class="hover:text-blue-400">Отзывы</a></li>
+                        <li><a href="{% url 'recovery_app:contact' %}" class="hover:text-blue-400">Контакты</a></li>
                     </ul>
                 </div>
                 <div>

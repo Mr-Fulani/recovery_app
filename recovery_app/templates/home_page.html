@@ -16,12 +16,15 @@
         height: auto;
         object-fit: cover;
     }
+    .hero-section {
+        height: 75vh; /* Уменьшенная высота (было 100vh через h-screen) */
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
-<section class="relative w-full h-screen overflow-hidden">
+<section class="relative w-full hero-section overflow-hidden">
     {% if page.video %}
     <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover">
         <source src="{{ page.video.url }}" type="video/mp4">
@@ -38,7 +41,7 @@
             <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in hero-text-shadow">Круглосуточная эвакуация автомобилей</h1>
             <p class="text-xl md:text-2xl mb-8 animate-fade-in hero-text-shadow" style="animation-delay: 0.2s;">Быстрая и надежная помощь на дороге 24/7</p>
         </div>
-        $^{        <div class="pb-8">
+        <div class="pb-8">
             <a href="{% url 'recovery_app:contact' %}"
                class="hero-button inline-block bg-white text-blue-600 px-10 py-4 rounded-full font-bold text-lg btn-hover-effect animate-fade-in"
                style="animation-delay: 0.4s;">

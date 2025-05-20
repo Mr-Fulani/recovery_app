@@ -115,4 +115,46 @@
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-} 
+}
+
+/* Тень для текста на видео */
+.hero-text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Стили для кнопки в герой-секции */
+.hero-button {
+    display: inline-block !important;
+    width: auto !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
+}
+.hero-button:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Видео стили */
+video {
+    object-fit: cover;
+}
+
+/* Стили для логотипа */
+.logo-img {
+    object-fit: contain;
+    transition: transform 0.2s ease-out;
+}
+.logo-img:hover {
+    transform: scale(1.05);
+}
+
+/* Стили для ссылок навигации */
+.nav-link {
+    display: inline-block;
+    transition: transform 0.2s ease-out, color 0.2s ease-out;
+    transform-origin: center;
+}
+.nav-link:hover {
+    transform: scale(1.05);
+    color: #e5e7eb;
+}

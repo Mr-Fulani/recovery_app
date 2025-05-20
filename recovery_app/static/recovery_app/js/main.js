@@ -42,10 +42,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 </button>
             </div>
             <nav class="space-y-4">
-                <a href="/" class="block text-gray-600 hover:text-blue-600">Главная</a>
-                <a href="/services/" class="block text-gray-600 hover:text-blue-600">Услуги</a>
-                <a href="/reviews/" class="block text-gray-600 hover:text-blue-600">Отзывы</a>
-                <a href="/contact/" class="block text-gray-600 hover:text-blue-600">Контакты</a>
+                <a href="/" class="nav-link block text-gray-600 hover:text-blue-600">Главная</a>
+                <a href="/services/" class="nav-link block text-gray-600 hover:text-blue-600">Услуги</a>
+                <a href="/reviews/" class="nav-link block text-gray-600 hover:text-blue-600">Отзывы</a>
+                <a href="/contact/" class="nav-link block text-gray-600 hover:text-blue-600">Контакты</a>
             </nav>
         </div>
     `;
@@ -101,4 +101,4 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.animate-on-scroll').forEach(element => {
         observer.observe(element);
     });
-}); 
+});

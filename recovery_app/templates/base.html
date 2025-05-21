@@ -16,7 +16,7 @@
 <body class="flex flex-col min-h-screen">
 
 
-    <header class="bg-gray-700 text-white py-4">
+    <header class="bg-gray-700 text-white py-4 relative z-50"> {# Добавил relative и z-50 к header #}
         <div class="container mx-auto px-4">
             <nav class="flex justify-between items-center">
                 <a href="/" class="flex items-center">
@@ -30,10 +30,20 @@
                 </div>
 
                 <div class="md:hidden">
-                    <button class="text-white focus:outline-none">
+                    <button id="mobile-menu-button" class="text-white focus:outline-none">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
+            </nav>
+        </div>
+
+        {# Мобильное выпадающее меню (скрыто по умолчанию) #}
+        <div id="mobile-menu" class="mobile-menu hidden md:hidden bg-gray-700 py-4">
+            <nav class="flex flex-col space-y-4 px-4 text-center">
+                <a href="/" class="nav-link-mobile text-white text-lg block py-2">Главная</a>
+                <a href="/services/" class="nav-link-mobile text-white text-lg block py-2">Услуги</a>
+                <a href="/reviews/" class="nav-link-mobile text-white text-lg block py-2">Отзывы</a>
+                <a href="/contact/" class="nav-link-mobile text-white text-lg block py-2">Контакты</a>
             </nav>
         </div>
     </header>

@@ -265,6 +265,41 @@ video {
     .work-photo-grid::-webkit-scrollbar-track {
         background-color: rgba(0, 0, 0, 0.05);
     }
+    /* Стили для выпадающего мобильного меню */
+    header { /* Убедитесь, что header имеет position: relative или position: sticky */
+        position: relative; /* Важно для позиционирования мобильного меню */
+        z-index: 50; /* Убедимся, что шапка находится поверх всего */
+    }
+
+    .mobile-menu {
+        transform: translateY(-100%); /* Начальное положение для анимации выезда сверху (скрыто) */
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Анимация */
+        opacity: 0;
+        position: absolute; /* Позиционируем меню относительно родителя (header) */
+        top: 100%; /* Начинается прямо под шапкой */
+        left: 0;
+        width: 100%;
+        z-index: 40; /* Чуть ниже основного заголовка, но выше контента */
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Небольшая тень для меню */
+    }
+
+    /* Класс, который JS будет добавлять для показа меню */
+    .mobile-menu.active {
+        transform: translateY(0); /* Конечная позиция - полностью видно */
+        opacity: 1;
+    }
+
+    /* Стили для ссылок внутри мобильного меню */
+    .nav-link-mobile {
+        padding: 0.75rem 1rem; /* Отступы для удобного нажатия */
+        display: block; /* Каждая ссылка на новой строке */
+        text-align: center; /* Центрируем текст */
+        transition: background-color 0.2s ease-out;
+    }
+
+    .nav-link-mobile:hover {
+        background-color: rgba(255, 255, 255, 0.1); /* Легкий фон при наведении */
+    }
 }
 
 

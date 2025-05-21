@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'recovery_app/css/main.css' %}">
+{% endblock %}
 
 {% block title %}Услуги - Эвакуатор{% endblock %}
 
@@ -91,4 +96,8 @@
         </div>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'recovery_app/js/main.js' %}"></script>
+{% endblock %}

@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 
 {% block title %}Отзывы - Эвакуатор{% endblock %}
 
@@ -22,6 +24,28 @@
                 <p class="text-gray-600">Выполненных эвакуаций</p>
             </div>
         </div>
+    </div>
+
+    <!-- Список отзывов -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for review in reviews %}
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center mb-4">
+                <div class="text-yellow-400">
+                    {% for i in "12345"|make_list %}
+                        {% if forloop.counter <= review.rating %}
+                            <i class="fas fa-star"></i>
+                        {% else %}
+                            <i class="far fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <p class="text-gray-600 mb-4">{{ review.text }}</p>
+            <div class="font-bold">{{ review.name }}</div>
+            <div class="text-sm text-gray-500">{{ review.created_at|date:"d.m.Y" }}</div>
+        </div>
+        {% endfor %}
     </div>
 
     <!-- Форма добавления отзыва -->
@@ -62,49 +86,29 @@
         </form>
     </div>
 
-    <!-- Список отзывов -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {% for review in reviews %}
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex items-center mb-4">
-                <div class="text-yellow-400">
-                    {% for i in "12345"|make_list %}
-                        {% if forloop.counter <= review.rating %}
-                            <i class="fas fa-star"></i>
-                        {% else %}
-                            <i class="far fa-star"></i>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-            <p class="text-gray-600 mb-4">{{ review.text }}</p>
-            <div class="font-bold">{{ review.name }}</div>
-            <div class="text-sm text-gray-500">{{ review.created_at|date:"d.m.Y" }}</div>
-        </div>
-        {% endfor %}
-    </div>
 </div>
+{% endblock %}
 
 {% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const ratingInputs = document.querySelectorAll('input[name="rating"]');
-    const starIcons = document.querySelectorAll('.fa-star');
+    <script src="{% static 'recovery_app/js/main.js' %}"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ratingInputs = document.querySelectorAll('input[name="rating"]');
+        const starIcons = document.querySelectorAll('.fa-star');
 
-    ratingInputs.forEach((input, index) => {
-        input.addEventListener('change', function() {
-            starIcons.forEach((star, starIndex) => {
-                if (starIndex <= index) {
-                    star.classList.remove('far');
-                    star.classList.add('fas');
-                } else {
-                    star.classList.remove('fas');
-                    star.classList.add('far');
-                }
+        ratingInputs.forEach((input, index) => {
+            input.addEventListener('change', function() {
+                starIcons.forEach((star, starIndex) => {
+                    if (starIndex <= index) {
+                        star.classList.remove('far');
+                        star.classList.add('fas');
+                    } else {
+                        star.classList.remove('fas');
+                        star.classList.add('far');
+                    }
+                });
             });
         });
     });
-});
-</script>
+    </script>
 {% endblock %}
-{% endblock %} 

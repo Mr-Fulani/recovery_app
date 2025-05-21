@@ -29,45 +29,57 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Мобильное меню
-    const menuButton = document.querySelector('.md\\:hidden button');
-    const mobileMenu = document.createElement('div');
-    mobileMenu.className = 'hidden fixed inset-0 bg-gray-800 bg-opacity-50 z-50';
-    mobileMenu.innerHTML = `
-        <div class="bg-white w-64 h-full p-4">
-            <div class="flex justify-between items-center mb-4">
-                <span class="text-xl font-bold text-blue-600">Меню</span>
-                <button class="text-gray-600 hover:text-blue-600">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
-            </div>
-            <nav class="space-y-4">
-                <a href="/" class="nav-link block text-gray-600 hover:text-blue-600">Главная</a>
-                <a href="/services/" class="nav-link block text-gray-600 hover:text-blue-600">Услуги</a>
-                <a href="/reviews/" class="nav-link block text-gray-600 hover:text-blue-600">Отзывы</a>
-                <a href="/contact/" class="nav-link block text-gray-600 hover:text-blue-600">Контакты</a>
-            </nav>
-        </div>
-    `;
+    // --- МОБИЛЬНОЕ МЕНЮ (НОВАЯ логика) ---
+    const mobileMenuButton = document.getElementById('mobile-menu-button'); // Получаем кнопку по ID
+    const mobileMenu = document.getElementById('mobile-menu');             // Получаем контейнер меню по ID
 
-    if (menuButton) {
-        document.body.appendChild(mobileMenu);
-        const closeButton = mobileMenu.querySelector('button');
-        const menuContent = mobileMenu.querySelector('div');
+    if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function() {
+            // Переключаем класс 'active' для анимации выезда/скрытия
+            mobileMenu.classList.toggle('active');
 
-        menuButton.addEventListener('click', function() {
-            mobileMenu.classList.remove('hidden');
-            menuContent.classList.add('animate-slide-in');
-        });
-
-        closeButton.addEventListener('click', function() {
-            mobileMenu.classList.add('hidden');
-        });
-
-        mobileMenu.addEventListener('click', function(e) {
-            if (e.target === mobileMenu) {
-                mobileMenu.classList.add('hidden');
+            // Переключаем класс 'hidden' TailwindCSS для фактического скрытия/показа
+            // Это важно, так как Tailwind's `hidden` имеет `display: none !important;`
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+            } else {
+                // Добавляем hidden с небольшой задержкой, чтобы анимация успела завершиться
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300); // Время должно совпадать с transition в CSS (0.3s)
             }
+
+            // Изменить иконку бургера на крестик
+            const burgerIcon = mobileMenuButton.querySelector('i'); // Ищем тег <i> (Font Awesome)
+            if (burgerIcon) {
+                if (mobileMenu.classList.contains('active')) {
+                    burgerIcon.classList.remove('fa-bars'); // Убрать иконку бургера
+                    burgerIcon.classList.add('fa-times');   // Добавить иконку крестика
+                } else {
+                    burgerIcon.classList.remove('fa-times'); // Убрать иконку крестика
+                    burgerIcon.classList.add('fa-bars');    // Добавить иконку бургера
+                }
+            }
+        });
+
+        // Закрывать меню при клике на ссылку (опционально)
+        const mobileLinks = mobileMenu.querySelectorAll('.nav-link-mobile');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                    // С небольшой задержкой скрываем, чтобы анимация завершилась
+                    setTimeout(() => {
+                        mobileMenu.classList.add('hidden');
+                    }, 300);
+                    // Возвращаем иконку бургера
+                    const burgerIcon = mobileMenuButton.querySelector('i');
+                    if (burgerIcon) {
+                        burgerIcon.classList.remove('fa-times');
+                        burgerIcon.classList.add('fa-bars');
+                    }
+                }
+            });
         });
     }
 

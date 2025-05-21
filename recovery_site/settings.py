@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'wagtail.admin',
     'wagtail',
     'wagtailmedia',
+    'wagtail.contrib.modeladmin',
 
     # Third party apps for Wagtail
     'taggit',

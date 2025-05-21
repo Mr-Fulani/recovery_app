@@ -93,6 +93,13 @@ document.addEventListener('DOMContentLoaded', function() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate-fade-in');
+                // Анимация для карточек фотографий
+                const photoCards = entry.target.querySelectorAll('.work-photo-card');
+                photoCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animate-fade-in');
+                    }, index * 100); // Задержка для последовательной анимации
+                });
                 observer.unobserve(entry.target);
             }
         });

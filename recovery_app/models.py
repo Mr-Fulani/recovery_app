@@ -85,3 +85,38 @@ class ServiceRequest(models.Model):
 
     def __str__(self):
         return f'Заявка от {self.name} ({self.created_at.strftime("%d.%m.%Y %H:%M")})'
+
+
+
+
+class WorkPhoto(models.Model):
+    """
+    A model to store photos of completed work with title, description, and image.
+    """
+    title = models.CharField(max_length=100, verbose_name='Заголовок')
+    description = models.TextField(blank=True, verbose_name='Описание')
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        verbose_name='Изображение'
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
+
+    panels = [
+        FieldPanel('title'),
+        FieldPanel('description'),
+        FieldPanel('image'),
+        FieldPanel('is_published'),
+    ]
+
+    class Meta:
+        verbose_name = 'Фотография работы'
+        verbose_name_plural = 'Фотографии работ'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title

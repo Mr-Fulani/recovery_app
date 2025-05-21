@@ -13,17 +13,16 @@ from django.db import models
 from django.utils.html import strip_tags
 from django.views.decorators.http import require_http_methods
 from wagtail.models import Page
-from .models import Review, ServiceRequest
+from .models import Review, ServiceRequest, WorkPhoto, HomePage
 
 
 def home(request):
     """
-    Render the homepage using Wagtail's HomePage model and display reviews and statistics.
+    Render the homepage using Wagtail's HomePage model and display reviews, statistics, and work photos.
     """
-    from recovery_app.models import HomePage
-    # Получите конкретную HomePage, а не базовую Page
     page = HomePage.objects.live().first()
     reviews = Review.objects.filter(is_approved=True)[:6]
+    work_photos = WorkPhoto.objects.filter(is_published=True)[:6]  # Ограничение до 6 фото
     average_rating = Review.objects.filter(is_approved=True).aggregate(
         avg_rating=models.Avg('rating')
     )['avg_rating'] or 4.8
@@ -31,9 +30,10 @@ def home(request):
     context = {
         'page': page,
         'reviews': reviews,
+        'work_photos': work_photos,
         'average_rating': round(average_rating, 1),
         'total_reviews': Review.objects.filter(is_approved=True).count(),
-        'total_services': 5000,  # Это значение можно сделать динамическим
+        'total_services': 5000,
         'whatsapp_number': settings.WHATSAPP_NUMBER,
     }
     return render(request, 'home_page.html', context)

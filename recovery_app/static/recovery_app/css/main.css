@@ -158,3 +158,127 @@ video {
     transform: scale(1.05);
     color: #e5e7eb;
 }
+
+
+
+
+/* --- Work Photos Section Styles --- */
+/* The parent section containing the grid */
+.container.mx-auto.px-4.mb-12.animate-on-scroll {
+    /* ОГРАНИЧИВАЕМ ОБЩУЮ ШИРИНУ РАЗДЕЛА */
+    max-width: 1100px; /* ИЗМЕНИТЕ ЭТО ЗНАЧЕНИЕ: например, с 900px на 1100px */
+    margin-left: auto; /* Центрируем раздел */
+    margin-right: auto; /* Центрируем раздел */
+    padding-left: 0; /* Убираем стандартный отступ px-4, если он мешает */
+    padding-right: 0; /* Убираем стандартный отступ px-4, если он мешает */
+}
+
+/* Здесь остаются правила nth-child для каждого изображения, чтобы сохранить ваш макет
+   Они были в предыдущем ответе и, как вы сказали, работают для заполнения. */
+
+/* Image 1 (large SUV, top left - forloop.counter0 == 0) */
+.work-photo-card:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+/* Image 2 (red car on flatbed, top right next to SUV - forloop.counter0 == 1) */
+.work-photo-card:nth-child(2) {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+/* Image 3 (white van on flatbed, below red car - forloop.counter0 == 2) */
+.work-photo-card:nth-child(3) {
+    grid-column: span 2;
+    grid-row: span 1;
+}
+
+/* Image 4 (black van, below large SUV - forloop.counter0 == 3) */
+.work-photo-card:nth-child(4) {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+/* Image 5 (classic car, next to black van - forloop.counter0 == 4) */
+.work-photo-card:nth-child(5) {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+/* Image 6 (car in yard, next to classic car, fills remaining space - forloop.counter0 == 5) */
+.work-photo-card:nth-child(6) {
+    grid-column: span 2; /* It looks like it spans 2 columns in the screenshot to fill the remaining space */
+    grid-row: span 1;
+}
+
+/* Hover effects (без изменений) */
+.work-photo-card:hover img {
+    transform: scale(1.03);
+}
+.work-photo-card:hover .absolute {
+    background-color: rgba(0, 0, 0, 0.6);
+    opacity: 1;
+}
+
+/* --- МОБИЛЬНЫЕ НАСТРОЙКИ: СЛАЙДЕР --- */
+@media (max-width: 767px) {
+    .work-photo-grid {
+        display: flex; /* Переключаем на flexbox для горизонтальной прокрутки */
+        overflow-x: auto; /* Включаем горизонтальную прокрутку */
+        scroll-snap-type: x mandatory; /* Плавная привязка при прокрутке */
+        gap: 1rem; /* Добавляем небольшой отступ между картинками в слайдере */
+        padding: 0 1rem; /* Отступы по бокам для видимости следующей картинки */
+        border-radius: 0; /* Убираем скругление у контейнера, если хотим, чтобы карточки выезжали без скругления по краям */
+        box-shadow: none; /* Убираем тень контейнера на мобильных, если она не нужна для слайдера */
+        background-color: transparent; /* Убираем фон контейнера, если он не нужен для слайдера */
+
+        /* Важно: сбрасываем грид-свойства, чтобы они не конфликтовали с flexbox */
+        grid-template-columns: unset;
+        grid-auto-rows: unset;
+        min-height: unset; /* Убираем любые жесткие ограничения высоты */
+    }
+
+    .work-photo-card {
+        flex: 0 0 85%; /* Каждая карточка занимает 85% ширины экрана, оставляя немного для следующей */
+        scroll-snap-align: start; /* Привязка к началу карточки при прокрутке */
+        min-height: 200px; /* Устанавливаем минимальную высоту для карточек на мобильных */
+        max-width: 100%; /* Убедимся, что они не выходят за пределы */
+        border-radius: 8px; /* Добавляем скругление и тень к каждой карточке слайдера */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        /* Важно: сбрасываем грид-свойства, которые были для больших экранов */
+        grid-column: unset !important;
+        grid-row: unset !important;
+    }
+
+    /* Добавляем стили для полосы прокрутки (необязательно, для кастомизации) */
+    .work-photo-grid::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .work-photo-grid::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+    }
+
+    .work-photo-grid::-webkit-scrollbar-track {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+}
+
+
+
+.video-container {
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 0.5rem;
+}
+.video-container video {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.hero-section {
+    height: 75vh; /* Уменьшенная высота (было 100vh через h-screen) */
+}

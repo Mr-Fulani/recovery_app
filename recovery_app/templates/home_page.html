@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Главная - Эвакуатор{% endblock %}
+{% block title %}Home - Tow Truck{% endblock %}
+
+{% block meta_description %}
+<meta name="description" content="Contacts of the car towing service. 24/7 roadside assistance. Phone, address, working hours.">
+{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'recovery_app/css/main.css' %}">
-
 {% endblock %}
 
 {% block content %}
@@ -14,24 +17,24 @@
     {% if page.video %}
     <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover">
         <source src="{{ page.video.url }}" type="video/mp4">
-        Ваш браузер не поддерживает видео.
+        Your browser does not support video.
     </video>
     {% else %}
     <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-center">
-        <p class="text-white text-xl">Видео не загружено. Пожалуйста, добавьте видео в админ-панели.</p>
+        <p class="text-white text-xl">Video not uploaded. Please add a video in the admin panel.</p>
     </div>
     {% endif %}
     <div class="absolute inset-0 bg-black opacity-50"></div>
     <div class="relative z-10 container mx-auto px-4 h-full flex flex-col text-center text-white">
         <div class="flex-1 flex flex-col justify-center">
-            <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in hero-text-shadow">Круглосуточная эвакуация автомобилей</h1>
-            <p class="text-xl md:text-2xl mb-8 animate-fade-in hero-text-shadow" style="animation-delay: 0.2s;">Быстрая и надежная помощь на дороге 24/7</p>
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in hero-text-shadow">24/7 Car Towing</h1>
+            <p class="text-xl md:text-2xl mb-8 animate-fade-in hero-text-shadow" style="animation-delay: 0.2s;">Fast and reliable roadside assistance 24/7</p>
         </div>
         <div class="pb-8">
             <a href="{% url 'recovery_app:contact' %}"
                class="hero-button inline-block bg-white text-blue-600 px-10 py-4 rounded-full font-bold text-lg btn-hover-effect animate-fade-in"
                style="animation-delay: 0.4s;">
-                Заказать эвакуатор
+                Order a Tow Truck
             </a>
         </div>
     </div>
@@ -39,22 +42,22 @@
 
 <!-- Services Section -->
 <section class="container mx-auto px-4 mb-12 animate-on-scroll">
-    <h2 class="text-3xl font-bold text-center mb-8">Наши услуги</h2>
+    <h2 class="text-3xl font-bold text-center mb-8">Our Services</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div class="bg-white p-6 rounded-lg shadow-md card-hover">
             <i class="fas fa-truck text-4xl text-blue-600 mb-4"></i>
-            <h3 class="text-xl font-bold mb-2">Эвакуация легковых авто</h3>
-            <p class="text-gray-600">Быстрая и бережная транспортировка вашего автомобиля</p>
+            <h3 class="text-xl font-bold mb-2">Passenger Car Towing</h3>
+            <p class="text-gray-600">Fast and careful transportation of your vehicle</p>
         </div>
         <div class="bg-white p-6 rounded-lg shadow-md card-hover">
             <i class="fas fa-car text-4xl text-blue-600 mb-4"></i>
-            <h3 class="text-xl font-bold mb-2">Техническая помощь</h3>
-            <p class="text-gray-600">Запуск двигателя, замена колеса, доливка жидкостей</p>
+            <h3 class="text-xl font-bold mb-2">Technical Assistance</h3>
+            <p class="text-gray-600">Engine start, tire replacement, fluid top-up</p>
         </div>
         <div class="bg-white p-6 rounded-lg shadow-md card-hover">
             <i class="fas fa-tools text-4xl text-blue-600 mb-4"></i>
-            <h3 class="text-xl font-bold mb-2">Доставка топлива</h3>
-            <p class="text-gray-600">Срочная доставка топлива на место поломки</p>
+            <h3 class="text-xl font-bold mb-2">Fuel Delivery</h3>
+            <p class="text-gray-600">Urgent fuel delivery to the breakdown location</p>
         </div>
     </div>
 </section>
@@ -65,15 +68,15 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
                 <div class="text-4xl font-bold text-blue-600 mb-2">{{ average_rating|default:"4.8" }}</div>
-                <p class="text-gray-600">Средний рейтинг</p>
+                <p class="text-gray-600">Average Rating</p>
             </div>
             <div>
                 <div class="text-4xl font-bold text-blue-600 mb-2">{{ total_reviews|default:"127" }}</div>
-                <p class="text-gray-600">Отзывов клиентов</p>
+                <p class="text-gray-600">Customer Reviews</p>
             </div>
             <div>
                 <div class="text-4xl font-bold text-blue-600 mb-2">{{ total_services|default:"5000+" }}</div>
-                <p class="text-gray-600">Выполненных эвакуаций</p>
+                <p class="text-gray-600">Completed Towings</p>
             </div>
         </div>
     </div>
@@ -81,7 +84,7 @@
 
 <!-- Work Photos Section -->
 <section class="container mx-auto px-4 mb-12 animate-on-scroll">
-    <h2 class="text-3xl font-bold text-center mb-8">Наши выполненные работы</h2>
+    <h2 class="text-3xl font-bold text-center mb-8">Our Completed Work</h2>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 work-photo-grid auto-rows-min">
         {% load wagtailimages_tags %}
         {% for photo in work_photos %}
@@ -102,7 +105,7 @@
             </div>
             {% else %}
             <div class="w-full h-full bg-gray-200 flex items-center justify-center rounded-lg">
-                <p class="text-gray-500">Изображение отсутствует</p>
+                <p class="text-gray-500">Image not available</p>
             </div>
             {% endif %}
         </div>
@@ -112,7 +115,7 @@
 
 <!-- Reviews Section -->
 <section class="container mx-auto px-4 mb-12 animate-on-scroll">
-    <h2 class="text-3xl font-bold text-center mb-8">Отзывы наших клиентов</h2>
+    <h2 class="text-3xl font-bold text-center mb-8">Our Customer Reviews</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for review in reviews %}
         <div class="bg-white p-6 rounded-lg shadow-md card-hover">
@@ -134,22 +137,22 @@
         {% endfor %}
     </div>
     <div class="text-center mt-8">
-        <a href="{% url 'recovery_app:reviews' %}" class="text-blue-600 hover:text-blue-800">Все отзывы →</a>
+        <a href="{% url 'recovery_app:reviews' %}" class="text-blue-600 hover:text-blue-800">All Reviews →</a>
     </div>
 </section>
 
 <!-- Contact Form Section -->
 <section class="container mx-auto px-4 bg-white p-8 rounded-lg shadow-md animate-on-scroll">
-    <h2 class="text-3xl font-bold text-center mb-8">Заказать эвакуатор</h2>
+    <h2 class="text-3xl font-bold text-center mb-8">Order a Tow Truck</h2>
     <form method="post" action="{% url 'recovery_app:contact' %}" class="max-w-lg mx-auto">
         {% csrf_token %}
         <div class="mb-4">
-            <label for="name" class="block text-gray-700 mb-2">Ваше имя <span class="text-red-500">*</span></label>
+            <label for="name" class="block text-gray-700 mb-2">Your Name <span class="text-red-500">*</span></label>
             <input type="text" id="name" name="name" required
                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input">
         </div>
         <div class="mb-4">
-            <label for="phone" class="block text-gray-700 mb-2">Телефон <span class="text-red-500">*</span></label>
+            <label for="phone" class="block text-gray-700 mb-2">Phone <span class="text-red-500">*</span></label>
             <input type="tel" id="phone" name="phone" required
                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input">
         </div>
@@ -159,18 +162,18 @@
                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input">
         </div>
         <div class="mb-4">
-            <label for="car_brand" class="block text-gray-700 mb-2">Марка автомобиля</label>
-            <input type="text" id="car_brand" name="car_brand" placeholder="Например: Toyota Camry"
+            <label for="car_brand" class="block text-gray-700 mb-2">Car Brand</label>
+            <input type="text" id="car_brand面空车品牌" name="car_brand" placeholder="For example: Toyota Camry"
                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input">
         </div>
         <div class="mb-4">
-            <label for="message" class="block text-gray-700 mb-2">Сообщение <span class="text-red-500">*</span></label>
+            <label for="message" class="block text-gray-700 mb-2">Message <span class="text-red-500">*</span></label>
             <textarea id="message" name="message" rows="4" required
                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input"></textarea>
         </div>
         <button type="submit"
                 class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold btn-hover-effect">
-            Отправить заявку
+            Submit Request
         </button>
     </form>
 </section>

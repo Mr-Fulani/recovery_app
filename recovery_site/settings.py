@@ -68,6 +68,9 @@ INSTALLED_APPS = [
 
     # Local apps
     'recovery_app',
+
+    # 'recovery_app.sitemaps',  # Добавляем приложение для создания карты сайта
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [
@@ -184,8 +187,17 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY', '')
 
 # WhatsApp number
-WHATSAPP_NUMBER = os.getenv('WHATSAPP_NUMBER', '+79999999999')
+WHATSAPP_NUMBER = os.getenv('WHATSAPP_NUMBER', '+449999999999')
 
 # Wagtail settings
 WAGTAIL_SITE_NAME = 'Эвакуатор'
 WAGTAILADMIN_BASE_URL = 'http://localhost'
+
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake', # Уникальное имя для этого кэша
+    }
+}

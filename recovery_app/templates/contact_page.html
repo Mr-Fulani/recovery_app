@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Контакты - Эвакуатор{% endblock %}
+{% block title %}Contact - Tow Truck Service{% endblock %}
+
+{% block meta_description %}
+<meta name="description" content="Contact our 24/7 tow truck service. Emergency roadside assistance. Phone, address, working hours.">
+{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'recovery_app/css/main.css' %}">
@@ -9,17 +13,17 @@
 
 {% block content %}
 <div class="max-w-6xl mx-auto">
-    <h1 class="text-4xl font-bold text-center mb-12">Контакты</h1>
+    <h1 class="text-4xl font-bold text-center mb-12">Contact Us</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="bg-white rounded-lg shadow-md p-8 card-hover"> {# ДОБАВЛЕН card-hover #}
-            <h2 class="text-2xl font-bold mb-6">Свяжитесь с нами</h2>
+        <div class="bg-white rounded-lg shadow-md p-8 card-hover">
+            <h2 class="text-2xl font-bold mb-6">Get In Touch</h2>
 
             <div class="space-y-4">
                 <div class="flex items-center">
                     <i class="fas fa-phone text-blue-600 text-xl w-8"></i>
                     <div>
-                        <p class="font-bold">Телефон</p>
+                        <p class="font-bold">Phone</p>
                         <a href="tel:{{ whatsapp_number }}" class="text-gray-600 hover:text-blue-600">
                             {{ whatsapp_number }}
                         </a>
@@ -31,7 +35,7 @@
                     <div>
                         <p class="font-bold">WhatsApp</p>
                         <a href="https://wa.me/{{ whatsapp_number }}" class="text-gray-600 hover:text-green-600">
-                            Написать в WhatsApp
+                            Message on WhatsApp
                         </a>
                     </div>
                 </div>
@@ -40,8 +44,8 @@
                     <i class="fas fa-envelope text-red-600 text-xl w-8"></i>
                     <div>
                         <p class="font-bold">Email</p>
-                        <a href="mailto:support@evacuator.com" class="text-gray-600 hover:text-red-600">
-                            support@evacuator.com
+                        <a href="mailto:dinamix.recoverysolutions@mail.ru" class="text-gray-600 hover:text-red-600">
+                            support@dinamix.com
                         </a>
                     </div>
                 </div>
@@ -49,42 +53,42 @@
                 <div class="flex items-center">
                     <i class="fas fa-map-marker-alt text-purple-600 text-xl w-8"></i>
                     <div>
-                        <p class="font-bold">Адрес</p>
-                        <p class="text-gray-600">ул. Примерная, 123, Киев, Украина</p>
+                        <p class="font-bold">Address</p>
+                        <p class="text-gray-600">123 Main Street, London, UK</p>
                     </div>
                 </div>
 
-                <h3 class="text-xl font-bold mt-8 mb-4">Форма обратной связи</h3>
+                <h3 class="text-xl font-bold mt-8 mb-4">Contact Form</h3>
                 <form action="{% url 'recovery_app:contact' %}" method="post">
                     {% csrf_token %}
                     <div class="mb-4">
-                        <label for="name" class="block text-gray-700 mb-2">Ваше имя <span class="text-red-500">*</span></label>
+                        <label for="name" class="block text-gray-700 mb-2">Your Name <span class="text-red-500">*</span></label>
                         <input type="text" id="name" name="name" required
                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
                     </div>
                     <div class="mb-4">
-                        <label for="phone" class="block text-gray-700 mb-2">Телефон <span class="text-red-500">*</span></label>
+                        <label for="phone" class="block text-gray-700 mb-2">Phone <span class="text-red-500">*</span></label>
                         <input type="tel" id="phone" name="phone" required
                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
                     </div>
                     <div class="mb-4">
-                        <label for="message" class="block text-gray-700 mb-2">Сообщение <span class="text-red-500">*</span></label>
+                        <label for="message" class="block text-gray-700 mb-2">Message <span class="text-red-500">*</span></label>
                         <textarea id="message" name="message" rows="4" required
                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"></textarea>
                     </div>
                     <button type="submit"
-                            class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors btn-hover-effect"> {# ДОБАВЛЕН btn-hover-effect #}
-                        Отправить заявку
+                            class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors btn-hover-effect">
+                        Send Request
                     </button>
                 </form>
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-md p-8 card-hover"> {# ДОБАВЛЕН card-hover #}
-            <h2 class="text-2xl font-bold mb-6">Зона обслуживания</h2>
+        <div class="bg-white rounded-lg shadow-md p-8 card-hover">
+            <h2 class="text-2xl font-bold mb-6">Service Area</h2>
             <div class="aspect-w-16 aspect-h-9">
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1531.066453915878!2d30.56303254589254!3d50.45010629631627!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d4ce5e51080351%3A0x88c2270d4734f9a0!2z0YPQu9C40YbQsCDQpNCw0YHRgtGA0YPQvdGD0LrQuNC5INGD0L3QuNC60Lg!5e0!3m2!1sru!2sua!4v1714578167660!5m2!1sru!2sua"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.5439676736056!2d-0.12758908423157!3d51.50735097963526!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604b900d26973%3A0x4291f3172409ea92!2sLondon%20Eye!5e0!3m2!1sen!2suk!4v1714578167660!5m2!1sen!2suk"
                     width="100%"
                     height="450"
                     style="border:0;"
@@ -93,17 +97,21 @@
                 </iframe>
             </div>
             <div class="mt-6">
-                <h3 class="text-xl font-bold mb-2">Мы работаем по всему городу и пригороду:</h3>
+                <h3 class="text-xl font-bold mb-2">We serve the entire city and surrounding areas:</h3>
                 <ul class="list-disc list-inside text-gray-600">
-                    <li>Киев</li>
-                    <li>Борисполь</li>
-                    <li>Бровары</li>
-                    <li>Ирпень</li>
-                    <li>Буча</li>
-                    <li>Вышгород</li>
+                    <li>Central London</li>
+                    <li>West London</li>
+                    <li>East London</li>
+                    <li>North London</li>
+                    <li>South London</li>
+                    <li>Greater London Area</li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'recovery_app/js/main.js' %}"></script>
 {% endblock %}

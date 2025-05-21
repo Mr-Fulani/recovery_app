@@ -38,15 +38,15 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Новая заявка на эвакуацию</h1>
+            <h1>New Towing Request</h1>
         </div>
         <div class="content">
             <div class="field">
-                <span class="label">Имя:</span>
+                <span class="label">Name:</span>
                 <span class="value">{{ service_request.name }}</span>
             </div>
             <div class="field">
-                <span class="label">Телефон:</span>
+                <span class="label">Phone:</span>
                 <span class="value">{{ service_request.phone }}</span>
             </div>
             {% if service_request.email %}
@@ -57,19 +57,19 @@
             {% endif %}
             {% if service_request.car_brand %}
             <div class="field">
-                <span class="label">Марка автомобиля:</span>
+                <span class="label">Car Brand:</span>
                 <span class="value">{{ service_request.car_brand }}</span>
             </div>
             {% endif %}
             <div class="field">
-                <span class="label">Сообщение:</span>
+                <span class="label">Message:</span>
                 <p class="value">{{ service_request.message }}</p>
             </div>
             <div class="field">
-                <span class="label">Дата создания:</span>
+                <span class="label">Creation Date:</span>
                 <span class="value">{{ service_request.created_at|date:"d.m.Y H:i" }}</span>
             </div>
         </div>
     </div>
 </body>
-</html> 
+</html>

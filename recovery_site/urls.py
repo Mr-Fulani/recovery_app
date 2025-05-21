@@ -13,10 +13,31 @@ from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtail_admin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
+from django.contrib.sitemaps.views import sitemap # Импортируем sitemap view
+
+# Импортируем наши Sitemaps
+from recovery_app.sitemaps import StaticViewSitemap, HomePageSitemap
+# from recovery_app.sitemaps import ReviewSitemap # Если будете использовать
+
+from django.views.generic import TemplateView
+
+
+
+
+
+
+sitemaps = {
+    'static': StaticViewSitemap,
+    'wagtail_pages': HomePageSitemap,
+    # 'reviews': ReviewSitemap, # Если будете использовать
+}
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('wagtail/', include(wagtail_admin_urls)),
     path('documents/', include(wagtaildocs_urls)),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('', include('recovery_app.urls')),
     path('', include(wagtail_urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

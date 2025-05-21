@@ -14,8 +14,12 @@ from django.utils.html import strip_tags
 from django.views.decorators.http import require_http_methods
 from wagtail.models import Page
 from .models import Review, ServiceRequest, WorkPhoto, HomePage
+# Добавьте импорт для кэширования
+from django.views.decorators.cache import cache_page
 
 
+
+@cache_page(60 * 15)  # Кэшировать страницу на 15 минут (60 секунд * 15)
 def home(request):
     """
     Render the homepage using Wagtail's HomePage model and display reviews, statistics, and work photos.

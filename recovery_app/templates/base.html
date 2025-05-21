@@ -1,11 +1,16 @@
-{% load static %}
+{% load static wagtailcore_tags %}
 
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% if page.seo_title %}{{ page.seo_title }}{% else %}{% block title %}{% endblock %}{% endif %}</title>
+    {% if page.search_description %}
+    <meta name="description" content="{{ page.search_description }}">
+    {% else %}
+    {% block meta_description %}{% endblock %}
+    {% endif %}
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
@@ -16,17 +21,17 @@
 <body class="flex flex-col min-h-screen bg-gray-100">
 
 
-    <header class="bg-gray-700 text-white py-4 relative z-50"> {# Добавил relative и z-50 к header #}
+    <header class="bg-gray-700 text-white py-4 relative z-50">
         <div class="container mx-auto px-4">
             <nav class="flex justify-between items-center">
                 <a href="/" class="flex items-center">
-                    <img src="{% static 'recovery_app/images/logo.png' %}" alt="Логотип Эвакуатор" class="h-12 logo-img">
+                    <img src="{% static 'recovery_app/images/logo.png' %}" alt="Tow Truck Service Logo" class="h-12 logo-img">
                 </a>
                 <div class="hidden md:flex space-x-4">
-                    <a href="/" class="nav-link hover:text-gray-200">Главная</a>
-                    <a href="/services/" class="nav-link hover:text-gray-200">Услуги</a>
-                    <a href="/reviews/" class="nav-link hover:text-gray-200">Отзывы</a>
-                    <a href="/contact/" class="nav-link hover:text-gray-200">Контакты</a>
+                    <a href="/" class="nav-link hover:text-gray-200">Home</a>
+                    <a href="/services/" class="nav-link hover:text-gray-200">Services</a>
+                    <a href="/reviews/" class="nav-link hover:text-gray-200">Reviews</a>
+                    <a href="/contact/" class="nav-link hover:text-gray-200">Contact</a>
                 </div>
 
                 <div class="md:hidden">
@@ -37,13 +42,13 @@
             </nav>
         </div>
 
-        {# Мобильное выпадающее меню (скрыто по умолчанию) #}
+        {# Mobile dropdown menu (hidden by default) #}
         <div id="mobile-menu" class="mobile-menu hidden md:hidden bg-gray-700 py-4">
             <nav class="flex flex-col space-y-4 px-4 text-center">
-                <a href="/" class="nav-link-mobile text-white text-lg block py-2">Главная</a>
-                <a href="/services/" class="nav-link-mobile text-white text-lg block py-2">Услуги</a>
-                <a href="/reviews/" class="nav-link-mobile text-white text-lg block py-2">Отзывы</a>
-                <a href="/contact/" class="nav-link-mobile text-white text-lg block py-2">Контакты</a>
+                <a href="/" class="nav-link-mobile text-white text-lg block py-2">Home</a>
+                <a href="/services/" class="nav-link-mobile text-white text-lg block py-2">Services</a>
+                <a href="/reviews/" class="nav-link-mobile text-white text-lg block py-2">Reviews</a>
+                <a href="/contact/" class="nav-link-mobile text-white text-lg block py-2">Contact</a>
             </nav>
         </div>
     </header>
@@ -68,23 +73,22 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
                 <div>
-                    <h3 class="text-lg font-bold mb-4">Контакты</h3>
+                    <h3 class="text-lg font-bold mb-4">Contact</h3>
                     <p><a href="tel:{{ whatsapp_number }}" class="hover:text-gray-200">{{ whatsapp_number }}</a></p>
-                    <p><a href="mailto:[email protected]" class="hover:text-gray-200">[email protected]</a></p>
+                    <p><a href="mailto:dinamix.recoverysolutions@mail.ru" class="hover:text-gray-200">support@dinamix.com</a></p>
                 </div>
 
                 <div>
-                    <h3 class="text-lg font-bold mb-4">Быстрые ссылки</h3>
                     <ul class="space-y-2">
-                        <li><a href="/" class="hover:text-gray-200">Главная</a></li>
-                        <li><a href="/services/" class="hover:text-gray-200">Услуги</a></li>
-                        <li><a href="/reviews/" class="hover:text-gray-200">Отзывы</a></li>
-                        <li><a href="/contact/" class="hover:text-gray-200">Контакты</a></li>
+                        <li><a href="/" class="hover:text-gray-200">Home</a></li>
+                        <li><a href="/services/" class="hover:text-gray-200">Services</a></li>
+                        <li><a href="/reviews/" class="hover:text-gray-200">Reviews</a></li>
+                        <li><a href="/contact/" class="hover:text-gray-200">Contact</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="text-lg font-bold mb-4">Мы в соцсетях</h3>
+                    <h3 class="text-lg font-bold mb-4">Follow Us</h3>
                     <div class="flex space-x-4">
                         <a href="#" class="text-2xl hover:text-gray-200"><i class="fab fa-facebook"></i></a>
                         <a href="#" class="text-2xl hover:text-gray-200"><i class="fab fa-instagram"></i></a>
@@ -94,7 +98,7 @@
             </div>
 
             <div class="mt-8 text-center">
-                <p>© {% now "Y" %} Эвакуатор. Все права защищены.</p>
+                <p>© {% now "Y" %} Tow Truck Service. All rights reserved.</p>
             </div>
         </div>
     </footer>

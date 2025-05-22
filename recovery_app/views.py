@@ -79,7 +79,7 @@ def contact(request):
         })
         plain_message = strip_tags(html_message)
         from_email = settings.DEFAULT_FROM_EMAIL
-        to_email = settings.ADMIN_EMAIL
+        to_email = settings.EMAIL_ADMIN
 
         send_mail(
             subject,

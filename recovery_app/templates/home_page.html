@@ -8,7 +8,8 @@
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'recovery_app/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'recovery_app/css/animated-order-button.css' %}">
+    <link rel="stylesheet" href="{% static 'recovery_app/css/main.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -171,14 +172,30 @@
             <textarea id="message" name="message" rows="4" required
                       class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input"></textarea>
         </div>
-        <button type="submit"
-                class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold btn-hover-effect">
-            Submit Request
+        <!-- Новая анимированная кнопка -->
+        <button type="submit" class="order-btn" id="orderBtn">
+            <span class="default">Submit Request</span>
+            <span class="success">Request Sent
+                <svg viewBox="0 0 12 10">
+                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                </svg>
+            </span>
+            <div class="box"></div>
+            <div class="truck">
+                <div class="back"></div>
+                <div class="front">
+                    <div class="window"></div>
+                </div>
+                <div class="light top"></div>
+                <div class="light bottom"></div>
+            </div>
+            <div class="lines"></div>
         </button>
     </form>
 </section>
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'recovery_app/js/main.js' %}"></script>
+    <script src="{% static 'recovery_app/js/animated-order-button.js' %}"></script>
+    <script src="{% static 'recovery_app/js/main.js' %}"></script>
 {% endblock %}

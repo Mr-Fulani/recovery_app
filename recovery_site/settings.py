@@ -98,6 +98,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'recovery_site.context_processors.footer_context',
             ],
         },
     },
@@ -188,6 +189,14 @@ GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY', '')
 
 # WhatsApp number
 WHATSAPP_NUMBER = os.getenv('WHATSAPP_NUMBER', '+449999999999')
+
+# Support email
+SUPPORT_EMAIL = os.getenv('SUPPORT_EMAIL', 'support@dinamix.com')
+
+# Social media URLs
+FACEBOOK_URL = os.getenv('FACEBOOK_URL', 'https://facebook.com/yourpage')
+INSTAGRAM_URL = os.getenv('INSTAGRAM_URL', 'https://instagram.com/yourpage')
+TWITTER_URL = os.getenv('TWITTER_URL', 'https://twitter.com/yourpage')
 
 # Wagtail settings
 WAGTAIL_SITE_NAME = 'Эвакуатор'

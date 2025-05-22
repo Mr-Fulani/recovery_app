@@ -18,7 +18,6 @@ from .models import Review, ServiceRequest, WorkPhoto, HomePage
 from django.views.decorators.cache import cache_page
 
 
-
 @cache_page(60 * 15)  # Кэшировать страницу на 15 минут (60 секунд * 15)
 def home(request):
     """
@@ -37,7 +36,7 @@ def home(request):
         'work_photos': work_photos,
         'average_rating': round(average_rating, 1),
         'total_reviews': Review.objects.filter(is_approved=True).count(),
-        'total_services': 5000,
+        'total_services': 1000,
         'whatsapp_number': settings.WHATSAPP_NUMBER,
     }
     return render(request, 'home_page.html', context)
@@ -122,8 +121,22 @@ def reviews(request):
         return redirect('recovery_app:reviews')
 
     reviews = Review.objects.filter(is_approved=True)
+
+    # Add these lines to calculate and pass statistics to the reviews template
+    average_rating = reviews.aggregate(
+        avg_rating=models.Avg('rating')
+    )['avg_rating'] or 4.8  # Use 4.8 as default if no reviews yet
+
+    total_reviews_count = reviews.count()
+
+    # Assuming total_services is a fixed number or retrieved similarly to home page
+    total_services_completed = 1000  # Or fetch from your Service model if it's dynamic
+
     context = {
         'reviews': reviews,
         'whatsapp_number': settings.WHATSAPP_NUMBER,
+        'average_rating': round(average_rating, 1),  # Round to one decimal place
+        'total_reviews': total_reviews_count,
+        'total_services': total_services_completed,
     }
     return render(request, 'reviews.html', context)

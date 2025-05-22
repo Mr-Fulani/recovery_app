@@ -8,25 +8,36 @@
 {% block title %}Reviews - Tow Truck{% endblock %}
 
 {% block meta_description %}
-<meta name="description" content="Contacts of the car towing service. 24/7 roadside assistance. Phone, address, working hours.">
+    <meta name="description"
+          content="Contacts of the car towing service. 24/7 roadside assistance. Phone, address, working hours.">
 {% endblock %}
 
 {% block content %}
 <div class="max-w-6xl mx-auto">
     <h1 class="text-4xl font-bold text-center mb-12">Our Customer Reviews</h1>
 
-    <div class="bg-white rounded-lg shadow-md p-8 mb-12 card-hover">
+    {# Обновленный блок статистики: добавлен animate-on-scroll и данные для js-count #}
+    <div class="bg-white rounded-lg shadow-md p-8 mb-12 card-hover animate-on-scroll pt-12 pb-12">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
-                <div class="text-4xl font-bold text-blue-600 mb-2">{{ average_rating|default:"4.8" }}</div>
+                {# Добавлены js-count, data-target и data-postfix #}
+                <div class="text-4xl font-bold text-blue-600 mb-2 js-count"
+                     data-target="{{ average_rating|default:"4.8" }}"
+                     data-postfix="">{{ average_rating|default:"4.8" }}</div>
                 <p class="text-gray-600">Average Rating</p>
             </div>
             <div>
-                <div class="text-4xl font-bold text-blue-600 mb-2">{{ total_reviews|default:"127" }}</div>
+                {# Добавлены js-count, data-target и data-postfix #}
+                <div class="text-4xl font-bold text-blue-600 mb-2 js-count"
+                     data-target="{{ total_reviews|default:"127" }}"
+                     data-postfix="">{{ total_reviews|default:"127" }}</div>
                 <p class="text-gray-600">Customer Reviews</p>
             </div>
             <div>
-                <div class="text-4xl font-bold text-blue-600 mb-2">{{ total_services|default:"5000+" }}</div>
+                {# Добавлены js-count, data-target и data-postfix #}
+                <div class="text-4xl font-bold text-blue-600 mb-2 js-count"
+                     data-target="{{ total_services|default:"1000" }}"
+                     data-postfix="+">{{ total_services|default:"1000+" }}</div>
                 <p class="text-gray-600">Completed Towings</p>
             </div>
         </div>
@@ -34,22 +45,22 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for review in reviews %}
-        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-            <div class="flex items-center mb-4">
-                <div class="text-yellow-400">
-                    {% for i in "12345"|make_list %}
-                        {% if forloop.counter <= review.rating %}
-                            <i class="fas fa-star"></i>
-                        {% else %}
-                            <i class="far fa-star"></i>
-                        {% endif %}
-                    {% endfor %}
+            <div class="bg-white p-6 rounded-lg shadow-md card-hover">
+                <div class="flex items-center mb-4">
+                    <div class="text-yellow-400">
+                        {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= review.rating %}
+                                <i class="fas fa-star"></i>
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
+                <p class="text-gray-600 mb-4">{{ review.text }}</p>
+                <div class="font-bold">{{ review.name }}</div>
+                <div class="text-sm text-gray-500">{{ review.created_at|date:"d.m.Y" }}</div>
             </div>
-            <p class="text-gray-600 mb-4">{{ review.text }}</p>
-            <div class="font-bold">{{ review.name }}</div>
-            <div class="text-sm text-gray-500">{{ review.created_at|date:"d.m.Y" }}</div>
-        </div>
         {% endfor %}
     </div>
 
@@ -71,9 +82,10 @@
                 <label class="block text-gray-700 mb-2">Rating</label>
                 <div class="flex space-x-2" id="rating-stars-container">
                     {% for i in "12345"|make_list %}
-                    <label class="cursor-pointer">
-                        <input type="radio" name="rating" value="{{ i }}" required class="hidden" {% if forloop.last %}checked{% endif %}>
-                        <i class="far fa-star text-2xl text-yellow-400 hover:text-yellow-500 rating-star-input"></i>
+                        <label class="cursor-pointer">
+                        <input type="radio" name="rating" value="{{ i }}" required class="hidden"
+                               {% if forloop.last %}checked{% endif %}>
+                    <i class="far fa-star text-2xl text-yellow-400 hover:text-yellow-500 rating-star-input"></i>
                     </label>
                     {% endfor %}
                 </div>
@@ -96,35 +108,35 @@
 {% block extra_js %}
     <script src="{% static 'recovery_app/js/main.js' %}"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const ratingContainer = document.getElementById('rating-stars-container');
-        if (ratingContainer) {
-            const ratingInputs = ratingContainer.querySelectorAll('input[name="rating"]');
-            const starIcons = ratingContainer.querySelectorAll('.rating-star-input');
+        document.addEventListener('DOMContentLoaded', function () {
+            const ratingContainer = document.getElementById('rating-stars-container');
+            if (ratingContainer) {
+                const ratingInputs = ratingContainer.querySelectorAll('input[name="rating"]');
+                const starIcons = ratingContainer.querySelectorAll('.rating-star-input');
 
-            function updateStars(selectedRatingValue) {
-                starIcons.forEach((star, index) => {
-                    if (index < selectedRatingValue) {
-                        star.classList.remove('far');
-                        star.classList.add('fas');
-                    } else {
-                        star.classList.remove('fas');
-                        star.classList.add('far');
-                    }
+                function updateStars(selectedRatingValue) {
+                    starIcons.forEach((star, index) => {
+                        if (index < selectedRatingValue) {
+                            star.classList.remove('far');
+                            star.classList.add('fas');
+                        } else {
+                            star.classList.remove('fas');
+                            star.classList.add('far');
+                        }
+                    });
+                }
+
+                ratingInputs.forEach(input => {
+                    input.addEventListener('change', function () {
+                        updateStars(parseInt(this.value));
+                    });
                 });
-            }
 
-            ratingInputs.forEach(input => {
-                input.addEventListener('change', function() {
-                    updateStars(parseInt(this.value));
-                });
-            });
-
-            const initialCheckedInput = ratingContainer.querySelector('input[name="rating"]:checked');
-            if (initialCheckedInput) {
-                updateStars(parseInt(initialCheckedInput.value));
+                const initialCheckedInput = ratingContainer.querySelector('input[name="rating"]:checked');
+                if (initialCheckedInput) {
+                    updateStars(parseInt(initialCheckedInput.value));
+                }
             }
-        }
-    });
+        });
     </script>
 {% endblock %}

@@ -189,6 +189,8 @@ GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY', '')
 
 # WhatsApp number
 WHATSAPP_NUMBER = os.getenv('WHATSAPP_NUMBER', '+449999999999')
+# Tel number
+TEL_NUMBER = os.getenv('TEL_NUMBER', '+449999999999')
 
 # Support email
 SUPPORT_EMAIL = os.getenv('SUPPORT_EMAIL', 'support@dinamix.com')

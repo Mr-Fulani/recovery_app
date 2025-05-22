@@ -35,49 +35,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (mobileMenuButton && mobileMenu) {
         mobileMenuButton.addEventListener('click', function() {
-            // Переключаем класс 'active' для анимации выезда/скрытия
-            mobileMenu.classList.toggle('active');
-
-            // Переключаем класс 'hidden' TailwindCSS для фактического скрытия/показа
-            // Это важно, так как Tailwind's `hidden` имеет `display: none !important;`
-            if (mobileMenu.classList.contains('hidden')) {
-                mobileMenu.classList.remove('hidden');
+            mobileMenu.classList.toggle('active'); // Переключаем класс 'active'
+            const burgerIcon = this.querySelector('i'); // Находим иконку внутри кнопки
+            if (mobileMenu.classList.contains('active')) {
+                // Если меню активно, меняем иконку на крестик
+                burgerIcon.classList.remove('fa-bars');
+                burgerIcon.classList.add('fa-times');
             } else {
-                // Добавляем hidden с небольшой задержкой, чтобы анимация успела завершиться
-                setTimeout(() => {
-                    mobileMenu.classList.add('hidden');
-                }, 300); // Время должно совпадать с transition в CSS (0.3s)
-            }
-
-            // Изменить иконку бургера на крестик
-            const burgerIcon = mobileMenuButton.querySelector('i'); // Ищем тег <i> (Font Awesome)
-            if (burgerIcon) {
-                if (mobileMenu.classList.contains('active')) {
-                    burgerIcon.classList.remove('fa-bars'); // Убрать иконку бургера
-                    burgerIcon.classList.add('fa-times');   // Добавить иконку крестика
-                } else {
-                    burgerIcon.classList.remove('fa-times'); // Убрать иконку крестика
-                    burgerIcon.classList.add('fa-bars');    // Добавить иконку бургера
-                }
+                // Если меню не активно, меняем иконку на бургер
+                burgerIcon.classList.remove('fa-times');
+                burgerIcon.classList.add('fa-bars');
             }
         });
 
-        // Закрывать меню при клике на ссылку (опционально)
-        const mobileLinks = mobileMenu.querySelectorAll('.nav-link-mobile');
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', function() {
+        // Закрытие меню при клике вне его или на ссылку
+        document.addEventListener('click', function(e) {
+            if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
                 if (mobileMenu.classList.contains('active')) {
                     mobileMenu.classList.remove('active');
-                    // С небольшой задержкой скрываем, чтобы анимация завершилась
-                    setTimeout(() => {
-                        mobileMenu.classList.add('hidden');
-                    }, 300);
-                    // Возвращаем иконку бургера
                     const burgerIcon = mobileMenuButton.querySelector('i');
                     if (burgerIcon) {
                         burgerIcon.classList.remove('fa-times');
                         burgerIcon.classList.add('fa-bars');
                     }
+                }
+            }
+        });
+
+        // Закрытие меню при клике на ссылку внутри него
+        mobileMenu.querySelectorAll('.nav-link-mobile').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                const burgerIcon = mobileMenuButton.querySelector('i');
+                if (burgerIcon) {
+                    burgerIcon.classList.remove('fa-times');
+                    burgerIcon.classList.add('fa-bars');
                 }
             });
         });
@@ -96,15 +88,60 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Function to start number counting animation
+    function startNumberCounting(targetElement) {
+        const numbers = targetElement.querySelectorAll('.js-count');
+
+        numbers.forEach(numberElement => {
+            // Ensure animation only runs once per element
+            if (numberElement.dataset.animated) {
+                return;
+            }
+            numberElement.dataset.animated = true; // Mark as animated
+
+            const target = parseFloat(numberElement.dataset.target);
+            const postfix = numberElement.dataset.postfix || '';
+            const duration = 2000; // Animation duration in milliseconds (2 seconds)
+            const start = 0;
+            let current = 0;
+            const increment = target / (duration / 10); // Calculate increment based on duration and ~10ms update interval
+
+            const isFloat = target % 1 !== 0; // Check if the target is a float
+
+            const updateCount = () => {
+                if (current < target) {
+                    current += increment;
+                    if (current > target) { // Prevent overshooting the target
+                        current = target;
+                    }
+                    // Format the number based on whether it's a float or integer
+                    numberElement.textContent = isFloat ? current.toFixed(1) : Math.floor(current);
+                    requestAnimationFrame(updateCount); // Continue animation
+                } else {
+                    numberElement.textContent = target + postfix; // Set final value with postfix
+                }
+            };
+
+            requestAnimationFrame(updateCount); // Start the animation
+        });
+    }
+
     // Анимация появления элементов при скролле
     const observerOptions = {
-        threshold: 0.1
+        threshold: 0.1 // Trigger when 10% of the element is visible
     };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate-fade-in');
+
+                // Check if the intersected element is the Statistics Section
+                // by checking if it contains elements with '.js-count'
+                if (entry.target.querySelector('.js-count')) {
+                    startNumberCounting(entry.target);
+                }
+
                 // Анимация для карточек фотографий
                 const photoCards = entry.target.querySelectorAll('.work-photo-card');
                 photoCards.forEach((card, index) => {
@@ -112,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         card.classList.add('animate-fade-in');
                     }, index * 100); // Задержка для последовательной анимации
                 });
-                observer.unobserve(entry.target);
+                observer.unobserve(entry.target); // Stop observing once animated
             }
         });
     }, observerOptions);

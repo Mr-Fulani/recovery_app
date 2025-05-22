@@ -29,10 +29,18 @@ from django.views.generic import TemplateView
 sitemaps = {
     'static': StaticViewSitemap,
     'wagtail_pages': HomePageSitemap,
-    # 'reviews': ReviewSitemap, # Если будете использовать
 }
 
-urlpatterns = [
+urlpatterns = []
+
+if settings.DEBUG:
+    import debug_toolbar
+    print("Debug Toolbar URLs included")  # Отладочный вывод
+    urlpatterns += [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ]
+
+urlpatterns += [
     path('admin/', admin.site.urls),
     path('wagtail/', include(wagtail_admin_urls)),
     path('documents/', include(wagtaildocs_urls)),

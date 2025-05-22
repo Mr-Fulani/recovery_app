@@ -71,6 +71,9 @@ INSTALLED_APPS = [
 
     # 'recovery_app.sitemaps',  # Добавляем приложение для создания карты сайта
     'django.contrib.sitemaps',
+
+    # Debug toolbar
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -83,6 +86,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+]
+if DEBUG:
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+
+
+# Настройка IP-адресов для отображения Debug Toolbar
+INTERNAL_IPS = [
+    '127.0.0.1',
+    '172.18.0.3',
 ]
 
 ROOT_URLCONF = 'recovery_site.urls'
@@ -212,3 +224,16 @@ CACHES = {
         'LOCATION': 'unique-snowflake', # Уникальное имя для этого кэша
     }
 }
+
+
+
+# Security Headers and Settings
+SECURE_SSL_REDIRECT = not DEBUG  # Перенаправление на HTTPS в продакшене
+SECURE_HSTS_SECONDS = 31536000  # HSTS на год
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SESSION_COOKIE_SECURE = not DEBUG  # Cookies только через HTTPS
+CSRF_COOKIE_SECURE = not DEBUG  # CSRF-токены только через HTTPS
+SECURE_BROWSER_XSS_FILTER = True  # Защита от XSS
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Предотвращение MIME-типов
+X_FRAME_OPTIONS = 'DENY'  # Защита от кликджекинга

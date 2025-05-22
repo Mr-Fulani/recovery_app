@@ -24,7 +24,7 @@ def home(request):
     Render the homepage using Wagtail's HomePage model and display reviews, statistics, and work photos.
     """
     page = HomePage.objects.live().first()
-    reviews = Review.objects.filter(is_approved=True)[:6]
+    reviews = Review.objects.filter(is_approved=True)[:3]  # Ограничение до 3 отзывов
     work_photos = WorkPhoto.objects.filter(is_published=True)[:6]  # Ограничение до 6 фото
     average_rating = Review.objects.filter(is_approved=True).aggregate(
         avg_rating=models.Avg('rating')

@@ -13,7 +13,6 @@
 {% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
 <section class="relative w-full hero-section overflow-hidden">
     {% if page.video %}
     <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover">
@@ -41,7 +40,6 @@
     </div>
 </section>
 
-<!-- Services Section -->
 <section class="container mx-auto px-4 mb-12 animate-on-scroll">
     <h2 class="text-3xl font-bold text-center mb-8">Our Services</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -63,7 +61,6 @@
     </div>
 </section>
 
-<!-- Statistic Section -->
 <section class="bg-gray-100 py-12 rounded-lg mb-12 animate-on-scroll">
     <div class="container mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
@@ -83,7 +80,6 @@
     </div>
 </section>
 
-<!-- Work Photos Section -->
 <section class="container mx-auto px-4 mb-12 animate-on-scroll">
     <h2 class="text-3xl font-bold text-center mb-8">Our Completed Work</h2>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 work-photo-grid auto-rows-min">
@@ -114,7 +110,6 @@
     </div>
 </section>
 
-<!-- Reviews Section -->
 <section class="container mx-auto px-4 mb-12 animate-on-scroll">
     <h2 class="text-3xl font-bold text-center mb-8">Our Customer Reviews</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -142,56 +137,8 @@
     </div>
 </section>
 
-<!-- Contact Form Section -->
 <section class="container mx-auto px-4 bg-white p-8 rounded-lg shadow-md animate-on-scroll">
-    <h2 class="text-3xl font-bold text-center mb-8">Order a Tow Truck</h2>
-    <form method="post" action="{% url 'recovery_app:contact' %}" class="max-w-lg mx-auto">
-        {% csrf_token %}
-        <div class="mb-4">
-            <label for="name" class="block text-gray-700 mb-2">Your Name <span class="text-red-500">*</span></label>
-            <input type="text" id="name" name="name" required
-                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input">
-        </div>
-        <div class="mb-4">
-            <label for="phone" class="block text-gray-700 mb-2">Phone <span class="text-red-500">*</span></label>
-            <input type="tel" id="phone" name="phone" required
-                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input">
-        </div>
-        <div class="mb-4">
-            <label for="email" class="block text-gray-700 mb-2">Email</label>
-            <input type="email" id="email" name="email"
-                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input">
-        </div>
-        <div class="mb-4">
-            <label for="car_brand" class="block text-gray-700 mb-2">Car Brand</label>
-            <input type="text" id="car_brand面空车品牌" name="car_brand" placeholder="For example: Toyota Camry"
-                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input">
-        </div>
-        <div class="mb-4">
-            <label for="message" class="block text-gray-700 mb-2">Message <span class="text-red-500">*</span></label>
-            <textarea id="message" name="message" rows="4" required
-                      class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input"></textarea>
-        </div>
-        <!-- Новая анимированная кнопка -->
-        <button type="submit" class="order-btn" id="orderBtn">
-            <span class="default">Submit Request</span>
-            <span class="success">Request Sent
-                <svg viewBox="0 0 12 10">
-                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                </svg>
-            </span>
-            <div class="box"></div>
-            <div class="truck">
-                <div class="back"></div>
-                <div class="front">
-                    <div class="window"></div>
-                </div>
-                <div class="light top"></div>
-                <div class="light bottom"></div>
-            </div>
-            <div class="lines"></div>
-        </button>
-    </form>
+    {% include 'includes/contact_form.html' %}
 </section>
 {% endblock %}
 

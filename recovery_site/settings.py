@@ -189,13 +189,24 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 
 # Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Для разработки
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 EMAIL_ADMIN = os.getenv('EMAIL_ADMIN', '')
+
+
+
+
+
+
+
 # Google Maps API Key
 GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY', '')
 
@@ -205,7 +216,7 @@ WHATSAPP_NUMBER = os.getenv('WHATSAPP_NUMBER', '+449999999999')
 TEL_NUMBER = os.getenv('TEL_NUMBER', '+449999999999')
 
 # Support email
-SUPPORT_EMAIL = os.getenv('SUPPORT_EMAIL', 'support@dinamix.com')
+SUPPORT_EMAIL = os.getenv('SUPPORT_EMAIL', '')
 
 # Social media URLs
 FACEBOOK_URL = os.getenv('FACEBOOK_URL', 'https://facebook.com/yourpage')

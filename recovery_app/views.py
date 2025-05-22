@@ -14,18 +14,18 @@ from django.utils.html import strip_tags
 from django.views.decorators.http import require_http_methods
 from wagtail.models import Page
 from .models import Review, ServiceRequest, WorkPhoto, HomePage
-# Добавьте импорт для кэширования
+# Add import for caching
 from django.views.decorators.cache import cache_page
 
 
-@cache_page(60 * 15)  # Кэшировать страницу на 15 минут (60 секунд * 15)
+@cache_page(60 * 15)  # Cache the page for 15 minutes (60 seconds * 15)
 def home(request):
     """
     Render the homepage using Wagtail's HomePage model and display reviews, statistics, and work photos.
     """
     page = HomePage.objects.live().first()
-    reviews = Review.objects.filter(is_approved=True)[:3]  # Ограничение до 3 отзывов
-    work_photos = WorkPhoto.objects.filter(is_published=True)[:6]  # Ограничение до 6 фото
+    reviews = Review.objects.filter(is_approved=True)[:3]  # Limit to 3 reviews
+    work_photos = WorkPhoto.objects.filter(is_published=True)[:6]  # Limit to 6 photos
     average_rating = Review.objects.filter(is_approved=True).aggregate(
         avg_rating=models.Avg('rating')
     )['avg_rating'] or 4.8
@@ -72,14 +72,14 @@ def contact(request):
             message=message
         )
 
-        # Отправка уведомления на email
-        subject = 'Новая заявка на эвакуацию'
+        # Send email notification
+        subject = 'New Evacuation Request'
         html_message = render_to_string('email/service_request.html', {
             'service_request': service_request
         })
         plain_message = strip_tags(html_message)
         from_email = settings.DEFAULT_FROM_EMAIL
-        to_email = settings.EMAIL_ADMIN
+        to_email = settings.SUPPORT_EMAIL
 
         send_mail(
             subject,
@@ -90,7 +90,7 @@ def contact(request):
             fail_silently=False,
         )
 
-        messages.success(request, 'Ваша заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.')
+        messages.success(request, 'Your request has been successfully submitted! We will contact you shortly.')
         return redirect('recovery_app:contact')
 
     context = {
@@ -109,7 +109,7 @@ def reviews(request):
         rating = request.POST.get('rating')
         text = request.POST.get('text')
 
-        # Создаем отзыв
+        # Create review
         Review.objects.create(
             name=name,
             email=email,
@@ -117,7 +117,7 @@ def reviews(request):
             text=text
         )
 
-        messages.success(request, 'Спасибо за ваш отзыв! Он будет опубликован после проверки.')
+        messages.success(request, 'Thank you for your review! It will be published after moderation.')
         return redirect('recovery_app:reviews')
 
     reviews = Review.objects.filter(is_approved=True)

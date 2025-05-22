@@ -1,4 +1,4 @@
-/* Animated Order Button Styles */
+/* CSS ПЕРЕМЕННЫЕ - оставляем глобальными */
 :root {
     --primary: #ef4444;
     --primary-light: #f87171;
@@ -12,66 +12,117 @@
     --sand-light: #fbbf24;
 }
 
-.order-btn {
+/* КОНТЕЙНЕР ДЛЯ ИЗОЛЯЦИИ СТИЛЕЙ */
+.order-form-wrapper {
+    font-family: Roboto, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    background: white;
+    border-radius: 12px;
+    /* Можно добавить тень для выделения */
+    /* box-shadow: 0 4px 20px rgba(0,0,0,0.1); */
+}
+
+/* СТИЛИ ФОРМЫ - теперь только внутри wrapper */
+.order-form-wrapper .form-container {
+    max-width: 500px;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.order-form-wrapper .form-group {
+    margin-bottom: 20px;
+}
+
+.order-form-wrapper .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+.order-form-wrapper .form-group input,
+.order-form-wrapper .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.order-form-wrapper .form-group input:focus,
+.order-form-wrapper .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.order-form-wrapper .required {
+    color: #ef4444;
+}
+
+.order-form-wrapper .error {
+    border-color: #ef4444 !important;
+}
+
+.order-form-wrapper .error-message {
+    color: #ef4444;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* ОРИГИНАЛЬНЫЕ СТИЛИ КНОПКИ - БЕЗ ИЗМЕНЕНИЙ! */
+.order {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     border: 0;
     background: var(--dark);
     position: relative;
-    height: 48px;
-    width: 100%;
+    height: 63px;
+    width: 240px;
     padding: 0;
     outline: none;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 32px;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     -webkit-tap-highlight-color: transparent;
     overflow: hidden;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-    font-weight: bold;
-    font-size: 16px;
+    transition: transform 0.3s ease;
+    margin: 20px auto;
+    display: block;
 }
 
-.order-btn:hover {
-    background: var(--grey-dark);
-}
-
-.order-btn:active {
-    transform: scale(0.98);
-}
-
-.order-btn:disabled {
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-.order-btn span {
+.order span {
     --o: 1;
     position: absolute;
     left: 0;
     right: 0;
     text-align: center;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 19px;
     line-height: 24px;
     color: var(--white);
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 500;
     opacity: var(--o);
     transition: opacity 0.3s ease;
 }
 
-.order-btn span.default {
+.order span.default {
     transition-delay: 0.3s;
 }
 
-.order-btn span.success {
+.order span.success {
     --offset: 16px;
     --o: 0;
 }
 
-.order-btn span.success svg {
+.order span.success svg {
     width: 12px;
     height: 10px;
     display: inline-block;
@@ -87,21 +138,24 @@
     transition: stroke-dashoffset 0.3s ease;
 }
 
-.order-btn .lines {
+.order:active {
+    transform: scale(0.96);
+}
+
+.order .lines {
     opacity: 0;
     position: absolute;
     height: 3px;
     background: var(--white);
     border-radius: 2px;
     width: 6px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 30px;
     left: 100%;
     box-shadow: 15px 0 0 var(--white), 30px 0 0 var(--white), 45px 0 0 var(--white), 60px 0 0 var(--white), 75px 0 0 var(--white), 90px 0 0 var(--white), 105px 0 0 var(--white), 120px 0 0 var(--white), 135px 0 0 var(--white), 150px 0 0 var(--white), 165px 0 0 var(--white), 180px 0 0 var(--white), 195px 0 0 var(--white), 210px 0 0 var(--white), 225px 0 0 var(--white), 240px 0 0 var(--white), 255px 0 0 var(--white), 270px 0 0 var(--white), 285px 0 0 var(--white), 300px 0 0 var(--white), 315px 0 0 var(--white), 330px 0 0 var(--white);
 }
 
-.order-btn .back,
-.order-btn .box {
+.order .back,
+.order .box {
     --start: var(--white);
     --stop: var(--grey-light);
     border-radius: 2px;
@@ -109,18 +163,17 @@
     position: absolute;
 }
 
-.order-btn .truck {
+.order .truck {
     width: 60px;
     height: 41px;
     left: 100%;
     z-index: 1;
-    top: 50%;
-    transform: translateY(-50%) translateX(24px);
+    top: 11px;
     position: absolute;
+    transform: translateX(24px);
 }
 
-.order-btn .truck:before, 
-.order-btn .truck:after {
+.order .truck:before, .order .truck:after {
     --r: -90deg;
     content: "";
     height: 2px;
@@ -134,16 +187,16 @@
     transform: rotate(var(--r));
 }
 
-.order-btn .truck:before {
+.order .truck:before {
     top: 4px;
 }
 
-.order-btn .truck:after {
+.order .truck:after {
     --r: 90deg;
     bottom: 4px;
 }
 
-.order-btn .truck .back {
+.order .truck .back {
     left: 0;
     top: 0;
     width: 60px;
@@ -151,7 +204,7 @@
     z-index: 1;
 }
 
-.order-btn .truck .front {
+.order .truck .front {
     overflow: hidden;
     position: absolute;
     border-radius: 2px 9px 9px 2px;
@@ -160,14 +213,13 @@
     left: 60px;
 }
 
-.order-btn .truck .front:before, 
-.order-btn .truck .front:after {
+.order .truck .front:before, .order .truck .front:after {
     content: "";
     position: absolute;
     display: block;
 }
 
-.order-btn .truck .front:before {
+.order .truck .front:before {
     height: 13px;
     width: 2px;
     left: 0;
@@ -175,7 +227,7 @@
     background: linear-gradient(var(--grey), var(--grey-dark));
 }
 
-.order-btn .truck .front:after {
+.order .truck .front:after {
     border-radius: 2px 9px 9px 2px;
     background: var(--primary);
     width: 24px;
@@ -183,7 +235,7 @@
     right: 0;
 }
 
-.order-btn .truck .front .window {
+.order .truck .front .window {
     overflow: hidden;
     border-radius: 2px 8px 8px 2px;
     background: var(--primary-light);
@@ -197,21 +249,20 @@
     transform-origin: 0 50%;
 }
 
-.order-btn .truck .front .window:before, 
-.order-btn .truck .front .window:after {
+.order .truck .front .window:before, .order .truck .front .window:after {
     content: "";
     position: absolute;
     right: 0;
 }
 
-.order-btn .truck .front .window:before {
+.order .truck .front .window:before {
     top: 0;
     bottom: 0;
     width: 14px;
     background: var(--dark);
 }
 
-.order-btn .truck .front .window:after {
+.order .truck .front .window:after {
     width: 14px;
     top: 7px;
     height: 4px;
@@ -221,7 +272,7 @@
     box-shadow: 0 7px 0 rgba(255, 255, 255, 0.14);
 }
 
-.order-btn .truck .light {
+.order .truck .light {
     width: 3px;
     height: 8px;
     left: 83px;
@@ -232,7 +283,7 @@
     background: #f0dc5f;
 }
 
-.order-btn .truck .light:before {
+.order .truck .light:before {
     content: "";
     height: 4px;
     width: 7px;
@@ -246,26 +297,24 @@
     background: linear-gradient(90deg, #f0dc5f, rgba(240, 220, 95, 0.7), rgba(240, 220, 95, 0));
 }
 
-.order-btn .truck .light.top {
+.order .truck .light.top {
     top: 4px;
 }
 
-.order-btn .truck .light.bottom {
+.order .truck .light.bottom {
     bottom: 4px;
 }
 
-.order-btn .box {
+.order .box {
     --start: var(--sand-light);
     --stop: var(--sand);
     width: 21px;
     height: 21px;
     right: 100%;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 21px;
 }
 
-.order-btn .box:before, 
-.order-btn .box:after {
+.order .box:before, .order .box:after {
     content: "";
     top: 10px;
     position: absolute;
@@ -273,77 +322,97 @@
     right: 0;
 }
 
-.order-btn .box:before {
+.order .box:before {
     height: 3px;
     margin-top: -1px;
     background: rgba(0, 0, 0, 0.1);
 }
 
-.order-btn .box:after {
+.order .box:after {
     height: 1px;
     background: rgba(0, 0, 0, 0.15);
 }
 
-/* Animation States */
-.order-btn.animate .default {
+/* ВСЕ АНИМАЦИИ - БЕЗ ИЗМЕНЕНИЙ */
+.order.animate .default {
     --o: 0;
     transition-delay: 0s;
 }
 
-.order-btn.animate .success {
+.order.animate .success {
     --offset: 0;
     --o: 1;
-    transition-delay: 5s;
+    transition-delay: 7s;
 }
 
-.order-btn.animate .success svg {
-    transition-delay: 5.3s;
+.order.animate .success svg {
+    transition-delay: 7.3s;
 }
 
-.order-btn.animate .truck {
-    animation: truck 6s ease forwards;
+.order.animate .truck {
+    -webkit-animation: truck 10s ease forwards;
+    animation: truck 10s ease forwards;
 }
 
-.order-btn.animate .truck:before {
+.order.animate .truck:before {
+    -webkit-animation: door1 2.4s ease forwards 0.3s;
     animation: door1 2.4s ease forwards 0.3s;
 }
 
-.order-btn.animate .truck:after {
+.order.animate .truck:after {
+    -webkit-animation: door2 2.4s ease forwards 0.6s;
     animation: door2 2.4s ease forwards 0.6s;
 }
 
-.order-btn.animate .truck .light:before {
-    animation: light 6s ease forwards;
+.order.animate .truck .light:before {
+    -webkit-animation: light 10s ease forwards;
+    animation: light 10s ease forwards;
 }
 
-.order-btn.animate .box {
-    animation: box 6s ease forwards;
+.order.animate .box {
+    -webkit-animation: box 10s ease forwards;
+    animation: box 10s ease forwards;
 }
 
-.order-btn.animate .lines {
-    animation: lines 6s ease forwards;
+.order.animate .lines {
+    -webkit-animation: lines 10s ease forwards;
+    animation: lines 10s ease forwards;
 }
 
-/* Keyframes */
-@keyframes truck {
+@-webkit-keyframes truck {
     10%, 30% {
-        transform: translateY(-50%) translateX(-164px);
+        transform: translateX(-164px);
     }
     40% {
-        transform: translateY(-50%) translateX(-104px);
+        transform: translateX(-104px);
     }
     60% {
-        transform: translateY(-50%) translateX(-224px);
+        transform: translateX(-224px);
     }
     75%, 100% {
-        transform: translateY(-50%) translateX(24px);
+        transform: translateX(24px);
     }
 }
 
-@keyframes lines {
+@keyframes truck {
+    10%, 30% {
+        transform: translateX(-164px);
+    }
+    40% {
+        transform: translateX(-104px);
+    }
+    60% {
+        transform: translateX(-224px);
+    }
+    75%, 100% {
+        transform: translateX(24px);
+    }
+}
+
+@-webkit-keyframes lines {
     0%, 30% {
         opacity: 0;
-        transform: translateY(-50%) scaleY(0.7) translateX(0);
+        transform: scaleY(0.7) translateX(0);
     }
     35%, 65% {
         opacity: 1;
@@ -352,10 +421,35 @@
         opacity: 0;
     }
     100% {
-        transform: translateY(-50%) scaleY(0.7) translateX(-400px);
+        transform: scaleY(0.7) translateX(-400px);
+    }
+}
+@keyframes lines {
+    0%, 30% {
+        opacity: 0;
+        transform: scaleY(0.7) translateX(0);
+    }
+    35%, 65% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 0;
+    }
+    100% {
+        transform: scaleY(0.7) translateX(-400px);
     }
 }
 
+@-webkit-keyframes light {
+    0%, 30% {
+        opacity: 0;
+        transform: perspective(2px) rotateY(-15deg) scaleX(0.88);
+    }
+    40%, 100% {
+        opacity: 1;
+        transform: perspective(2px) rotateY(-15deg) scaleX(0.94);
+    }
+}
 @keyframes light {
     0%, 30% {
         opacity: 0;
@@ -367,33 +461,61 @@
     }
 }
 
+@-webkit-keyframes door1 {
+    30%, 50% {
+        transform: rotate(32deg);
+    }
+}
 @keyframes door1 {
     30%, 50% {
         transform: rotate(32deg);
     }
 }
 
+@-webkit-keyframes door2 {
+    30%, 50% {
+        transform: rotate(-32deg);
+    }
+}
 @keyframes door2 {
     30%, 50% {
         transform: rotate(-32deg);
     }
 }
 
-@keyframes box {
+@-webkit-keyframes box {
     8%, 10% {
-        transform: translateY(-50%) translateX(40px);
+        transform: translateX(40px);
         opacity: 1;
     }
     25% {
-        transform: translateY(-50%) translateX(112px);
+        transform: translateX(112px);
         opacity: 1;
     }
     26% {
-        transform: translateY(-50%) translateX(112px);
+        transform: translateX(112px);
         opacity: 0;
     }
     27%, 100% {
-        transform: translateY(-50%) translateX(0px);
+        transform: translateX(0px);
+        opacity: 0;
+    }
+}
+@keyframes box {
+    8%, 10% {
+        transform: translateX(40px);
+        opacity: 1;
+    }
+    25% {
+        transform: translateX(112px);
+        opacity: 1;
+    }
+    26% {
+        transform: translateX(112px);
+        opacity: 0;
+    }
+    27%, 100% {
+        transform: translateX(0px);
         opacity: 0;
     }
 }

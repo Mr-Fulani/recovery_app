@@ -1,49 +1,54 @@
 {% load static %}
 
-<h2 class="text-3xl font-bold text-center mb-8">Order a Tow Truck</h2>
-<form method="post" action="{% url 'recovery_app:contact' %}" class="max-w-lg mx-auto" id="orderForm"> {# Добавил id="orderForm" #}
-    {% csrf_token %}
-    <div class="mb-4">
-        <label for="name" class="block text-gray-700 mb-2">Your Name <span class="text-red-500">*</span></label>
-        <input type="text" id="name" name="name" required
-               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input">
-    </div>
-    <div class="mb-4">
-        <label for="phone" class="block text-gray-700 mb-2">Phone <span class="text-red-500">*</span></label>
-        <input type="tel" id="phone" name="phone" required
-               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input">
-    </div>
-    <div class="mb-4">
-        <label for="email" class="block text-gray-700 mb-2">Email</label>
-        <input type="email" id="email" name="email"
-               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input">
-    </div>
-    <div class="mb-4">
-        <label for="car_brand" class="block text-gray-700 mb-2">Car Brand</label>
-        <input type="text" id="car_brand" name="car_brand" placeholder="For example: Toyota Camry"
-               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input">
-    </div>
-    <div class="mb-4">
-        <label for="message" class="block text-gray-700 mb-2">Message <span class="text-red-500">*</span></label>
-        <textarea id="message" name="message" rows="4" required
-                  class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500 form-input"></textarea>
-    </div>
-    <button type="submit" class="order-btn" id="orderBtn">
-        <span class="default">Submit Request</span>
-        <span class="success">Request Sent
-            <svg viewBox="0 0 12 10">
-                <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-            </svg>
-        </span>
-        <div class="box"></div>
-        <div class="truck">
-            <div class="back"></div>
-            <div class="front">
-                <div class="window"></div>
-            </div>
-            <div class="light top"></div>
-            <div class="light bottom"></div>
+<div class="order-form-wrapper">
+    <h2 class="text-3xl font-bold text-center mb-8">Order a Tow Truck</h2>
+
+    <form method="post" action="{% url 'recovery_app:contact' %}" class="form-container" id="orderForm">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="name">Your Name <span class="required">*</span></label>
+            <input type="text" id="name" name="name" required>
         </div>
-        <div class="lines"></div>
-    </button>
-</form>
+
+        <div class="form-group">
+            <label for="phone">Phone <span class="required">*</span></label>
+            <input type="tel" id="phone" name="phone" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email">
+        </div>
+
+        <div class="form-group">
+            <label for="car_brand">Car Brand</label>
+            <input type="text" id="car_brand" name="car_brand" placeholder="For example: Toyota Camry">
+        </div>
+
+        <div class="form-group">
+            <label for="message">Message <span class="required">*</span></label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+        </div>
+
+        <button type="submit" class="order" id="orderBtn">
+            <span class="default">Submit Request</span>
+            <span class="success">Request Sent
+                <svg viewBox="0 0 12 10">
+                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                </svg>
+            </span>
+            <div class="box"></div>
+            <div class="truck">
+                <div class="back"></div>
+                <div class="front">
+                    <div class="window"></div>
+                </div>
+                <div class="light top"></div>
+                <div class="light bottom"></div>
+            </div>
+            <div class="lines"></div>
+        </button>
+    </form>
+</div>
+

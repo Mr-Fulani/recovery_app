@@ -14,11 +14,16 @@ from django.utils.html import strip_tags
 from django.views.decorators.http import require_http_methods
 from wagtail.models import Page
 from .models import Review, ServiceRequest, WorkPhoto, HomePage
-# Add import for caching
-from django.views.decorators.cache import cache_page
+from django.views.decorators.cache import cache_page, cache_control
+from django.views.decorators.vary import vary_on_cookie
+from django.core.cache import cache
 
+def get_cache_key(view_name, *args, **kwargs):
+    """Generate a cache key for a view."""
+    return f"view_{view_name}_{args}_{kwargs}"
 
-@cache_page(60 * 15)  # Cache the page for 15 minutes (60 seconds * 15)
+@cache_page(settings.CACHE_TIMEOUTS['home_page'])
+@vary_on_cookie
 def home(request):
     """
     Render the homepage using Wagtail's HomePage model and display reviews, statistics, and work photos.
@@ -41,7 +46,7 @@ def home(request):
     }
     return render(request, 'home_page.html', context)
 
-
+@cache_page(settings.CACHE_TIMEOUTS['static_content'])
 def services(request):
     """
     Render the services page.
@@ -50,7 +55,6 @@ def services(request):
         'whatsapp_number': settings.WHATSAPP_NUMBER,
     }
     return render(request, 'service_page.html', context)
-
 
 @require_http_methods(["GET", "POST"])
 def contact(request):
@@ -90,6 +94,10 @@ def contact(request):
             fail_silently=False,
         )
 
+        # Invalidate relevant caches
+        cache.delete_pattern('view_home_*')
+        cache.delete_pattern('view_services_*')
+
         messages.success(request, 'Your request has been successfully submitted! We will contact you shortly.')
         return redirect('recovery_app:contact')
 
@@ -98,7 +106,8 @@ def contact(request):
     }
     return render(request, 'contact_page.html', context)
 
-
+@cache_page(settings.CACHE_TIMEOUTS['dynamic_content'])
+@vary_on_cookie
 def reviews(request):
     """
     Handle review submission and render the reviews page with approved reviews.
@@ -116,6 +125,10 @@ def reviews(request):
             rating=rating,
             text=text
         )
+
+        # Invalidate relevant caches
+        cache.delete_pattern('view_home_*')
+        cache.delete_pattern('view_reviews_*')
 
         messages.success(request, 'Thank you for your review! It will be published after moderation.')
         return redirect('recovery_app:reviews')

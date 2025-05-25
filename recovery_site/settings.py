@@ -106,6 +106,8 @@ if DEBUG:
 # Настройка IP-адресов для отображения Debug Toolbar
 INTERNAL_IPS = [
     '127.0.0.1',
+    '0.0.0.0',
+    'localhost',
     '172.18.0.3',
 ]
 
@@ -242,19 +244,47 @@ WAGTAILADMIN_BASE_URL = 'http://localhost:8080'
 
 
 
-# CACHES # <-- ДОБАВЛЕНО/ОБНОВЛЕНО
+# CACHES
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1'),
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
+            'CONNECTION_POOL_CLASS_KWARGS': {
+                'max_connections': 50,
+                'timeout': 20,
+            },
+            'COMPRESSOR': 'django_redis.compressors.zlib.ZlibCompressor',
+            'IGNORE_EXCEPTIONS': True,
         },
-        'TIMEOUT': 300, # Время жизни кэша по умолчанию в секундах (5 минут)
+        'KEY_PREFIX': 'recovery_site',
+        'TIMEOUT': 300,  # Default timeout of 5 minutes
     }
 }
 
+# Cache settings for different content types
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 300  # 5 minutes
+CACHE_MIDDLEWARE_KEY_PREFIX = 'recovery_site'
 
+# Cache timeouts for different content types
+CACHE_TIMEOUTS = {
+    'home_page': 60 * 60 * 24 * 3,  # 3 days for home page
+    'static_content': 60 * 60 * 24,  # 1 day for static content
+    'dynamic_content': 60 * 15,  # 15 minutes for dynamic content
+    'media': 60 * 60 * 24 * 7,  # 7 days for media
+}
+
+# Wagtail cache settings
+WAGTAIL_CACHE = True
+WAGTAIL_CACHE_BACKEND = 'default'
+WAGTAIL_CACHE_TIMEOUT = CACHE_TIMEOUTS['static_content']
+
+# Session settings
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
 
 # # Security Headers and Settings
 # SECURE_SSL_REDIRECT = not DEBUG  # Перенаправление на HTTPS в продакшене

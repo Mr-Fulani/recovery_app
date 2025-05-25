@@ -12,11 +12,23 @@ services:
       - .env
     depends_on:
       - db
+      - redis # <-- ДОБАВЛЕНО: Зависимость от Redis
+    environment: # <-- ДОБАВЛЕНО: Переменные окружения для web
+      # Передача переменных из .env, которые вы уже используете
+      - DEBUG=${DEBUG}
+      - SECRET_KEY=${SECRET_KEY}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT}
+      # Переменная окружения для Redis
+      - REDIS_URL=redis://redis:6379/1 # <-- ДОБАВЛЕНО: Указывает на сервис Redis
 
   nginx:
     image: nginx:1.25
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - static_volume:/app/staticfiles
@@ -35,7 +47,16 @@ services:
     env_file:
       - .env
 
+  redis: # <-- ДОБАВЛЕНО: Новый сервис для Redis
+    image: redis:7-alpine # Используем легковесный образ Redis
+    hostname: redis # Имя хоста для доступа из других контейнеров (например, web)
+    ports:
+      - "6379:6379" # Опционально: если вы хотите доступ к Redis извне Docker (например, для redis-cli)
+    volumes:
+      - redis_data:/data # Для персистентности данных Redis
+
 volumes:
   postgres_data:
   static_volume:
   media_volume:
+  redis_data: # <-- ДОБАВЛЕНО: Определяем именованный том для Redis

@@ -1,11 +1,10 @@
-// Обработка формы обратной связи
 document.addEventListener('DOMContentLoaded', function() {
+    // Обработка формы обратной связи
     const contactForm = document.querySelector('form[action*="contact"]');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             const phoneInput = this.querySelector('input[name="phone"]');
             if (phoneInput) {
-                // Очищаем телефон от всего кроме цифр
                 phoneInput.value = phoneInput.value.replace(/\D/g, '');
             }
         });
@@ -14,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Обработка рейтинга в форме отзывов
     const ratingInputs = document.querySelectorAll('input[name="rating"]');
     const starIcons = document.querySelectorAll('.fa-star');
-
     ratingInputs.forEach((input, index) => {
         input.addEventListener('change', function() {
             starIcons.forEach((star, starIndex) => {
@@ -29,26 +27,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // --- МОБИЛЬНОЕ МЕНЮ (НОВАЯ логика) ---
-    const mobileMenuButton = document.getElementById('mobile-menu-button'); // Получаем кнопку по ID
-    const mobileMenu = document.getElementById('mobile-menu');             // Получаем контейнер меню по ID
-
+    // Обработка мобильного меню
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
     if (mobileMenuButton && mobileMenu) {
+        // Сброс состояния мобильного меню при загрузке
+        if (mobileMenu.classList.contains('active')) {
+            mobileMenu.classList.remove('active');
+            const burgerIcon = mobileMenuButton.querySelector('i');
+            if (burgerIcon) {
+                burgerIcon.classList.remove('fa-times');
+                burgerIcon.classList.add('fa-bars');
+            }
+        }
+
         mobileMenuButton.addEventListener('click', function() {
-            mobileMenu.classList.toggle('active'); // Переключаем класс 'active'
-            const burgerIcon = this.querySelector('i'); // Находим иконку внутри кнопки
+            mobileMenu.classList.toggle('active');
+            const burgerIcon = this.querySelector('i');
             if (mobileMenu.classList.contains('active')) {
-                // Если меню активно, меняем иконку на крестик
                 burgerIcon.classList.remove('fa-bars');
                 burgerIcon.classList.add('fa-times');
             } else {
-                // Если меню не активно, меняем иконку на бургер
                 burgerIcon.classList.remove('fa-times');
                 burgerIcon.classList.add('fa-bars');
             }
         });
 
-        // Закрытие меню при клике вне его или на ссылку
+        // Закрытие меню при клике вне его
         document.addEventListener('click', function(e) {
             if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
                 if (mobileMenu.classList.contains('active')) {
@@ -62,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Закрытие меню при клике на ссылку внутри него
+        // Закрытие меню при клике на ссылку
         mobileMenu.querySelectorAll('.nav-link-mobile').forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.remove('active');
@@ -88,68 +93,57 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Function to start number counting animation
+    // Анимация счетчика чисел
     function startNumberCounting(targetElement) {
         const numbers = targetElement.querySelectorAll('.js-count');
-
         numbers.forEach(numberElement => {
-            // Ensure animation only runs once per element
             if (numberElement.dataset.animated) {
                 return;
             }
-            numberElement.dataset.animated = true; // Mark as animated
-
+            numberElement.dataset.animated = true;
             const target = parseFloat(numberElement.dataset.target);
             const postfix = numberElement.dataset.postfix || '';
-            const duration = 2000; // Animation duration in milliseconds (2 seconds)
+            const duration = 2000;
             const start = 0;
             let current = 0;
-            const increment = target / (duration / 10); // Calculate increment based on duration and ~10ms update interval
-
-            const isFloat = target % 1 !== 0; // Check if the target is a float
+            const increment = target / (duration / 10);
+            const isFloat = target % 1 !== 0;
 
             const updateCount = () => {
                 if (current < target) {
                     current += increment;
-                    if (current > target) { // Prevent overshooting the target
+                    if (current > target) {
                         current = target;
                     }
-                    // Format the number based on whether it's a float or integer
                     numberElement.textContent = isFloat ? current.toFixed(1) : Math.floor(current);
-                    requestAnimationFrame(updateCount); // Continue animation
+                    requestAnimationFrame(updateCount);
                 } else {
-                    numberElement.textContent = target + postfix; // Set final value with postfix
+                    numberElement.textContent = target + postfix;
                 }
             };
-
-            requestAnimationFrame(updateCount); // Start the animation
+            requestAnimationFrame(updateCount);
         });
     }
 
     // Анимация появления элементов при скролле
     const observerOptions = {
-        threshold: 0.1 // Trigger when 10% of the element is visible
+        threshold: 0.1
     };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate-fade-in');
-
-                // Check if the intersected element is the Statistics Section
-                // by checking if it contains elements with '.js-count'
                 if (entry.target.querySelector('.js-count')) {
                     startNumberCounting(entry.target);
                 }
-
-                // Анимация для карточек фотографий
                 const photoCards = entry.target.querySelectorAll('.work-photo-card');
                 photoCards.forEach((card, index) => {
                     setTimeout(() => {
                         card.classList.add('animate-fade-in');
-                    }, index * 100); // Задержка для последовательной анимации
+                    }, index * 100);
                 });
-                observer.unobserve(entry.target); // Stop observing once animated
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);

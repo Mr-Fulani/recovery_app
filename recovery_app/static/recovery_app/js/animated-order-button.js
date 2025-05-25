@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             // Отправляем форму программно
             form.submit();
-        }, 7000);
+        }, 5000);
 
         // Сбрасываем анимацию через 10 секунд (если форма не отправилась)
         setTimeout(() => {

@@ -29,7 +29,18 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-for-developmen
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+    SECURE_SSL_REDIRECT = False # Отключите принудительное перенаправление на HTTPS в DEBUG режиме
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+else:
+    ALLOWED_HOSTS = ['5.187.4.131']
+    # Временно отключите SECURE_SSL_REDIRECT для локальной отладки с DEBUG=False
+    # ПОМНИТЕ: на продакшене эта настройка ДОЛЖНА БЫТЬ True, и у вас должен быть настроен HTTPS
+    SECURE_SSL_REDIRECT = False # <-- ИЗМЕНИТЕ ЭТУ СТРОКУ
+    SESSION_COOKIE_SECURE = True # Эти можно оставить True, если не вызывают проблем
+    CSRF_COOKIE_SECURE = True    # Но для полной уверенности, можете и их сделать False временно
 
 # Application definition
 
@@ -65,6 +76,7 @@ INSTALLED_APPS = [
     'crispy_tailwind',
     'widget_tweaks',
     'imagekit',
+    'django_redis',
 
     # Local apps
     'recovery_app',
@@ -197,6 +209,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Для разр
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
 EMAIL_USE_SSL = True
+# EMAIL_USE_TLS=True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 EMAIL_ADMIN = os.getenv('EMAIL_ADMIN', '')
@@ -225,26 +238,31 @@ TWITTER_URL = os.getenv('TWITTER_URL', 'https://twitter.com/yourpage')
 
 # Wagtail settings
 WAGTAIL_SITE_NAME = 'Эвакуатор'
-WAGTAILADMIN_BASE_URL = 'http://localhost'
+WAGTAILADMIN_BASE_URL = 'http://localhost:8080'
 
 
 
+# CACHES # <-- ДОБАВЛЕНО/ОБНОВЛЕНО
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake', # Уникальное имя для этого кэша
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1'),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+        'TIMEOUT': 300, # Время жизни кэша по умолчанию в секундах (5 минут)
     }
 }
 
 
 
-# Security Headers and Settings
-SECURE_SSL_REDIRECT = not DEBUG  # Перенаправление на HTTPS в продакшене
-SECURE_HSTS_SECONDS = 31536000  # HSTS на год
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SESSION_COOKIE_SECURE = not DEBUG  # Cookies только через HTTPS
-CSRF_COOKIE_SECURE = not DEBUG  # CSRF-токены только через HTTPS
-SECURE_BROWSER_XSS_FILTER = True  # Защита от XSS
-SECURE_CONTENT_TYPE_NOSNIFF = True  # Предотвращение MIME-типов
-X_FRAME_OPTIONS = 'DENY'  # Защита от кликджекинга
+# # Security Headers and Settings
+# SECURE_SSL_REDIRECT = not DEBUG  # Перенаправление на HTTPS в продакшене
+# SECURE_HSTS_SECONDS = 31536000  # HSTS на год
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+# SESSION_COOKIE_SECURE = not DEBUG  # Cookies только через HTTPS
+# CSRF_COOKIE_SECURE = not DEBUG  # CSRF-токены только через HTTPS
+# SECURE_BROWSER_XSS_FILTER = True  # Защита от XSS
+# SECURE_CONTENT_TYPE_NOSNIFF = True  # Предотвращение MIME-типов
+# X_FRAME_OPTIONS = 'DENY'  # Защита от кликджекинга

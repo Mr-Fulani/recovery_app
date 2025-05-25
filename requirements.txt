@@ -15,3 +15,4 @@ crispy-tailwind==0.5.0
 psycopg[binary]
 wagtailmedia>=0.1
 django-debug-toolbar>=4.4.6
+django-redis

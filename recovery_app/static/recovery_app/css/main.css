@@ -272,20 +272,21 @@ video {
     }
 
     .mobile-menu {
-        transform: translateY(-100%); /* Начальное положение для анимации выезда сверху (скрыто) */
-        transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Анимация */
+        display: none; /* Скрыто по умолчанию на мобильных устройствах */
+        transform: translateY(-100%);
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
         opacity: 0;
-        position: absolute; /* Позиционируем меню относительно родителя (header) */
-        top: 100%; /* Начинается прямо под шапкой */
+        position: absolute;
+        top: 100%;
         left: 0;
         width: 100%;
-        z-index: 40; /* Чуть ниже основного заголовка, но выше контента */
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Небольшая тень для меню */
+        z-index: 40;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
-    /* Класс, который JS будет добавлять для показа меню */
     .mobile-menu.active {
-        transform: translateY(0); /* Конечная позиция - полностью видно */
+        display: flex; /* Отображать как flex-столбец при активности */
+        transform: translateY(0);
         opacity: 1;
     }
 
@@ -300,6 +301,24 @@ video {
     .nav-link-mobile:hover {
         background-color: rgba(255, 255, 255, 0.1); /* Легкий фон при наведении */
     }
+}
+
+
+/* Скрытие мобильного меню на десктопе */
+@media (min-width: 768px) {
+    .mobile-menu {
+        display: none !important;
+    }
+}
+
+/* Улучшение UX кнопки мобильного меню */
+#mobile-menu-button {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease-out;
+}
+#mobile-menu-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 

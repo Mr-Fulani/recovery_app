@@ -26,10 +26,19 @@ class HomePage(Page):
         related_name='+',
         help_text="Видео для герой-секции"
     )
+    video_mobile = models.ForeignKey(
+        'wagtailmedia.Media',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        help_text="Мобильное видео для герой-секции"
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('intro'),
         FieldPanel('video'),
+        FieldPanel('video_mobile'),
     ]
 
 class Review(models.Model):

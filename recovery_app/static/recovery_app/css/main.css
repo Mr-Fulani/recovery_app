@@ -301,6 +301,34 @@ video {
     .nav-link-mobile:hover {
         background-color: rgba(255, 255, 255, 0.1); /* Легкий фон при наведении */
     }
+
+    .hero-section {
+        height: 60vh; /* Немного уменьшенная высота для мобильных */
+        min-height: 400px; /* Минимальная высота для корректного отображения */
+    }
+
+    /* Специфичные стили для мобильного видео */
+    .hero-section video {
+        /* Обеспечиваем правильное позиционирование */
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        transform: none; /* Убираем transform для мобильных */
+    }
+
+    /* Альтернативный подход - если видео все еще растягивается */
+    .hero-section video.block.md\:hidden {
+        width: 100vw;
+        height: 60vh;
+        min-height: 400px;
+        max-height: 60vh;
+        object-fit: cover;
+        object-position: center center;
+    }
 }
 
 
@@ -320,6 +348,58 @@ video {
 #mobile-menu-button:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
+
+
+
+
+
+
+
+/* Добавьте эти стили в ваш main.css */
+
+/* Базовые стили для hero-section */
+.hero-section {
+    height: 75vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Стили для видео */
+.hero-section video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+}
+
+
+
+/* Дополнительные стили для очень маленьких экранов */
+@media (max-width: 480px) {
+    .hero-section {
+        height: 50vh;
+        min-height: 350px;
+    }
+
+    .hero-section video {
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+
+/* Стили для постера (заставки) */
+.hero-section video[poster] {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 
 
 

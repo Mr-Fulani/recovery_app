@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static wagtailcore_tags %}
 {% load cache %}
 
 {% block title %}Home - Tow Truck{% endblock %}
@@ -15,22 +15,49 @@
 
 {% block content %}
 <section class="relative w-full hero-section overflow-hidden">
-    {% cache 259200 "hero_section" %}  {# 3 days cache #}
+    {% cache 259200 "hero_section" page.video.file.url page.video_mobile.file.url|default:'' %}
     {% if page.video %}
-    <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover">
-        <source src="{{ page.video.url }}" type="video/mp4">
-        Your browser does not support video.
-    </video>
+        <!-- Десктопное видео -->
+        <video autoplay muted loop playsinline preload="auto"
+               class="hidden md:block absolute top-0 left-0 w-full h-full object-cover"
+               poster="{% static 'recovery_app/images/poster-desktop.jpg' %}">
+            <source src="{{ page.video.url }}" type="video/mp4">
+            Your browser does not support video.
+        </video>
+
+        <!-- Мобильное видео -->
+        {% if page.video_mobile %}
+        <video autoplay muted loop playsinline preload="auto"
+               class="block md:hidden absolute top-0 left-0"
+               style="width: 100%; height: 100%; object-fit: cover;"
+               poster="{% static 'recovery_app/images/poster-desktop.jpg' %}">
+            <source src="{{ page.video_mobile.url }}" type="video/mp4">
+            Your browser does not support video.
+        </video>
+        {% else %}
+        <!-- Если мобильного видео нет, используем десктопное -->
+        <video autoplay muted loop playsinline preload="auto"
+               class="block md:hidden absolute top-0 left-0"
+               style="width: 100%; height: 100%; object-fit: cover;"
+               poster="{% static 'recovery_app/images/poster-desktop.jpg' %}">
+            <source src="{{ page.video.url }}" type="video/mp4">
+            Your browser does not support video.
+        </video>
+        {% endif %}
     {% else %}
     <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-center">
         <p class="text-white text-xl">Video not uploaded. Please add a video in the admin panel.</p>
     </div>
     {% endif %}
+
+    <!-- Оверлей и контент остаются без изменений -->
     <div class="absolute inset-0 bg-black opacity-50"></div>
     <div class="relative z-10 container mx-auto px-4 h-full flex flex-col text-center text-white">
         <div class="flex-1 flex flex-col justify-center">
             <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in hero-text-shadow">24/7 Car Towing</h1>
-            <p class="text-xl md:text-2xl mb-8 animate-fade-in hero-text-shadow" style="animation-delay: 0.2s;">Fast and reliable roadside assistance 24/7</p>
+            <p class="text-xl md:text-2xl mb-8 animate-fade-in hero-text-shadow" style="animation-delay: 0.2s;">
+                Fast and reliable roadside assistance 24/7
+            </p>
         </div>
         <div class="pb-8">
             <a href="{% url 'recovery_app:contact' %}"

@@ -39,8 +39,8 @@ else:
     # Временно отключите SECURE_SSL_REDIRECT для локальной отладки с DEBUG=False
     # ПОМНИТЕ: на продакшене эта настройка ДОЛЖНА БЫТЬ True, и у вас должен быть настроен HTTPS
     SECURE_SSL_REDIRECT = False # <-- ИЗМЕНИТЕ ЭТУ СТРОКУ
-    SESSION_COOKIE_SECURE = True # Эти можно оставить True, если не вызывают проблем
-    CSRF_COOKIE_SECURE = True    # Но для полной уверенности, можете и их сделать False временно
+    SESSION_COOKIE_SECURE = False # Эти можно оставить True, если не вызывают проблем
+    CSRF_COOKIE_SECURE = False    # Но для полной уверенности, можете и их сделать False временно
 
 # Application definition
 
@@ -283,8 +283,14 @@ WAGTAIL_CACHE_BACKEND = 'default'
 WAGTAIL_CACHE_TIMEOUT = CACHE_TIMEOUTS['static_content']
 
 # Session settings
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-SESSION_CACHE_ALIAS = 'default'
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://5.187.4.131',
+    'https://5.187.4.131',
+]
 
 # # Security Headers and Settings
 # SECURE_SSL_REDIRECT = not DEBUG  # Перенаправление на HTTPS в продакшене
@@ -296,3 +302,10 @@ SESSION_CACHE_ALIAS = 'default'
 # SECURE_BROWSER_XSS_FILTER = True  # Защита от XSS
 # SECURE_CONTENT_TYPE_NOSNIFF = True  # Предотвращение MIME-типов
 # X_FRAME_OPTIONS = 'DENY'  # Защита от кликджекинга
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8080',
+    'http://127.0.0.1:8080',
+    'http://5.187.4.131',
+    'https://5.187.4.131',
+]

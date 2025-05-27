@@ -99,7 +99,7 @@ def contact(request):
         cache.delete_pattern('view_services_*')
 
         messages.success(request, 'Your request has been successfully submitted! We will contact you shortly.')
-        return redirect('recovery_app:contact')
+        return redirect('recovery_app:home')
 
     context = {
         'whatsapp_number': settings.WHATSAPP_NUMBER,

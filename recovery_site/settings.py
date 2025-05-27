@@ -287,10 +287,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://5.187.4.131',
-    'https://5.187.4.131',
-]
+
 
 # # Security Headers and Settings
 # SECURE_SSL_REDIRECT = not DEBUG  # Перенаправление на HTTPS в продакшене

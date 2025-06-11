@@ -15,7 +15,7 @@
 
 {% block content %}
 <section class="relative w-full hero-section overflow-hidden">
-    {% cache 259200 "hero_section" page.video.file.url page.video_mobile.file.url|default:'' %}
+    {% cache 259200 "hero_section" page.video.file.url page.video_mobile.file.url|default:0 %}
     {% if page.video %}
         <!-- Десктопное видео -->
         <video autoplay muted loop playsinline preload="auto"

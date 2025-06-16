@@ -238,6 +238,14 @@ FACEBOOK_URL = os.getenv('FACEBOOK_URL', 'https://facebook.com/yourpage')
 INSTAGRAM_URL = os.getenv('INSTAGRAM_URL', 'https://instagram.com/yourpage')
 TWITTER_URL = os.getenv('TWITTER_URL', 'https://twitter.com/yourpage')
 
+# Analytics Settings
+GOOGLE_ANALYTICS_ID = os.getenv('GOOGLE_ANALYTICS_ID', 'G-XXXXXXXXXX')
+YANDEX_METRICA_ID = os.getenv('YANDEX_METRICA_ID', '12345678')
+
+# SEO Settings
+SITE_DOMAIN = os.getenv('SITE_DOMAIN', 'yourdomain.com')
+CANONICAL_URL = os.getenv('CANONICAL_URL', 'https://yourdomain.com')
+
 # Wagtail settings
 WAGTAIL_SITE_NAME = 'Эвакуатор'
 WAGTAILADMIN_BASE_URL = 'http://localhost:8080'

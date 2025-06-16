@@ -23,12 +23,14 @@ def get_cache_key(view_name, *args, **kwargs):
     """Generate a cache key for a view."""
     return f"view_{view_name}_{args}_{kwargs}"
 
-def get_slider_context():
+def get_slider_context(limit_photos=6):
     """
     Get common slider context for all pages.
     """
     home_page = HomePage.objects.live().first()
-    work_photos = WorkPhoto.objects.filter(is_published=True)[:6]  # Limit to 6 photos
+    work_photos = WorkPhoto.objects.filter(is_published=True)
+    if limit_photos:
+        work_photos = work_photos[:limit_photos]
     
     return {
         'slider_video': home_page.video if home_page else None,
@@ -215,8 +217,8 @@ def gallery(request):
         'whatsapp_number': settings.WHATSAPP_NUMBER,
     }
     
-    # Add slider context
-    context.update(get_slider_context())
+    # Add slider context without photo limit for gallery
+    context.update(get_slider_context(limit_photos=None))
     
     return render(request, 'gallery.html', context)
 

@@ -184,6 +184,12 @@
         </div>
         {% endfor %}
     </div>
+    <div class="text-center mt-8">
+        <a href="{% url 'recovery_app:gallery' %}" class="nav-action-button">
+            View Full Gallery
+            <i class="fas fa-images"></i>
+        </a>
+    </div>
 </section>
 {% endcache %}
 
@@ -210,7 +216,10 @@
         {% endfor %}
     </div>
     <div class="text-center mt-8">
-        <a href="{% url 'recovery_app:reviews' %}" class="text-blue-600 hover:text-blue-800">All Reviews →</a>
+        <a href="{% url 'recovery_app:reviews' %}" class="nav-action-button">
+            All Reviews
+            <i class="fas fa-arrow-right"></i>
+        </a>
     </div>
 </section>
 

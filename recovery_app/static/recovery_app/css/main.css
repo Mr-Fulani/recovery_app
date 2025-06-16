@@ -661,3 +661,144 @@ video {
 .border-primary {
     border-color: var(--primary-color);
 }
+
+/* Service Areas Styling */
+.service-areas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.service-area-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.service-area-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-area-item:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.service-area-item:hover {
+    background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.service-area-item:hover:before {
+    transform: scaleY(1);
+}
+
+.service-area-item.main-city {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-color: #3b82f6;
+    font-weight: 600;
+}
+
+.service-area-item.main-city:hover {
+    background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+    transform: translateX(8px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.25);
+}
+
+.service-area-item.main-city:before {
+    background: linear-gradient(to bottom, #fbbf24, #f59e0b);
+    width: 4px;
+}
+
+.service-area-item i {
+    color: #3b82f6;
+    font-size: 0.875rem;
+    margin-right: 0.75rem;
+    min-width: 16px;
+    transition: all 0.3s ease;
+}
+
+.service-area-item.main-city i {
+    color: #f59e0b;
+    font-size: 1rem;
+}
+
+.service-area-item:hover i {
+    transform: scale(1.1);
+}
+
+.service-area-item span {
+    color: #374151;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    transition: color 0.3s ease;
+}
+
+.service-area-item:hover span {
+    color: #1f2937;
+}
+
+.service-area-item.main-city span {
+    color: #1e40af;
+}
+
+/* Responsive Design for Service Areas */
+@media (max-width: 768px) {
+    .service-areas-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    
+    .service-area-item {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .service-area-item i {
+        font-size: 0.75rem;
+        margin-right: 0.5rem;
+        min-width: 14px;
+    }
+    
+    .service-area-item.main-city i {
+        font-size: 0.875rem;
+    }
+    
+    .service-area-item span {
+        font-size: 0.8125rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .service-areas-grid {
+        gap: 0.5rem;
+    }
+    
+    .service-area-item {
+        padding: 0.5rem;
+    }
+    
+    .service-area-item:hover {
+        transform: translateX(3px);
+    }
+    
+    .service-area-item.main-city:hover {
+        transform: translateX(5px);
+    }
+}

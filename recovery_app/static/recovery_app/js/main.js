@@ -30,53 +30,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // Обработка мобильного меню
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
+
     if (mobileMenuButton && mobileMenu) {
-        // Сброс состояния мобильного меню при загрузке
-        if (mobileMenu.classList.contains('active')) {
-            mobileMenu.classList.remove('active');
-            const burgerIcon = mobileMenuButton.querySelector('i');
-            if (burgerIcon) {
-                burgerIcon.classList.remove('fa-times');
-                burgerIcon.classList.add('fa-bars');
-            }
-        }
+        // Очистка предыдущих обработчиков
+        mobileMenuButton.replaceWith(mobileMenuButton.cloneNode(true));
+        const newMobileMenuButton = document.getElementById('mobile-menu-button');
 
-        mobileMenuButton.addEventListener('click', function() {
+        newMobileMenuButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            this.classList.toggle('active');
             mobileMenu.classList.toggle('active');
-            const burgerIcon = this.querySelector('i');
-            if (mobileMenu.classList.contains('active')) {
-                burgerIcon.classList.remove('fa-bars');
-                burgerIcon.classList.add('fa-times');
-            } else {
-                burgerIcon.classList.remove('fa-times');
-                burgerIcon.classList.add('fa-bars');
-            }
-        });
-
-        // Закрытие меню при клике вне его
-        document.addEventListener('click', function(e) {
-            if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
-                if (mobileMenu.classList.contains('active')) {
-                    mobileMenu.classList.remove('active');
-                    const burgerIcon = mobileMenuButton.querySelector('i');
-                    if (burgerIcon) {
-                        burgerIcon.classList.remove('fa-times');
-                        burgerIcon.classList.add('fa-bars');
-                    }
-                }
-            }
         });
 
         // Закрытие меню при клике на ссылку
         mobileMenu.querySelectorAll('.nav-link-mobile').forEach(link => {
             link.addEventListener('click', () => {
+                newMobileMenuButton.classList.remove('active');
                 mobileMenu.classList.remove('active');
-                const burgerIcon = mobileMenuButton.querySelector('i');
-                if (burgerIcon) {
-                    burgerIcon.classList.remove('fa-times');
-                    burgerIcon.classList.add('fa-bars');
-                }
             });
+        });
+
+        // Закрытие меню при клике вне его
+        document.addEventListener('click', function(e) {
+            if (!mobileMenu.contains(e.target) && !newMobileMenuButton.contains(e.target)) {
+                if (mobileMenu.classList.contains('active')) {
+                    newMobileMenuButton.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                }
+            }
         });
     }
 

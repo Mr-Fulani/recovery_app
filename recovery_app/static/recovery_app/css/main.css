@@ -19,6 +19,62 @@
     }
 }
 
+/* Анимация для гамбургер меню */
+@keyframes hamburgerToX1 {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(8px) rotate(0deg); }
+    100% { transform: translateY(8px) rotate(45deg); }
+}
+
+@keyframes hamburgerToX2 {
+    0% { opacity: 1; transform: scaleX(1); }
+    50% { opacity: 0; transform: scaleX(0); }
+    100% { opacity: 0; transform: scaleX(0); }
+}
+
+@keyframes hamburgerToX3 {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(0deg); }
+    100% { transform: translateY(-8px) rotate(-45deg); }
+}
+
+@keyframes XToHamburger1 {
+    0% { transform: translateY(8px) rotate(45deg); }
+    50% { transform: translateY(8px) rotate(0deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes XToHamburger2 {
+    0% { opacity: 0; transform: scaleX(0); }
+    50% { opacity: 0; transform: scaleX(0); }
+    100% { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes XToHamburger3 {
+    0% { transform: translateY(-8px) rotate(-45deg); }
+    50% { transform: translateY(-8px) rotate(0deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* Анимация пульсации для кнопок */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Анимация появления видео-фона */
+@keyframes videoFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(1.1);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 .animate-slide-in {
     animation: slideIn 0.3s ease-out;
 }
@@ -41,16 +97,17 @@
 
 /* Стили для форм */
 .form-input:focus {
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
 }
 
 /* Стили для кнопок */
 .btn-hover-effect {
-    transition: transform 0.2s ease-out;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 
 .btn-hover-effect:hover {
     transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 /* Стили для карточек */
@@ -60,12 +117,12 @@
 
 .card-hover:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
 /* Стили для мобильного меню */
 .mobile-menu-overlay {
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(8px);
 }
 
 /* Стили для рейтинга */
@@ -77,24 +134,84 @@
     transform: scale(1.2);
 }
 
-/* Стили для WhatsApp кнопки */
+/* Новые стили для кнопок виджетов - мобильная версия */
+.widget-buttons-mobile {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.widget-buttons-desktop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+}
+
+.widget-button {
+    pointer-events: all;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.widget-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+}
+
+.widget-button:hover::before {
+    width: 100%;
+    height: 100%;
+}
+
+.widget-button:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.widget-button:active {
+    transform: scale(0.95);
+}
+
 .whatsapp-button {
-    transition: transform 0.2s ease-out, background-color 0.2s ease-out;
+    background: linear-gradient(135deg, #25D366, #128C7E);
 }
 
 .whatsapp-button:hover {
-    transform: scale(1.1);
-    background-color: #25D366;
+    background: linear-gradient(135deg, #128C7E, #25D366);
 }
 
-/* Стили для кнопки звонка */
 .call-button {
-    transition: transform 0.2s ease-out, background-color 0.2s ease-out;
+    background: linear-gradient(135deg, #3B82F6, #1E40AF);
 }
 
 .call-button:hover {
-    transform: scale(1.1);
-    background-color: #2563eb;
+    background: linear-gradient(135deg, #1E40AF, #3B82F6);
 }
 
 /* Стили для сообщений */
@@ -105,7 +222,7 @@
 /* Стили для загрузки */
 .loading-spinner {
     border: 3px solid #f3f3f3;
-    border-top: 3px solid #2563eb;
+    border-top: 3px solid #10B981;
     border-radius: 50%;
     width: 24px;
     height: 24px;
@@ -119,197 +236,313 @@
 
 /* Тень для текста на видео */
 .hero-text-shadow {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 /* Стили для кнопки в герой-секции */
 .hero-button {
     display: inline-block !important;
     width: auto !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
-}
-.hero-button:hover {
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, #10B981, #059669);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    color: white;
 }
 
-/* Видео стили */
+.hero-button:hover {
+    background: linear-gradient(135deg, #059669, #10B981);
+    box-shadow: 0 15px 35px rgba(16, 185, 129, 0.6);
+    transform: translateY(-3px) scale(1.02);
+    color: white;
+}
+
+/* Видео стили с анимацией */
 video {
     object-fit: cover;
+    animation: videoFadeIn 1s ease-out;
+}
+
+/* Глобальный фон видео для всех страниц */
+.global-video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.1;
+}
+
+.global-video-background video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(2px) brightness(0.3);
 }
 
 /* Стили для логотипа */
 .logo-img {
     object-fit: contain;
-    transition: transform 0.2s ease-out;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
+
 .logo-img:hover {
-    transform: scale(1.05);
+    transform: scale(1.05) rotate(-2deg);
 }
 
 /* Стили для ссылок навигации */
 .nav-link {
     display: inline-block;
-    transition: transform 0.2s ease-out, color 0.2s ease-out;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transform-origin: center;
+    position: relative;
+    overflow: hidden;
 }
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #10B981, #34D399);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::before {
+    width: 100%;
+}
+
 .nav-link:hover {
-    transform: scale(1.05);
-    color: #e5e7eb;
+    transform: translateY(-2px);
+    color: #10B981;
 }
 
+/* Стили для гамбургер кнопки */
+.hamburger-button {
+    width: 30px;
+    height: 24px;
+    position: relative;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
 
+.hamburger-button:hover {
+    background-color: rgba(16, 185, 129, 0.1);
+}
 
+.hamburger-line {
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 1px;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    left: 0;
+}
 
-/* --- Work Photos Section Styles --- */
-/* The parent section containing the grid */
+.hamburger-line:nth-child(1) {
+    top: 6px;
+}
+
+.hamburger-line:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.hamburger-line:nth-child(3) {
+    bottom: 6px;
+}
+
+.hamburger-button.active .hamburger-line:nth-child(1) {
+    animation: hamburgerToX1 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.hamburger-button.active .hamburger-line:nth-child(2) {
+    animation: hamburgerToX2 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.hamburger-button.active .hamburger-line:nth-child(3) {
+    animation: hamburgerToX3 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.hamburger-button:not(.active) .hamburger-line:nth-child(1) {
+    animation: XToHamburger1 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.hamburger-button:not(.active) .hamburger-line:nth-child(2) {
+    animation: XToHamburger2 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.hamburger-button:not(.active) .hamburger-line:nth-child(3) {
+    animation: XToHamburger3 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* Work Photos Section Styles */
 .container.mx-auto.px-4.mb-12.animate-on-scroll {
-    /* ОГРАНИЧИВАЕМ ОБЩУЮ ШИРИНУ РАЗДЕЛА */
-    max-width: 1100px; /* ИЗМЕНИТЕ ЭТО ЗНАЧЕНИЕ: например, с 900px на 1100px */
-    margin-left: auto; /* Центрируем раздел */
-    margin-right: auto; /* Центрируем раздел */
-    padding-left: 0; /* Убираем стандартный отступ px-4, если он мешает */
-    padding-right: 0; /* Убираем стандартный отступ px-4, если он мешает */
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
 }
 
-/* Здесь остаются правила nth-child для каждого изображения, чтобы сохранить ваш макет
-   Они были в предыдущем ответе и, как вы сказали, работают для заполнения. */
-
-/* Image 1 (large SUV, top left - forloop.counter0 == 0) */
 .work-photo-card:nth-child(1) {
     grid-column: span 2;
     grid-row: span 2;
 }
 
-/* Image 2 (red car on flatbed, top right next to SUV - forloop.counter0 == 1) */
 .work-photo-card:nth-child(2) {
     grid-column: span 2;
     grid-row: span 1;
 }
 
-/* Image 3 (white van on flatbed, below red car - forloop.counter0 == 2) */
 .work-photo-card:nth-child(3) {
     grid-column: span 2;
     grid-row: span 1;
 }
 
-/* Image 4 (black van, below large SUV - forloop.counter0 == 3) */
 .work-photo-card:nth-child(4) {
     grid-column: span 1;
     grid-row: span 1;
 }
 
-/* Image 5 (classic car, next to black van - forloop.counter0 == 4) */
 .work-photo-card:nth-child(5) {
     grid-column: span 1;
     grid-row: span 1;
 }
 
-/* Image 6 (car in yard, next to classic car, fills remaining space - forloop.counter0 == 5) */
 .work-photo-card:nth-child(6) {
-    grid-column: span 2; /* It looks like it spans 2 columns in the screenshot to fill the remaining space */
+    grid-column: span 2;
     grid-row: span 1;
 }
 
-/* Hover effects (без изменений) */
 .work-photo-card:hover img {
-    transform: scale(1.03);
+    transform: scale(1.05);
 }
+
 .work-photo-card:hover .absolute {
     background-color: rgba(0, 0, 0, 0.6);
     opacity: 1;
 }
 
-/* --- МОБИЛЬНЫЕ НАСТРОЙКИ: СЛАЙДЕР --- */
+/* Мобильные настройки */
 @media (max-width: 767px) {
-    .work-photo-grid {
-        display: flex; /* Переключаем на flexbox для горизонтальной прокрутки */
-        overflow-x: auto; /* Включаем горизонтальную прокрутку */
-        scroll-snap-type: x mandatory; /* Плавная привязка при прокрутке */
-        gap: 1rem; /* Добавляем небольшой отступ между картинками в слайдере */
-        padding: 0 1rem; /* Отступы по бокам для видимости следующей картинки */
-        border-radius: 0; /* Убираем скругление у контейнера, если хотим, чтобы карточки выезжали без скругления по краям */
-        box-shadow: none; /* Убираем тень контейнера на мобильных, если она не нужна для слайдера */
-        background-color: transparent; /* Убираем фон контейнера, если он не нужен для слайдера */
+    /* Скрываем десктопные виджеты и показываем мобильные */
+    .widget-buttons-desktop {
+        display: none;
+    }
 
-        /* Важно: сбрасываем грид-свойства, чтобы они не конфликтовали с flexbox */
+    .widget-buttons-mobile {
+        display: flex;
+    }
+
+    .work-photo-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 1rem;
+        padding: 0 1rem;
+        border-radius: 0;
+        box-shadow: none;
+        background-color: transparent;
         grid-template-columns: unset;
         grid-auto-rows: unset;
-        min-height: unset; /* Убираем любые жесткие ограничения высоты */
+        min-height: unset;
     }
 
     .work-photo-card {
-        flex: 0 0 85%; /* Каждая карточка занимает 85% ширины экрана, оставляя немного для следующей */
-        scroll-snap-align: start; /* Привязка к началу карточки при прокрутке */
-        min-height: 200px; /* Устанавливаем минимальную высоту для карточек на мобильных */
-        max-width: 100%; /* Убедимся, что они не выходят за пределы */
-        border-radius: 8px; /* Добавляем скругление и тень к каждой карточке слайдера */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        flex: 0 0 85%;
+        scroll-snap-align: start;
+        min-height: 200px;
+        max-width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         background-color: #ffffff;
-        /* Важно: сбрасываем грид-свойства, которые были для больших экранов */
         grid-column: unset !important;
         grid-row: unset !important;
     }
 
-    /* Добавляем стили для полосы прокрутки (необязательно, для кастомизации) */
     .work-photo-grid::-webkit-scrollbar {
         height: 8px;
     }
 
     .work-photo-grid::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.2);
+        background: linear-gradient(90deg, #10B981, #34D399);
         border-radius: 4px;
     }
 
     .work-photo-grid::-webkit-scrollbar-track {
         background-color: rgba(0, 0, 0, 0.05);
     }
-    /* Стили для выпадающего мобильного меню */
-    header { /* Убедитесь, что header имеет position: relative или position: sticky */
-        position: relative; /* Важно для позиционирования мобильного меню */
-        z-index: 50; /* Убедимся, что шапка находится поверх всего */
+
+    header {
+        position: relative;
+        z-index: 50;
     }
 
     .mobile-menu {
-        display: none; /* Скрыто по умолчанию на мобильных устройствах */
+        display: none;
         transform: translateY(-100%);
-        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         opacity: 0;
         position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
         z-index: 40;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        background: rgba(31, 41, 55, 0.95);
     }
 
     .mobile-menu.active {
-        display: flex; /* Отображать как flex-столбец при активности */
+        display: flex;
         transform: translateY(0);
         opacity: 1;
     }
 
-    /* Стили для ссылок внутри мобильного меню */
     .nav-link-mobile {
-        padding: 0.75rem 1rem; /* Отступы для удобного нажатия */
-        display: block; /* Каждая ссылка на новой строке */
-        text-align: center; /* Центрируем текст */
-        transition: background-color 0.2s ease-out;
+        padding: 1rem 1.5rem;
+        display: block;
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .nav-link-mobile::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .nav-link-mobile:hover::before {
+        left: 100%;
     }
 
     .nav-link-mobile:hover {
-        background-color: rgba(255, 255, 255, 0.1); /* Легкий фон при наведении */
+        background-color: rgba(16, 185, 129, 0.1);
+        color: #10B981;
+        transform: translateX(10px);
     }
 
     .hero-section {
-        height: 60vh; /* Немного уменьшенная высота для мобильных */
-        min-height: 400px; /* Минимальная высота для корректного отображения */
+        height: 60vh;
+        min-height: 400px;
     }
 
-    /* Специфичные стили для мобильного видео */
     .hero-section video {
-        /* Обеспечиваем правильное позиционирование */
         position: absolute;
         top: 0;
         left: 0;
@@ -317,10 +550,9 @@ video {
         height: 100%;
         object-fit: cover;
         object-position: center center;
-        transform: none; /* Убираем transform для мобильных */
+        transform: none;
     }
 
-    /* Альтернативный подход - если видео все еще растягивается */
     .hero-section video.block.md\:hidden {
         width: 100vw;
         height: 60vh;
@@ -331,31 +563,20 @@ video {
     }
 }
 
-
-/* Скрытие мобильного меню на десктопе */
+/* Скрытие мобильных виджетов на десктопе */
 @media (min-width: 768px) {
     .mobile-menu {
         display: none !important;
     }
+
+    .widget-buttons-mobile {
+        display: none;
+    }
+
+    .widget-buttons-desktop {
+        display: flex;
+    }
 }
-
-/* Улучшение UX кнопки мобильного меню */
-#mobile-menu-button {
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    transition: background-color 0.2s ease-out;
-}
-#mobile-menu-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-
-
-
-
-
-
-/* Добавьте эти стили в ваш main.css */
 
 /* Базовые стили для hero-section */
 .hero-section {
@@ -364,7 +585,6 @@ video {
     overflow: hidden;
 }
 
-/* Стили для видео */
 .hero-section video {
     position: absolute;
     top: 50%;
@@ -376,8 +596,6 @@ video {
     transform: translate(-50%, -50%);
     object-fit: cover;
 }
-
-
 
 /* Дополнительные стили для очень маленьких экранов */
 @media (max-width: 480px) {
@@ -391,28 +609,55 @@ video {
         object-fit: cover;
         object-position: center;
     }
+
+    .widget-button {
+        width: 55px;
+        height: 55px;
+    }
 }
 
-/* Стили для постера (заставки) */
 .hero-section video[poster] {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-
-
-
 .video-container {
     max-width: 100%;
     overflow: hidden;
     border-radius: 0.5rem;
 }
+
 .video-container video {
     width: 100%;
     height: auto;
     object-fit: cover;
 }
-.hero-section {
-    height: 75vh; /* Уменьшенная высота (было 100vh через h-screen) */
+
+/* Обновленная цветовая схема */
+:root {
+    --primary-color: #10B981;
+    --primary-dark: #059669;
+    --secondary-color: #34D399;
+    --accent-color: #F59E0B;
+    --text-dark: #1F2937;
+    --text-light: #6B7280;
+    --background-light: #F9FAFB;
+}
+
+/* Новые цвета для элементов */
+.bg-primary {
+    background-color: var(--primary-color);
+}
+
+.bg-primary-dark {
+    background-color: var(--primary-dark);
+}
+
+.text-primary {
+    color: var(--primary-color);
+}
+
+.border-primary {
+    border-color: var(--primary-color);
 }

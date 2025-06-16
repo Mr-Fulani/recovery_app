@@ -1,0 +1,51 @@
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+<!-- Фоновый слайдер для страниц -->
+<section class="background-slider-section" id="background-slider">
+    <div class="background-slider-container">
+        <div class="background-slider-track" id="backgroundSliderTrack">
+            <!-- Видео элементы -->
+            {% if slider_video %}
+            <div class="background-slide video-slide">
+                <video autoplay muted loop playsinline preload="metadata" class="background-slide-video">
+                    <source src="{{ slider_video.url }}" type="video/mp4">
+                    Your browser does not support video.
+                </video>
+            </div>
+            {% endif %}
+
+            <!-- Мобильное видео -->
+            {% if slider_video_mobile %}
+            <div class="background-slide video-slide mobile-video">
+                <video autoplay muted loop playsinline preload="metadata" class="background-slide-video">
+                    <source src="{{ slider_video_mobile.url }}" type="video/mp4">
+                    Your browser does not support video.
+                </video>
+            </div>
+            {% endif %}
+
+            <!-- Фотографии работ -->
+            {% for photo in slider_work_photos %}
+            <div class="background-slide photo-slide">
+                {% if photo.image %}
+                    {% image photo.image fill-1200x600 as slide_img %}
+                    <img src="{{ slide_img.url }}" alt="{{ photo.title }}" class="background-slide-image">
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Оверлей для затемнения -->
+        <div class="background-slider-overlay"></div>
+        
+        <!-- Слот для контента страницы -->
+        <div class="background-slider-content">
+            <div class="container mx-auto px-4 h-full flex flex-col justify-center text-center text-white">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-fade-in hero-text-shadow">{{ page_title }}</h1>
+                {% if page_subtitle %}
+                <p class="text-xl md:text-2xl animate-fade-in hero-text-shadow" style="animation-delay: 0.2s;">{{ page_subtitle }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section> 

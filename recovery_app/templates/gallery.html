@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static wagtailimages_tags %}
+
+{% block title %}Gallery - Tow Truck Service{% endblock %}
+
+{% block meta_description %}
+<meta name="description" content="Gallery of our completed work. Professional towing services with photo documentation.">
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'recovery_app/css/main.css' %}">
+<link rel="stylesheet" href="{% static 'recovery_app/css/gallery.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Фоновый слайдер с заголовком -->
+{% include 'includes/background_slider.html' with page_title="Our Gallery" page_subtitle="Professional work documented" %}
+
+<div class="container mx-auto px-4 mt-12">
+    <!-- Статистика галереи -->
+    <div class="bg-white rounded-lg shadow-md p-8 mb-12 text-center">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <div class="text-4xl font-bold text-blue-600 mb-2">{{ total_photos }}</div>
+                <p class="text-gray-600">Total Photos</p>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-blue-600 mb-2">{{ work_photos.count }}</div>
+                <p class="text-gray-600">Completed Jobs</p>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-blue-600 mb-2">100%</div>
+                <p class="text-gray-600">Success Rate</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Фильтры (если нужно будет добавить категории) -->
+    <div class="mb-8">
+        <div class="flex justify-center">
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-th mr-2"></i>All Photos
+                    </button>
+                    <button class="filter-btn" data-filter="recent">
+                        <i class="fas fa-clock mr-2"></i>Recent
+                    </button>
+                    <button class="filter-btn" data-filter="featured">
+                        <i class="fas fa-star mr-2"></i>Featured
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Галерея -->
+    <div class="gallery-grid" id="galleryGrid">
+        {% for photo in photos_with_images %}
+        <div class="gallery-item" data-category="{% if forloop.counter <= 6 %}recent{% endif %} {% if forloop.counter0|divisibleby:3 %}featured{% endif %}">
+            {% if photo.image %}
+                {% image photo.image fill-400x300 as thumb_img %}
+                {% image photo.image original as full_img %}
+                <div class="gallery-item-inner">
+                    <img src="{{ thumb_img.url }}" alt="{{ photo.title }}" class="gallery-thumbnail" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-info">
+                            <h3 class="gallery-title">{{ photo.title }}</h3>
+                            <p class="gallery-description">{{ photo.description|truncatewords:10 }}</p>
+                            <div class="gallery-date">{{ photo.created_at|date:"M d, Y" }}</div>
+                        </div>
+                        <div class="gallery-actions">
+                            <button class="gallery-btn view-btn" data-image="{{ full_img.url }}" data-title="{{ photo.title }}" data-description="{{ photo.description }}">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="gallery-btn download-btn" data-image="{{ full_img.url }}">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12">
+            <i class="fas fa-images text-6xl text-gray-400 mb-4"></i>
+            <h3 class="text-2xl font-bold text-gray-600 mb-2">No Photos Yet</h3>
+            <p class="text-gray-500">Check back soon for our latest work!</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Пагинация (если нужно будет добавить) -->
+    {% if photos_with_images.count > 12 %}
+    <div class="mt-12 flex justify-center">
+        <button class="load-more-btn" id="loadMoreBtn">
+            <i class="fas fa-plus mr-2"></i>Load More Photos
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Модальное окно для просмотра фото -->
+<div class="modal" id="imageModal">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-content">
+        <button class="modal-close" id="modalClose">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-image-container">
+            <img id="modalImage" src="" alt="" class="modal-image">
+            <div class="modal-navigation">
+                <button class="modal-nav prev-image" id="prevImage">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="modal-nav next-image" id="nextImage">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="modal-info">
+            <h3 class="modal-title" id="modalTitle"></h3>
+            <p class="modal-description" id="modalDescription"></p>
+            <div class="modal-actions">
+                <button class="modal-action-btn download-full" id="downloadFull">
+                    <i class="fas fa-download mr-2"></i>Download
+                </button>
+                <button class="modal-action-btn share-btn" id="shareBtn">
+                    <i class="fas fa-share mr-2"></i>Share
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'recovery_app/js/main.js' %}"></script>
+<script src="{% static 'recovery_app/js/gallery.js' %}"></script>
+{% endblock %} 

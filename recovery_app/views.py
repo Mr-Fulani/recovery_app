@@ -22,6 +22,19 @@ def get_cache_key(view_name, *args, **kwargs):
     """Generate a cache key for a view."""
     return f"view_{view_name}_{args}_{kwargs}"
 
+def get_slider_context():
+    """
+    Get common slider context for all pages.
+    """
+    home_page = HomePage.objects.live().first()
+    work_photos = WorkPhoto.objects.filter(is_published=True)[:6]  # Limit to 6 photos
+    
+    return {
+        'slider_video': home_page.video if home_page else None,
+        'slider_video_mobile': home_page.video_mobile if home_page else None,
+        'slider_work_photos': work_photos,
+    }
+
 @cache_page(settings.CACHE_TIMEOUTS['home_page'])
 @vary_on_cookie
 def home(request):
@@ -44,6 +57,10 @@ def home(request):
         'total_services': 1000,
         'whatsapp_number': settings.WHATSAPP_NUMBER,
     }
+    
+    # Add slider context
+    context.update(get_slider_context())
+    
     return render(request, 'home_page.html', context)
 
 @cache_page(settings.CACHE_TIMEOUTS['static_content'])
@@ -54,6 +71,10 @@ def services(request):
     context = {
         'whatsapp_number': settings.WHATSAPP_NUMBER,
     }
+    
+    # Add slider context
+    context.update(get_slider_context())
+    
     return render(request, 'service_page.html', context)
 
 @require_http_methods(["GET", "POST"])
@@ -104,6 +125,10 @@ def contact(request):
     context = {
         'whatsapp_number': settings.WHATSAPP_NUMBER,
     }
+    
+    # Add slider context
+    context.update(get_slider_context())
+    
     return render(request, 'contact_page.html', context)
 
 @cache_page(settings.CACHE_TIMEOUTS['dynamic_content'])
@@ -152,4 +177,30 @@ def reviews(request):
         'total_reviews': total_reviews_count,
         'total_services': total_services_completed,
     }
+    
+    # Add slider context
+    context.update(get_slider_context())
+    
     return render(request, 'reviews.html', context)
+
+@cache_page(settings.CACHE_TIMEOUTS['static_content'])
+def gallery(request):
+    """
+    Render the gallery page with all work photos and videos.
+    """
+    work_photos = WorkPhoto.objects.filter(is_published=True).order_by('-created_at')
+    
+    # Разделяем на фото и видео если нужно
+    photos_with_images = work_photos.filter(image__isnull=False)
+    
+    context = {
+        'work_photos': work_photos,
+        'photos_with_images': photos_with_images,
+        'total_photos': work_photos.count(),
+        'whatsapp_number': settings.WHATSAPP_NUMBER,
+    }
+    
+    # Add slider context
+    context.update(get_slider_context())
+    
+    return render(request, 'gallery.html', context)

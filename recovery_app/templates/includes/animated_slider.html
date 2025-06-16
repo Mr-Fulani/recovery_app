@@ -1,0 +1,78 @@
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+<!-- Анимированный слайдер с видео и фотографиями -->
+<section class="animated-slider-section" id="animated-slider">
+    <div class="slider-container">
+        <div class="slider-track" id="sliderTrack">
+            <!-- Видео элементы -->
+            {% if slider_video %}
+            <div class="slide video-slide">
+                <video autoplay muted loop playsinline preload="metadata" class="slide-video">
+                    <source src="{{ slider_video.url }}" type="video/mp4">
+                    Your browser does not support video.
+                </video>
+                <div class="slide-overlay">
+                    <div class="slide-content">
+                        <h3 class="slide-title">24/7 Professional Towing</h3>
+                        <p class="slide-description">Reliable roadside assistance when you need it most</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Мобильное видео -->
+            {% if slider_video_mobile %}
+            <div class="slide video-slide mobile-video">
+                <video autoplay muted loop playsinline preload="metadata" class="slide-video">
+                    <source src="{{ slider_video_mobile.url }}" type="video/mp4">
+                    Your browser does not support video.
+                </video>
+                <div class="slide-overlay">
+                    <div class="slide-content">
+                        <h3 class="slide-title">Mobile Optimized</h3>
+                        <p class="slide-description">Accessible anywhere, anytime</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Фотографии работ -->
+            {% for photo in slider_work_photos %}
+            <div class="slide photo-slide">
+                {% if photo.image %}
+                    {% image photo.image fill-800x600 as slide_img %}
+                    <img src="{{ slide_img.url }}" alt="{{ photo.title }}" class="slide-image">
+                    <div class="slide-overlay">
+                        <div class="slide-content">
+                            <h3 class="slide-title">{{ photo.title }}</h3>
+                            <p class="slide-description">{{ photo.description|truncatewords:10 }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Навигация слайдера -->
+        <div class="slider-navigation">
+            <button class="nav-btn prev-btn" id="prevBtn" aria-label="Previous slide">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn next-btn" id="nextBtn" aria-label="Next slide">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Индикаторы -->
+        <div class="slider-indicators" id="sliderIndicators">
+            <!-- Будут добавлены через JavaScript -->
+        </div>
+
+        <!-- Кнопка управления автопрокруткой -->
+        <div class="slider-controls">
+            <button class="play-pause-btn" id="playPauseBtn" aria-label="Play/Pause slideshow">
+                <i class="fas fa-pause"></i>
+            </button>
+        </div>
+    </div>
+</section> 

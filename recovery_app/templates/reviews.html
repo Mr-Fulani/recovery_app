@@ -13,8 +13,10 @@
 {% endblock %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto">
-    <h1 class="text-4xl font-bold text-center mb-12">Our Customer Reviews</h1>
+<!-- Фоновый слайдер с заголовком -->
+{% include 'includes/background_slider.html' with page_title="Customer Reviews" page_subtitle="See what our clients say about us" %}
+
+<div class="max-w-6xl mx-auto mt-12">
 
     {# Обновленный блок статистики: добавлен animate-on-scroll и данные для js-count #}
     <div class="bg-white rounded-lg shadow-md p-8 mb-12 card-hover animate-on-scroll pt-12 pb-12">

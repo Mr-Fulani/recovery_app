@@ -2,7 +2,15 @@
 
 <!-- Анимированный слайдер с видео и фотографиями -->
 <section class="animated-slider-section" id="animated-slider">
-    <div class="slider-container">
+    <!-- Preloader для слайдера -->
+    <div class="slider-preloader" id="sliderPreloader">
+        <div class="preloader-spinner">
+            <div class="spinner-circle"></div>
+        </div>
+        <p class="preloader-text">Loading content...</p>
+    </div>
+    
+    <div class="slider-container" id="sliderContainer" style="opacity: 0; transition: opacity 0.5s ease-in-out;">
         <div class="slider-track" id="sliderTrack">
             <!-- Видео элементы -->
             {% if slider_video %}

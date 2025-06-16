@@ -2,10 +2,15 @@
 {% load static wagtailcore_tags %}
 {% load cache %}
 
-{% block title %}Home - Tow Truck{% endblock %}
+{% block title %}Dynamix Recovery - Professional Car Towing & Roadside Assistance in Northampton{% endblock %}
+
+{% block og_title %}Dynamix Recovery - Professional Car Towing & Roadside Assistance in Northampton{% endblock %}
+
+{% block twitter_title %}Dynamix Recovery - Professional Car Towing & Roadside Assistance in Northampton{% endblock %}
 
 {% block meta_description %}
-<meta name="description" content="Contacts of the car towing service. 24/7 roadside assistance. Phone, address, working hours.">
+<meta name="description" content="Dynamix Recovery provides 24/7 professional car towing and roadside assistance in Northampton. Fast, reliable service covering Rugby, Towcester, Wellingborough and surrounding areas. Call now for emergency help!">
+<meta name="keywords" content="car towing Northampton, roadside assistance, emergency towing, breakdown recovery, 24/7 towing service, vehicle recovery Northampton, tow truck service">
 {% endblock %}
 
 {% block extra_css %}
@@ -14,6 +19,71 @@
 {% endblock %}
 
 {% block content %}
+<!-- Structured Data JSON-LD -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Dynamix Recovery",
+    "image": "{% static 'recovery_app/images/logo.png' %}",
+    "description": "Professional 24/7 car towing and roadside assistance service in Northampton and surrounding areas.",
+    "url": "{{ request.build_absolute_uri }}",
+    "telephone": "{{ whatsapp_number }}",
+    "email": "support@dinamix.com",
+    "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Northampton",
+        "addressRegion": "Northamptonshire",
+        "addressCountry": "UK"
+    },
+    "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "52.2405",
+        "longitude": "-0.9027"
+    },
+    "openingHours": "Mo-Su 00:00-23:59",
+    "serviceArea": {
+        "@type": "Place",
+        "name": "Northamptonshire and surrounding areas"
+    },
+    "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Towing Services",
+        "itemListElement": [
+            {
+                "@type": "Offer",
+                "itemOffered": {
+                    "@type": "Service",
+                    "name": "Car Towing",
+                    "description": "Professional passenger car towing service"
+                }
+            },
+            {
+                "@type": "Offer",
+                "itemOffered": {
+                    "@type": "Service",
+                    "name": "Roadside Assistance",
+                    "description": "Emergency roadside assistance including jump starts and tire changes"
+                }
+            },
+            {
+                "@type": "Offer",
+                "itemOffered": {
+                    "@type": "Service",
+                    "name": "Fuel Delivery",
+                    "description": "Emergency fuel delivery service"
+                }
+            }
+        ]
+    },
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ average_rating|default:'4.8' }}",
+        "reviewCount": "{{ total_reviews|default:'127' }}"
+    }
+}
+</script>
+
 <!-- Главный слайдер с героем -->
 <section class="relative w-full hero-section overflow-hidden" style="height: 600px;">
     <!-- Слайдер как фон -->

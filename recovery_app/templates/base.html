@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if page.seo_title %}{{ page.seo_title }}{% else %}{% block title %}{% endblock %}{% endif %}</title>
+    <title>{% if page.seo_title %}{{ page.seo_title }}{% else %}{% block title %}Dynamix Recovery{% endblock %}{% endif %}</title>
     {% if page.search_description %}
     <meta name="description" content="{{ page.search_description }}">
     {% else %}
@@ -17,6 +17,48 @@
     <link rel="stylesheet" href="{% static 'recovery_app/css/animated-slider.css' %}">
 
     {% block extra_css %}{% endblock %}
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    
+    <!-- Yandex.Metrika -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+        
+        ym(YANDEX_METRIKA_ID, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true,
+            webvisor:true
+        });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/YANDEX_METRIKA_ID" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    
+    <!-- SEO мета теги -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{% block og_title %}Dynamix Recovery{% endblock %}{% endif %}">
+    <meta property="og:description" content="{% if page.search_description %}{{ page.search_description }}{% else %}Professional car towing and roadside assistance in Northampton. 24/7 emergency service.{% endif %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:site_name" content="Dynamix Recovery">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% if page.seo_title %}{{ page.seo_title }}{% else %}{% block twitter_title %}Dynamix Recovery{% endblock %}{% endif %}">
+    <meta name="twitter:description" content="{% if page.search_description %}{{ page.search_description }}{% else %}Professional car towing and roadside assistance in Northampton. 24/7 emergency service.{% endif %}">
+    
+    <!-- Дополнительные SEO мета теги -->
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Dynamix Recovery">
+    <meta name="language" content="en">
+    <meta name="revisit-after" content="7 days">
+    <meta name="rating" content="general">
 </head>
 
 <body class="flex flex-col min-h-screen" style="background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%);">

@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.http import HttpResponse
 from django.db import models
 from django.utils.html import strip_tags
 from django.views.decorators.http import require_http_methods
@@ -218,3 +219,23 @@ def gallery(request):
     context.update(get_slider_context())
     
     return render(request, 'gallery.html', context)
+
+def sitemap(request):
+    """
+    Generate XML sitemap for SEO.
+    """
+    context = {
+        'request': request,
+    }
+    return render(request, 'sitemap.xml', context, content_type='application/xml')
+
+def robots_txt(request):
+    """
+    Generate robots.txt for SEO.
+    """
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Sitemap: {}/sitemap.xml".format(request.build_absolute_uri('/')[:-1]),
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")

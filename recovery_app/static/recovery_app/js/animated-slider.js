@@ -8,6 +8,8 @@ class AnimatedSlider {
         this.container = document.getElementById(containerId);
         if (!this.container) return;
 
+        this.sliderContainer = this.container.querySelector('#sliderContainer');
+        this.preloader = this.container.querySelector('#sliderPreloader');
         this.sliderTrack = this.container.querySelector('#sliderTrack');
         this.slides = this.container.querySelectorAll('.slide');
         this.prevBtn = this.container.querySelector('#prevBtn');
@@ -20,32 +22,127 @@ class AnimatedSlider {
         this.isPlaying = true;
         this.autoPlayInterval = null;
         this.autoPlayDelay = 5000; // 5 секунд
+        this.isLoaded = false;
 
         this.init();
     }
 
     init() {
-        if (this.totalSlides === 0) return;
+        if (this.totalSlides === 0) {
+            this.hidePreloader();
+            return;
+        }
 
-        this.createIndicators();
-        this.bindEvents();
-        this.updateSlider();
-        this.startAutoPlay();
+        // Ждем загрузки всех медиа-элементов
+        this.preloadMedia().then(() => {
+            this.createIndicators();
+            this.bindEvents();
+            this.updateSlider();
+            this.hidePreloader();
+            this.startAutoPlay();
+            this.isLoaded = true;
 
-        // Добавляем обработчик для паузы при наведении
-        this.container.addEventListener('mouseenter', () => this.pauseAutoPlay());
-        this.container.addEventListener('mouseleave', () => {
-            if (this.isPlaying) this.startAutoPlay();
+            // Добавляем обработчик для паузы при наведении
+            this.container.addEventListener('mouseenter', () => this.pauseAutoPlay());
+            this.container.addEventListener('mouseleave', () => {
+                if (this.isPlaying) this.startAutoPlay();
+            });
+
+            // Обработчик для видимости страницы
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    this.pauseAutoPlay();
+                } else if (this.isPlaying) {
+                    this.startAutoPlay();
+                }
+            });
         });
+    }
 
-        // Обработчик для видимости страницы
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                this.pauseAutoPlay();
-            } else if (this.isPlaying) {
-                this.startAutoPlay();
+    async preloadMedia() {
+        const mediaElements = [];
+        
+        this.slides.forEach(slide => {
+            const video = slide.querySelector('video');
+            const image = slide.querySelector('img');
+            
+            if (video) {
+                mediaElements.push(this.loadVideo(video));
+            }
+            if (image) {
+                mediaElements.push(this.loadImage(image));
             }
         });
+
+        // Ждем загрузки всех элементов или максимум 5 секунд
+        return Promise.race([
+            Promise.all(mediaElements),
+            new Promise(resolve => setTimeout(resolve, 5000))
+        ]);
+    }
+
+    loadVideo(video) {
+        return new Promise(resolve => {
+            if (video.readyState >= 3) {
+                resolve();
+                return;
+            }
+            
+            const onLoadedData = () => {
+                video.removeEventListener('loadeddata', onLoadedData);
+                video.removeEventListener('error', onError);
+                resolve();
+            };
+            
+            const onError = () => {
+                video.removeEventListener('loadeddata', onLoadedData);
+                video.removeEventListener('error', onError);
+                resolve(); // Продолжаем даже если видео не загрузилось
+            };
+            
+            video.addEventListener('loadeddata', onLoadedData);
+            video.addEventListener('error', onError);
+            
+            // Форсируем загрузку
+            video.load();
+        });
+    }
+
+    loadImage(image) {
+        return new Promise(resolve => {
+            if (image.complete) {
+                resolve();
+                return;
+            }
+            
+            const onLoad = () => {
+                image.removeEventListener('load', onLoad);
+                image.removeEventListener('error', onError);
+                resolve();
+            };
+            
+            const onError = () => {
+                image.removeEventListener('load', onLoad);
+                image.removeEventListener('error', onError);
+                resolve(); // Продолжаем даже если изображение не загрузилось
+            };
+            
+            image.addEventListener('load', onLoad);
+            image.addEventListener('error', onError);
+        });
+    }
+
+    hidePreloader() {
+        if (this.preloader) {
+            this.preloader.classList.add('hidden');
+            setTimeout(() => {
+                this.preloader.style.display = 'none';
+            }, 500);
+        }
+        
+        if (this.sliderContainer) {
+            this.sliderContainer.style.opacity = '1';
+        }
     }
 
     createIndicators() {

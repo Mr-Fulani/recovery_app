@@ -88,13 +88,27 @@ def contact(request):
         email = request.POST.get('email')
         car_brand = request.POST.get('car_brand')
         message = request.POST.get('message')
+        
+        # New optional fields
+        pickup_location = request.POST.get('pickup_location')
+        destination = request.POST.get('destination')
+        service_type = request.POST.get('service_type')
+        urgency = request.POST.get('urgency', 'medium')
+        preferred_time = request.POST.get('preferred_time')
+        problem_details = request.POST.get('problem_details')
 
         service_request = ServiceRequest.objects.create(
             name=name,
             phone=phone,
             email=email,
             car_brand=car_brand,
-            message=message
+            message=message,
+            pickup_location=pickup_location,
+            destination=destination,
+            service_type=service_type,
+            urgency=urgency,
+            preferred_time=preferred_time,
+            problem_details=problem_details
         )
 
         # Send email notification

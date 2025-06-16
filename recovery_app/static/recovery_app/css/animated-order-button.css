@@ -46,7 +46,8 @@
 }
 
 .order-form-wrapper .form-group input,
-.order-form-wrapper .form-group textarea {
+.order-form-wrapper .form-group textarea,
+.order-form-wrapper .form-group select {
     width: 100%;
     padding: 12px;
     border: 2px solid #ddd;
@@ -54,12 +55,30 @@
     font-size: 16px;
     transition: border-color 0.3s ease;
     box-sizing: border-box;
+    background-color: white;
+}
+
+.order-form-wrapper .form-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+    cursor: pointer;
 }
 
 .order-form-wrapper .form-group input:focus,
-.order-form-wrapper .form-group textarea:focus {
+.order-form-wrapper .form-group textarea:focus,
+.order-form-wrapper .form-group select:focus {
     outline: none;
     border-color: var(--primary);
+}
+
+.order-form-wrapper .form-group select:hover {
+    border-color: #bbb;
 }
 
 .order-form-wrapper .required {

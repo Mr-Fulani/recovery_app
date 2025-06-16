@@ -239,6 +239,61 @@
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
 }
 
+/* Стили для главного логотипа DYNAMIX */
+.hero-logo-main {
+    font-family: 'Impact', 'Arial Black', 'Helvetica', sans-serif;
+    background: linear-gradient(45deg, #FFD700, #FF8C00, #FF4500, #DC143C);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease-in-out infinite;
+    letter-spacing: 0.1em;
+    position: relative;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+}
+
+.hero-logo-main::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #FFD700, #FF8C00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    z-index: -1;
+    filter: blur(10px);
+    opacity: 0.7;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.hero-subtitle {
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+}
+
+.hero-subtitle:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
 /* Стили для кнопки в герой-секции */
 .hero-button {
     display: inline-block !important;
@@ -290,6 +345,60 @@ video {
 
 .logo-img:hover {
     transform: scale(1.05) rotate(-2deg);
+}
+
+/* Мобильное текстовое лого */
+.mobile-logo-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #10B981, #34D399, #6EE7B7);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-flow 3s ease infinite;
+    text-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+    letter-spacing: 0.05em;
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-logo-text::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #10B981, #34D399);
+    border-radius: 8px;
+    opacity: 0;
+    transform: scale(1.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+    filter: blur(8px);
+}
+
+.mobile-logo-text:hover {
+    transform: scale(1.05);
+}
+
+.mobile-logo-text:hover::before {
+    opacity: 0.15;
+    transform: scale(1.2);
+}
+
+@keyframes gradient-flow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* Стили для ссылок навигации */
@@ -793,12 +902,18 @@ video {
     .service-area-item {
         padding: 0.5rem;
     }
-    
+
     .service-area-item:hover {
         transform: translateX(3px);
     }
-    
+
     .service-area-item.main-city:hover {
         transform: translateX(5px);
+    }
+
+    /* Адаптивное мобильное лого для очень маленьких экранов */
+    .mobile-logo-text {
+        font-size: 1.5rem;
+        letter-spacing: 0.02em;
     }
 }

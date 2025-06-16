@@ -33,6 +33,28 @@
         .value {
             color: #333;
         }
+        .section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-left: 4px solid #2563eb;
+            background-color: white;
+        }
+        .section-title {
+            font-weight: bold;
+            color: #2563eb;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .urgency {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .urgency-low { background-color: #d1fae5; color: #065f46; }
+        .urgency-medium { background-color: #fef3c7; color: #92400e; }
+        .urgency-high { background-color: #fed7aa; color: #c2410c; }
+        .urgency-emergency { background-color: #fee2e2; color: #dc2626; }
     </style>
 </head>
 <body>
@@ -41,33 +63,83 @@
             <h1>New Towing Request</h1>
         </div>
         <div class="content">
-            <div class="field">
-                <span class="label">Name:</span>
-                <span class="value">{{ service_request.name }}</span>
+            
+            <div class="section">
+                <div class="section-title">Contact Information</div>
+                <div class="field">
+                    <span class="label">Name:</span>
+                    <span class="value">{{ service_request.name }}</span>
+                </div>
+                <div class="field">
+                    <span class="label">Phone:</span>
+                    <span class="value">{{ service_request.phone }}</span>
+                </div>
+                {% if service_request.email %}
+                <div class="field">
+                    <span class="label">Email:</span>
+                    <span class="value">{{ service_request.email }}</span>
+                </div>
+                {% endif %}
             </div>
-            <div class="field">
-                <span class="label">Phone:</span>
-                <span class="value">{{ service_request.phone }}</span>
+
+            <div class="section">
+                <div class="section-title">Service Details</div>
+                {% if service_request.service_type %}
+                <div class="field">
+                    <span class="label">Service Type:</span>
+                    <span class="value">{{ service_request.get_service_type_display }}</span>
+                </div>
+                {% endif %}
+                <div class="field">
+                    <span class="label">Urgency:</span>
+                    <span class="value urgency urgency-{{ service_request.urgency }}">{{ service_request.get_urgency_display }}</span>
+                </div>
+                {% if service_request.preferred_time %}
+                <div class="field">
+                    <span class="label">Preferred Time:</span>
+                    <span class="value">{{ service_request.preferred_time }}</span>
+                </div>
+                {% endif %}
             </div>
-            {% if service_request.email %}
-            <div class="field">
-                <span class="label">Email:</span>
-                <span class="value">{{ service_request.email }}</span>
+
+            <div class="section">
+                <div class="section-title">Vehicle & Location</div>
+                {% if service_request.car_brand %}
+                <div class="field">
+                    <span class="label">Car Brand:</span>
+                    <span class="value">{{ service_request.car_brand }}</span>
+                </div>
+                {% endif %}
+                {% if service_request.pickup_location %}
+                <div class="field">
+                    <span class="label">Pickup Location:</span>
+                    <span class="value">{{ service_request.pickup_location }}</span>
+                </div>
+                {% endif %}
+                {% if service_request.destination %}
+                <div class="field">
+                    <span class="label">Destination:</span>
+                    <span class="value">{{ service_request.destination }}</span>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
-            {% if service_request.car_brand %}
-            <div class="field">
-                <span class="label">Car Brand:</span>
-                <span class="value">{{ service_request.car_brand }}</span>
-            </div>
-            {% endif %}
-            <div class="field">
-                <span class="label">Message:</span>
-                <p class="value">{{ service_request.message }}</p>
-            </div>
-            <div class="field">
-                <span class="label">Creation Date:</span>
-                <span class="value">{{ service_request.created_at|date:"d.m.Y H:i" }}</span>
+
+            <div class="section">
+                <div class="section-title">Additional Information</div>
+                {% if service_request.problem_details %}
+                <div class="field">
+                    <span class="label">Problem Details:</span>
+                    <p class="value">{{ service_request.problem_details }}</p>
+                </div>
+                {% endif %}
+                <div class="field">
+                    <span class="label">Additional Message:</span>
+                    <p class="value">{{ service_request.message }}</p>
+                </div>
+                <div class="field">
+                    <span class="label">Request Date:</span>
+                    <span class="value">{{ service_request.created_at|date:"d.m.Y H:i" }}</span>
+                </div>
             </div>
         </div>
     </div>

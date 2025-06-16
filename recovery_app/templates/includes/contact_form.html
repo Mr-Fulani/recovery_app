@@ -28,7 +28,52 @@
         </div>
 
         <div class="form-group">
-            <label for="message">Message <span class="required">*</span></label>
+            <label for="service_type">Service Type</label>
+            <select id="service_type" name="service_type">
+                <option value="">Select service type</option>
+                <option value="evacuation">Evacuation</option>
+                <option value="roadside_assistance">Roadside Assistance</option>
+                <option value="towing">Towing</option>
+                <option value="tire_change">Tire Change</option>
+                <option value="battery_jumpstart">Battery Jumpstart</option>
+                <option value="fuel_delivery">Fuel Delivery</option>
+                <option value="lockout_service">Lockout Service</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="pickup_location">Pickup Location</label>
+            <input type="text" id="pickup_location" name="pickup_location" placeholder="Where should we pick up your vehicle?">
+        </div>
+
+        <div class="form-group">
+            <label for="destination">Destination</label>
+            <input type="text" id="destination" name="destination" placeholder="Where should we deliver your vehicle?">
+        </div>
+
+        <div class="form-group">
+            <label for="urgency">Urgency Level</label>
+            <select id="urgency" name="urgency">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+                <option value="emergency">Emergency</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="preferred_time">Preferred Time</label>
+            <input type="text" id="preferred_time" name="preferred_time" placeholder="When would you prefer the service? (e.g., ASAP, after 2 PM, etc.)">
+        </div>
+
+        <div class="form-group">
+            <label for="problem_details">Problem Details</label>
+            <textarea id="problem_details" name="problem_details" rows="3" placeholder="Please describe the specific problem with your vehicle"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="message">Additional Message <span class="required">*</span></label>
             <textarea id="message" name="message" rows="4" required></textarea>
         </div>
 

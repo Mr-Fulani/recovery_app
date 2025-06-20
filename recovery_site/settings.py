@@ -231,7 +231,7 @@ WHATSAPP_NUMBER = os.getenv('WHATSAPP_NUMBER', '+449999999999')
 TEL_NUMBER = os.getenv('TEL_NUMBER', '+449999999999')
 
 # Support email
-SUPPORT_EMAIL = os.getenv('SUPPORT_EMAIL', '')
+SUPPORT_EMAIL = os.getenv('SUPPORT_EMAIL', 'dynamixrecoverynorthampton@gmail.com')
 
 # Social media URLs
 FACEBOOK_URL = os.getenv('FACEBOOK_URL', 'https://facebook.com/yourpage')
@@ -243,12 +243,12 @@ GOOGLE_ANALYTICS_ID = os.getenv('GOOGLE_ANALYTICS_ID', 'G-XXXXXXXXXX')
 YANDEX_METRICA_ID = os.getenv('YANDEX_METRICA_ID', '12345678')
 
 # SEO Settings
-SITE_DOMAIN = os.getenv('SITE_DOMAIN', 'yourdomain.com')
-CANONICAL_URL = os.getenv('CANONICAL_URL', 'https://yourdomain.com')
+SITE_DOMAIN = os.getenv('SITE_DOMAIN', 'dynamixrecoverynorthampton.uk')
+CANONICAL_URL = os.getenv('CANONICAL_URL', 'https://dynamixrecoverynorthampton.uk')
 
 # Wagtail settings
 WAGTAIL_SITE_NAME = 'Эвакуатор'
-WAGTAILADMIN_BASE_URL = 'http://localhost:8080'
+WAGTAILADMIN_BASE_URL = 'https://dynamixrecoverynorthampton.uk'
 
 
 
@@ -309,6 +309,8 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 
 CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
     'http://95.164.37.230',
     'https://95.164.37.230',
     'http://dynamixrecoverynorthampton.uk',

@@ -63,3 +63,4 @@ volumes:
   static_volume:
   media_volume:
   redis_data: # <-- ДОБАВЛЕНО: Определяем именованный том для Redis
+

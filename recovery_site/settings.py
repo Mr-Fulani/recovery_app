@@ -35,7 +35,7 @@ if DEBUG:
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
 else:
-    ALLOWED_HOSTS = ['5.187.4.131']
+    ALLOWED_HOSTS = ['95.164.37.230', 'dynamixrecoverynorthampton.uk', 'www.dynamixrecoverynorthampton.uk']
     # Временно отключите SECURE_SSL_REDIRECT для локальной отладки с DEBUG=False
     # ПОМНИТЕ: на продакшене эта настройка ДОЛЖНА БЫТЬ True, и у вас должен быть настроен HTTPS
     SECURE_SSL_REDIRECT = False # <-- ИЗМЕНИТЕ ЭТУ СТРОКУ
@@ -295,10 +295,6 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://5.187.4.131',
-    'https://5.187.4.131',
-]
 
 # # Security Headers and Settings
 # SECURE_SSL_REDIRECT = not DEBUG  # Перенаправление на HTTPS в продакшене
@@ -311,9 +307,12 @@ CSRF_TRUSTED_ORIGINS = [
 # SECURE_CONTENT_TYPE_NOSNIFF = True  # Предотвращение MIME-типов
 # X_FRAME_OPTIONS = 'DENY'  # Защита от кликджекинга
 
+
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8080',
-    'http://127.0.0.1:8080',
-    'http://5.187.4.131',
-    'https://5.187.4.131',
+    'http://95.164.37.230',
+    'https://95.164.37.230',
+    'http://dynamixrecoverynorthampton.uk',
+    'https://dynamixrecoverynorthampton.uk',
+    'http://www.dynamixrecoverynorthampton.uk',
+    'https://www.dynamixrecoverynorthampton.uk',
 ]

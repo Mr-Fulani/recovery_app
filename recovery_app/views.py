@@ -80,6 +80,48 @@ def services(request):
     
     return render(request, 'service_page.html', context)
 
+@cache_page(settings.CACHE_TIMEOUTS['static_content'])
+def car_towing(request):
+    """
+    Render the car towing service page.
+    """
+    context = {
+        'whatsapp_number': settings.WHATSAPP_NUMBER,
+    }
+    
+    # Add slider context
+    context.update(get_slider_context())
+    
+    return render(request, 'car_towing.html', context)
+
+@cache_page(settings.CACHE_TIMEOUTS['static_content'])
+def roadside_assistance(request):
+    """
+    Render the roadside assistance service page.
+    """
+    context = {
+        'whatsapp_number': settings.WHATSAPP_NUMBER,
+    }
+    
+    # Add slider context
+    context.update(get_slider_context())
+    
+    return render(request, 'roadside_assistance.html', context)
+
+@cache_page(settings.CACHE_TIMEOUTS['static_content'])
+def motorcycle_towing(request):
+    """
+    Render the motorcycle towing service page.
+    """
+    context = {
+        'whatsapp_number': settings.WHATSAPP_NUMBER,
+    }
+    
+    # Add slider context
+    context.update(get_slider_context())
+    
+    return render(request, 'motorcycle_towing.html', context)
+
 @require_http_methods(["GET", "POST"])
 def contact(request):
     """

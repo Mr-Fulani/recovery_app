@@ -115,23 +115,95 @@
 
 {% cache 86400 "services_section" %}  {# 1 day cache #}
 <section class="container mx-auto px-4 mb-12 animate-on-scroll">
-    <h2 class="text-3xl font-bold text-center mb-8">Our Services</h2>
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-center mb-8">24/7 ASSISTANCE</h2>
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-            <i class="fas fa-truck text-4xl text-blue-600 mb-4"></i>
-            <h3 class="text-xl font-bold mb-2">Passenger Car Towing</h3>
-            <p class="text-gray-600">Fast and careful transportation of your vehicle</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-            <i class="fas fa-car text-4xl text-blue-600 mb-4"></i>
-            <h3 class="text-xl font-bold mb-2">Technical Assistance</h3>
-            <p class="text-gray-600">Engine start, tire replacement, fluid top-up</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-            <i class="fas fa-tools text-4xl text-blue-600 mb-4"></i>
-            <h3 class="text-xl font-bold mb-2">Fuel Delivery</h3>
-            <p class="text-gray-600">Urgent fuel delivery to the breakdown location</p>
-        </div>
+        <a href="{% url 'recovery_app:car_towing' %}" class="bg-white p-8 rounded-xl shadow-lg card-hover group overflow-hidden relative">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative z-10">
+                <div class="flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-truck text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-center group-hover:text-blue-600 transition-colors">Car Recovery & Towing</h3>
+                <p class="text-gray-600 mb-4 text-center">Professional vehicle recovery and towing services for cars, vans, and commercial vehicles throughout Northampton and surrounding areas.</p>
+                <div class="space-y-2 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>24/7 Emergency Response</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Long Distance Transport</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Damage-Free Loading</span>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <span class="inline-flex items-center text-blue-600 font-semibold group-hover:text-blue-800">
+                        Learn More <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="{% url 'recovery_app:roadside_assistance' %}" class="bg-white p-8 rounded-xl shadow-lg card-hover group overflow-hidden relative">
+            <div class="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative z-10">
+                <div class="flex items-center justify-center w-16 h-16 bg-green-600 rounded-full mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-wrench text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-center group-hover:text-green-600 transition-colors">Roadside Assistance</h3>
+                <p class="text-gray-600 mb-4 text-center">Quick roadside assistance including jump starts, tire changes, lockout service, and emergency repairs to get you back on the road.</p>
+                <div class="space-y-2 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Battery Jump Start</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Emergency Fuel Delivery</span>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <span class="inline-flex items-center text-green-600 font-semibold group-hover:text-green-800">
+                        Learn More <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
+        
+        <a href="{% url 'recovery_app:motorcycle_towing' %}" class="bg-white p-8 rounded-xl shadow-lg card-hover group overflow-hidden relative">
+            <div class="absolute inset-0 bg-gradient-to-br from-orange-50 to-red-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative z-10">
+                <div class="flex items-center justify-center w-16 h-16 bg-orange-600 rounded-full mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-biking text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-center group-hover:text-orange-600 transition-colors">Motorcycle Recovery</h3>
+                <p class="text-gray-600 mb-4 text-center">Specialized motorcycle towing and recovery services with proper equipment and expertise for safe transportation of all bike types.</p>
+                <div class="space-y-2 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Specialized Equipment</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>All Bike Types</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Secure Transport</span>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <span class="inline-flex items-center text-orange-600 font-semibold group-hover:text-orange-800">
+                        Learn More <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
     </div>
 </section>
 {% endcache %}

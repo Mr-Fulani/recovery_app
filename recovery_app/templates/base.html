@@ -99,7 +99,26 @@
                 <!-- Десктопное меню -->
                 <div class="hidden md:flex space-x-8">
                     <a href="/" class="nav-link text-white font-medium">Home</a>
-                    <a href="/services/" class="nav-link text-white font-medium">Services</a>
+                    <div class="relative group">
+                        <a href="/services/" class="nav-link text-white font-medium flex items-center">
+                            Services <i class="fas fa-chevron-down ml-1 text-sm"></i>
+                        </a>
+                        <div class="absolute top-full left-0 bg-white shadow-lg rounded-lg py-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <a href="{% url 'recovery_app:services' %}" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600">
+                                <i class="fas fa-list mr-2"></i>All Services
+                            </a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="{% url 'recovery_app:car_towing' %}" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600">
+                                <i class="fas fa-truck mr-2"></i>Car Recovery & Towing
+                            </a>
+                            <a href="{% url 'recovery_app:roadside_assistance' %}" class="block px-4 py-2 text-gray-800 hover:bg-green-50 hover:text-green-600">
+                                <i class="fas fa-wrench mr-2"></i>Roadside Assistance
+                            </a>
+                                                         <a href="{% url 'recovery_app:motorcycle_towing' %}" class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">
+                                 <i class="fas fa-biking mr-2"></i>Motorcycle Recovery
+                             </a>
+                        </div>
+                    </div>
                     <a href="/gallery/" class="nav-link text-white font-medium">Gallery</a>
                     <a href="/reviews/" class="nav-link text-white font-medium">Reviews</a>
                     <a href="/contact/" class="nav-link text-white font-medium">Contact</a>
@@ -123,8 +142,17 @@
                     <i class="fas fa-home mr-3"></i>Home
                 </a>
                 <a href="/services/" class="nav-link-mobile text-white text-lg font-medium">
-                    <i class="fas fa-tools mr-3"></i>Services
+                    <i class="fas fa-tools mr-3"></i>All Services
                 </a>
+                <a href="{% url 'recovery_app:car_towing' %}" class="nav-link-mobile text-white text-lg font-medium pl-8">
+                    <i class="fas fa-truck mr-3"></i>Car Towing
+                </a>
+                <a href="{% url 'recovery_app:roadside_assistance' %}" class="nav-link-mobile text-white text-lg font-medium pl-8">
+                    <i class="fas fa-wrench mr-3"></i>Roadside Help
+                </a>
+                                 <a href="{% url 'recovery_app:motorcycle_towing' %}" class="nav-link-mobile text-white text-lg font-medium pl-8">
+                     <i class="fas fa-biking mr-3"></i>Motorcycle Towing
+                 </a>
                 <a href="/gallery/" class="nav-link-mobile text-white text-lg font-medium">
                     <i class="fas fa-images mr-3"></i>Gallery
                 </a>

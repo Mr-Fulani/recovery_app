@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static wagtailcore_tags %}
+{% load cache %}
+
+{% block title %}Professional Car Recovery & Towing Services - Dynamix Recovery Northampton{% endblock %}
+
+{% block og_title %}Professional Car Recovery & Towing Services - Dynamix Recovery Northampton{% endblock %}
+
+{% block twitter_title %}Professional Car Recovery & Towing Services - Dynamix Recovery Northampton{% endblock %}
+
+{% block meta_description %}
+<meta name="description" content="Professional car recovery and towing services in Northampton. 24/7 emergency response, long-distance transport, damage-free loading. Fast, reliable service for cars, vans, and commercial vehicles.">
+<meta name="keywords" content="car towing, vehicle recovery, emergency towing, car transport, breakdown recovery, Northampton towing service">
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'recovery_app/css/main.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative w-full hero-section overflow-hidden" style="height: 500px;">
+    <!-- Background with overlay -->
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900"></div>
+    <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+    
+    <!-- Hero Content -->
+    <div class="absolute inset-0 z-20 container mx-auto px-4 h-full flex flex-col justify-center text-center text-white">
+        <div class="mb-6 animate-fade-in">
+            <h2 class="text-2xl md:text-3xl hero-subtitle mb-2">PROFESSIONAL</h2>
+            <h1 class="text-6xl md:text-8xl font-black mb-2 hero-logo-main">CAR RECOVERY</h1>
+            <h2 class="text-2xl md:text-3xl hero-subtitle">& TOWING SERVICES</h2>
+        </div>
+        <p class="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">
+            Fast, reliable, and damage-free vehicle recovery throughout Northampton and surrounding areas
+        </p>
+    </div>
+</section>
+
+<!-- Service Overview -->
+<section class="container mx-auto px-4 py-16 animate-on-scroll">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+            <h2 class="text-4xl font-bold mb-6 text-gray-800">Seamless Vehicle Recovery & Transport</h2>
+            <p class="text-lg text-gray-600 mb-6">
+                Whether you're stranded with a broken-down vehicle or need to relocate your car to a different location, 
+                we specialize in providing seamless car transport in Northampton and beyond. Our team is equipped to manage 
+                all types of car recovery and transportation, ensuring your vehicle reaches its destination quickly, safely, 
+                and without damage.
+            </p>
+            <p class="text-lg text-gray-600 mb-8">
+                We understand how important your car is to you, and our goal is to offer a hassle-free experience that gets 
+                you back on the road or your vehicle to its next destination with ease. Our vehicle transport service caters 
+                to a wide range of needs.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <i class="fas fa-truck text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-1">Emergency Breakdown Recovery</h4>
+                        <p class="text-gray-600 text-sm">Rapid response when your car breaks down</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <i class="fas fa-map-marked-alt text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-1">Long-Distance Transport</h4>
+                        <p class="text-gray-600 text-sm">Safe transport across long distances</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <i class="fas fa-shield-alt text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-1">Damage-Free Loading</h4>
+                        <p class="text-gray-600 text-sm">Professional equipment and techniques</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                        <i class="fas fa-clock text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-1">24/7 Availability</h4>
+                        <p class="text-gray-600 text-sm">Round-the-clock emergency service</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="relative">
+            <div class="bg-gradient-to-br from-blue-100 to-indigo-200 rounded-2xl p-8 h-96 flex items-center justify-center">
+                <i class="fas fa-truck text-8xl text-blue-600"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Expert Vehicle Handling -->
+<section class="bg-gray-50 py-16 animate-on-scroll">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold mb-4 text-gray-800">Expert Vehicle Handling and Transportation</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Our experienced team is ready to handle vehicle transportation complexities for long-distance car transport in Northampton
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-car-crash text-2xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Emergency Recovery</h3>
+                <p class="text-gray-600">
+                    Rapid response when your car breaks down, ensuring it's safely transported to a garage or your preferred location.
+                </p>
+            </div>
+            
+            <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-calendar-alt text-2xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Pre-Arranged Relocations</h3>
+                <p class="text-gray-600">
+                    Scheduled transport for cars, vans, and other vehicles to destinations within Northampton or further afield.
+                </p>
+            </div>
+            
+            <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                <div class="w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-gem text-2xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Luxury & Project Cars</h3>
+                <p class="text-gray-600">
+                    Expert handling for high-value or unique vehicles requiring extra care and specialized transportation.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="container mx-auto px-4 py-16 animate-on-scroll">
+    <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4 text-gray-800">Why Choose Dynamix Recovery?</h2>
+        <p class="text-xl text-gray-600">We're committed to delivering reliable, efficient, and affordable services</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="text-center">
+            <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-tachometer-alt text-3xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Fast Response Time</h3>
+            <p class="text-gray-600">We understand time is critical, so we promptly respond to your vehicle recovery needs.</p>
+        </div>
+        
+        <div class="text-center">
+            <div class="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-tools text-3xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Professional Equipment</h3>
+            <p class="text-gray-600">Our modern fleet ensures safe and secure transportation for all vehicle types.</p>
+        </div>
+        
+        <div class="text-center">
+            <div class="w-20 h-20 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-user-graduate text-3xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Expert Technicians</h3>
+            <p class="text-gray-600">Our skilled team has extensive knowledge in handling all vehicle types and situations.</p>
+        </div>
+        
+        <div class="text-center">
+            <div class="w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-pound-sign text-3xl text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Affordable Pricing</h3>
+            <p class="text-gray-600">Competitive rates with no hidden costs, providing excellent value for money.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-16 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-4xl font-bold mb-4">Need Car Recovery Service?</h2>
+        <p class="text-xl mb-8 max-w-3xl mx-auto">
+            Don't let a breakdown ruin your day. Contact Dynamix Recovery for fast, safe, and reliable car recovery services 
+            in Northampton and surrounding areas. Available 24/7 for your convenience.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="tel:{{ whatsapp_number }}" 
+               class="bg-white text-blue-600 px-8 py-4 rounded-full font-bold text-lg btn-hover-effect inline-flex items-center justify-center">
+                <i class="fas fa-phone mr-3"></i>
+                Call Now: {{ whatsapp_number }}
+            </a>
+            <a href="https://wa.me/{{ whatsapp_number }}" 
+               class="bg-green-600 text-white px-8 py-4 rounded-full font-bold text-lg btn-hover-effect inline-flex items-center justify-center"
+               target="_blank">
+                <i class="fab fa-whatsapp mr-3"></i>
+                WhatsApp
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'recovery_app/js/main.js' %}"></script>
+{% endblock %} 

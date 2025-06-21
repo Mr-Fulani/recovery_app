@@ -231,7 +231,7 @@ WHATSAPP_NUMBER = os.getenv('WHATSAPP_NUMBER', '+449999999999')
 TEL_NUMBER = os.getenv('TEL_NUMBER', '+449999999999')
 
 # Support email
-SUPPORT_EMAIL = os.getenv('SUPPORT_EMAIL', 'dynamixrecoverynorthampton@gmail.com')
+SUPPORT_EMAIL = os.getenv('SUPPORT_EMAIL', 'fulani.dev@gmail.com')
 
 # Social media URLs
 FACEBOOK_URL = os.getenv('FACEBOOK_URL', 'https://facebook.com/yourpage')

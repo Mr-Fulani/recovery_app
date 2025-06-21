@@ -75,13 +75,9 @@ class ServiceRequest(models.Model):
     ]
 
     SERVICE_TYPE_CHOICES = [
-        ('evacuation', 'Эвакуация'),
-        ('roadside_assistance', 'Техпомощь на дороге'),
         ('towing', 'Буксировка'),
-        ('tire_change', 'Замена колеса'),
         ('battery_jumpstart', 'Прикурить аккумулятор'),
         ('fuel_delivery', 'Доставка топлива'),
-        ('lockout_service', 'Вскрытие замков'),
         ('other', 'Другое'),
     ]
 
@@ -104,8 +100,7 @@ class ServiceRequest(models.Model):
     destination = models.CharField(max_length=255, verbose_name='Место назначения', blank=True, null=True)
     service_type = models.CharField(max_length=50, choices=SERVICE_TYPE_CHOICES, verbose_name='Тип услуги', blank=True, null=True)
     urgency = models.CharField(max_length=20, choices=URGENCY_CHOICES, verbose_name='Срочность', default='medium', blank=True)
-    preferred_time = models.CharField(max_length=100, verbose_name='Предпочтительное время', blank=True, null=True)
-    problem_details = models.TextField(verbose_name='Детали проблемы', blank=True, null=True)
+    preferred_time = models.CharField(max_length=100, verbose_name='Preferred Time', blank=True, null=True)
     
     # Системные поля
     status = models.CharField(

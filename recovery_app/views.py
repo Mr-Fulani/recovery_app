@@ -98,7 +98,6 @@ def contact(request):
         service_type = request.POST.get('service_type')
         urgency = request.POST.get('urgency', 'medium')
         preferred_time = request.POST.get('preferred_time')
-        problem_details = request.POST.get('problem_details')
 
         service_request = ServiceRequest.objects.create(
             name=name,
@@ -111,7 +110,6 @@ def contact(request):
             service_type=service_type,
             urgency=urgency,
             preferred_time=preferred_time,
-            problem_details=problem_details
         )
 
         # Send email notification

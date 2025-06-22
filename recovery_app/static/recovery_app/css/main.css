@@ -995,3 +995,68 @@ video {
         letter-spacing: 0.02em;
     }
 }
+
+/* Mobile slider animations */
+@media (max-width: 640px) {
+    /* Возможность свайпа */
+    .mobile-slider {
+        touch-action: pan-x;
+        cursor: grab;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .mobile-slider::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .mobile-slider:active {
+        cursor: grabbing;
+    }
+    
+    /* First slider moves right */
+    .auto-slide-right {
+        animation: slideRight 10s linear infinite;
+    }
+    
+    /* Second slider moves left */
+    .auto-slide-left {
+        animation: slideLeft 12s linear infinite;
+    }
+    
+    @keyframes slideRight {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+    
+    @keyframes slideLeft {
+        0% {
+            transform: translateX(-50%);
+        }
+        100% {
+            transform: translateX(0);
+        }
+    }
+    
+    /* Pause animation on hover and touch */
+    .auto-slide-right:hover,
+    .auto-slide-left:hover,
+    .mobile-slider:active {
+        animation-play-state: paused;
+    }
+}
+
+.desktop-only {
+    display: none;
+}
+
+@media (min-width: 769px) {
+    .desktop-only {
+        display: grid;
+    }
+}

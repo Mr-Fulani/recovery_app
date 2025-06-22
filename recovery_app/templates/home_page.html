@@ -208,20 +208,41 @@
 </section>
 {% endcache %}
 
-<section class="bg-gray-100 py-12 rounded-lg mb-12 animate-on-scroll">
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-                <div class="text-4xl font-bold text-blue-600 mb-2 js-count" data-target="{{ average_rating|default:'4.8' }}" data-postfix="">{{ average_rating|default:"4.8" }}</div>
-                <p class="text-gray-600">Average Rating</p>
+<section class="container mx-auto px-4 mb-12 animate-on-scroll">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-md card-hover group overflow-hidden relative text-center">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative z-10">
+                <div class="flex items-center justify-center w-12 h-12 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-star text-3xl text-yellow-500"></i>
+                </div>
+                <div class="text-3xl font-bold text-blue-600 mb-2 js-count group-hover:text-blue-700 transition-colors" data-target="{{ average_rating|default:'4.8' }}" data-postfix="">{{ average_rating|default:"4.8" }}</div>
+                <p class="text-gray-600 font-semibold">Average Rating</p>
+                <p class="text-xs text-gray-500 mt-1">Based on customer feedback</p>
             </div>
-            <div>
-                <div class="text-4xl font-bold text-blue-600 mb-2 js-count" data-target="{{ total_reviews|default:'127' }}" data-postfix="">{{ total_reviews|default:"127" }}</div>
-                <p class="text-gray-600">Customer Reviews</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md card-hover group overflow-hidden relative text-center">
+            <div class="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative z-10">
+                <div class="flex items-center justify-center w-12 h-12 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-comments text-3xl text-green-600"></i>
+                </div>
+                <div class="text-3xl font-bold text-blue-600 mb-2 js-count group-hover:text-blue-700 transition-colors" data-target="{{ total_reviews|default:'127' }}" data-postfix="">{{ total_reviews|default:"127" }}</div>
+                <p class="text-gray-600 font-semibold">Customer Reviews</p>
+                <p class="text-xs text-gray-500 mt-1">Satisfied customers</p>
             </div>
-            <div>
-                <div class="text-4xl font-bold text-blue-600 mb-2 js-count" data-target="{{ total_services|default:'1000' }}" data-postfix="+">{{ total_services|default:"1000+" }}</div>
-                <p class="text-gray-600">Completed Towings</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md card-hover group overflow-hidden relative text-center">
+            <div class="absolute inset-0 bg-gradient-to-br from-orange-50 to-red-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative z-10">
+                <div class="flex items-center justify-center w-12 h-12 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-truck text-3xl text-orange-600"></i>
+                </div>
+                <div class="text-3xl font-bold text-blue-600 mb-2 js-count group-hover:text-blue-700 transition-colors" data-target="{{ total_services|default:'1000' }}" data-postfix="+">{{ total_services|default:"1000+" }}</div>
+                <p class="text-gray-600 font-semibold">Completed Towings</p>
+                <p class="text-xs text-gray-500 mt-1">Successful recoveries</p>
             </div>
         </div>
     </div>
@@ -230,7 +251,9 @@
 {% cache 86400 "work_photos" %}  {# 1 day cache #}
 <section class="container mx-auto px-4 mb-12 animate-on-scroll">
     <h2 class="text-3xl font-bold text-center mb-8">Our Completed Work</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 work-photo-grid auto-rows-min">
+    
+    <!-- Desktop version - ТОЛЬКО для экранов больше 768px -->
+    <div class="desktop-only grid-cols-3 lg:grid-cols-4 gap-4 work-photo-grid auto-rows-min">
         {% load wagtailimages_tags %}
         {% for photo in work_photos %}
         <div class="work-photo-card bg-white rounded-lg shadow-md overflow-hidden relative
@@ -241,7 +264,7 @@
             {% if photo.image %}
             {% image photo.image fill-400x300 as photo_img %}
             <img src="{{ photo_img.url }}" alt="{{ photo.title }}"
-                 class="w-full h-full object-cover transition-transform duration-300">
+                class="w-full h-full object-cover transition-transform duration-300">
             <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
                 <div class="text-white text-center p-4">
                     <h3 class="text-lg font-bold">{{ photo.title }}</h3>
@@ -256,6 +279,100 @@
         </div>
         {% endfor %}
     </div>
+
+    <!-- Mobile version - все картинки с возможностью свайпа -->
+    <div class="sm:hidden space-y-8">
+        <!-- First row slider (moves right) -->
+        <div class="relative overflow-hidden">
+            <div class="flex space-x-4 auto-slide-right mobile-slider" id="mobile-slider-1">
+                {% for photo in work_photos %}
+                <div class="flex-shrink-0 w-72 h-52 bg-white rounded-lg shadow-md overflow-hidden relative work-photo-card">
+                    {% if photo.image %}
+                    {% image photo.image fill-400x300 as photo_img %}
+                    <img src="{{ photo_img.url }}" alt="{{ photo.title }}"
+                        class="w-full h-full object-cover transition-transform duration-300">
+                    <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
+                        <div class="text-white text-center p-2">
+                            <h3 class="text-sm font-bold">{{ photo.title }}</h3>
+                            <p class="text-xs">{{ photo.description|truncatewords:10 }}</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="w-full h-full bg-gray-200 flex items-center justify-center rounded-lg">
+                        <p class="text-gray-500 text-sm">Image not available</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <!-- Duplicate для бесшовного цикла -->
+                {% for photo in work_photos %}
+                <div class="flex-shrink-0 w-72 h-52 bg-white rounded-lg shadow-md overflow-hidden relative work-photo-card">
+                    {% if photo.image %}
+                    {% image photo.image fill-400x300 as photo_img %}
+                    <img src="{{ photo_img.url }}" alt="{{ photo.title }}"
+                        class="w-full h-full object-cover transition-transform duration-300">
+                    <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
+                        <div class="text-white text-center p-2">
+                            <h3 class="text-sm font-bold">{{ photo.title }}</h3>
+                            <p class="text-xs">{{ photo.description|truncatewords:10 }}</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="w-full h-full bg-gray-200 flex items-center justify-center rounded-lg">
+                        <p class="text-gray-500 text-sm">Image not available</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Second row slider (moves left) -->
+        <div class="relative overflow-hidden">
+            <div class="flex space-x-4 auto-slide-left mobile-slider" id="mobile-slider-2">
+                {% for photo in work_photos %}
+                <div class="flex-shrink-0 w-72 h-52 bg-white rounded-lg shadow-md overflow-hidden relative work-photo-card">
+                    {% if photo.image %}
+                    {% image photo.image fill-400x300 as photo_img %}
+                    <img src="{{ photo_img.url }}" alt="{{ photo.title }}"
+                        class="w-full h-full object-cover transition-transform duration-300">
+                    <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
+                        <div class="text-white text-center p-2">
+                            <h3 class="text-sm font-bold">{{ photo.title }}</h3>
+                            <p class="text-xs">{{ photo.description|truncatewords:10 }}</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="w-full h-full bg-gray-200 flex items-center justify-center rounded-lg">
+                        <p class="text-gray-500 text-sm">Image not available</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <!-- Duplicate для бесшовного цикла -->
+                {% for photo in work_photos %}
+                <div class="flex-shrink-0 w-72 h-52 bg-white rounded-lg shadow-md overflow-hidden relative work-photo-card">
+                    {% if photo.image %}
+                    {% image photo.image fill-400x300 as photo_img %}
+                    <img src="{{ photo_img.url }}" alt="{{ photo.title }}"
+                        class="w-full h-full object-cover transition-transform duration-300">
+                    <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
+                        <div class="text-white text-center p-2">
+                            <h3 class="text-sm font-bold">{{ photo.title }}</h3>
+                            <p class="text-xs">{{ photo.description|truncatewords:10 }}</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="w-full h-full bg-gray-200 flex items-center justify-center rounded-lg">
+                        <p class="text-gray-500 text-sm">Image not available</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
     <div class="text-center mt-8">
         <a href="{% url 'recovery_app:gallery' %}" class="nav-action-button">
             View Full Gallery
@@ -265,25 +382,62 @@
 </section>
 {% endcache %}
 
+
 <section class="container mx-auto px-4 mb-12 animate-on-scroll">
     <h2 class="text-3xl font-bold text-center mb-8">Our Customer Reviews</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for review in reviews %}
-        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-            <div class="flex items-center mb-4">
-                <div class="text-yellow-400">
-                    {% for i in "12345"|make_list %}
-                        {% if forloop.counter <= review.rating %}
-                            <i class="fas fa-star rating-star"></i>
-                        {% else %}
-                            <i class="far fa-star rating-star"></i>
-                        {% endif %}
-                    {% endfor %}
+        <div class="bg-white p-8 rounded-xl shadow-lg card-hover group overflow-hidden relative border-l-4 border-blue-500">
+            <!-- Gradient background on hover -->
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            
+            <div class="relative z-10">
+                <!-- Header with avatar and quote icon -->
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                            {{ review.name|first|upper }}
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-800">{{ review.name }}</div>
+                            <div class="text-sm text-gray-500">{{ review.created_at|date:"d M Y" }}</div>
+                        </div>
+                    </div>
+                    <div class="text-blue-500 opacity-20 group-hover:opacity-40 transition-opacity">
+                        <i class="fas fa-quote-right text-3xl"></i>
+                    </div>
+                </div>
+                
+                <!-- Star rating -->
+                <div class="flex items-center mb-4">
+                    <div class="flex text-yellow-400 mr-2">
+                        {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= review.rating %}
+                                <i class="fas fa-star text-lg mr-1"></i>
+                            {% else %}
+                                <i class="far fa-star text-lg mr-1"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <span class="text-sm font-semibold text-gray-600">({{ review.rating }}/5)</span>
+                </div>
+                
+                <!-- Review text -->
+                <div class="relative">
+                    <div class="absolute -top-2 -left-2 text-blue-200 opacity-50">
+                        <i class="fas fa-quote-left text-2xl"></i>
+                    </div>
+                    <p class="text-gray-700 italic leading-relaxed pl-6">{{ review.text }}</p>
+                </div>
+                
+                <!-- Service type badge -->
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 group-hover:bg-blue-200 transition-colors">
+                        <i class="fas fa-truck mr-1"></i>
+                        Recovery Service
+                    </span>
                 </div>
             </div>
-            <p class="text-gray-600 mb-4">{{ review.text }}</p>
-            <div class="font-bold">{{ review.name }}</div>
-            <div class="text-sm text-gray-500">{{ review.created_at|date:"d.m.Y" }}</div>
         </div>
         {% endfor %}
     </div>
@@ -303,4 +457,50 @@
 {% block extra_js %}
     <script src="{% static 'recovery_app/js/animated-order-button.js' %}"></script>
     <script src="{% static 'recovery_app/js/main.js' %}"></script>
+    <script>
+    // JavaScript для улучшенного свайпа
+    document.addEventListener('DOMContentLoaded', function() {
+        const sliders = document.querySelectorAll('.mobile-slider');
+        
+        sliders.forEach(slider => {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+            
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                slider.style.animationPlayState = 'paused';
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+            
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+                slider.style.animationPlayState = 'running';
+            });
+            
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                slider.style.animationPlayState = 'running';
+            });
+            
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2;
+                slider.scrollLeft = scrollLeft - walk;
+            });
+            
+            // Touch events для мобильных устройств
+            slider.addEventListener('touchstart', () => {
+                slider.style.animationPlayState = 'paused';
+            });
+            
+            slider.addEventListener('touchend', () => {
+                slider.style.animationPlayState = 'running';
+            });
+        });
+    });
+    </script>
 {% endblock %}

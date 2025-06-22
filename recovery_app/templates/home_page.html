@@ -285,8 +285,7 @@
         <div class="relative">
             <div class="flex space-x-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide instagram-slider px-4" id="instagram-slider">
                 {% for photo in work_photos %}
-                <div class="flex-shrink-0 w-72 story-height bg-white rounded-2xl shadow-xl overflow-hidden relative snap-center clickable-photo" 
-                     data-title="{{ photo.title }}" data-description="{{ photo.description }}">
+                <div class="flex-shrink-0 w-72 story-height bg-white rounded-2xl shadow-xl overflow-hidden relative snap-center clickable-photo">
                     {% if photo.image %}
                     {% image photo.image fill-400x700 as photo_img %}
                     <img src="{{ photo_img.url }}" alt="{{ photo.title }}"
@@ -464,16 +463,8 @@
                     ripple.remove();
                 }, 600);
                 
-                // Get photo data
-                const title = this.dataset.title;
-                const description = this.dataset.description;
-                
-                // Show simple alert (you can replace with modal)
-                if (title) {
-                    setTimeout(() => {
-                        alert(`${title}\n\n${description}`);
-                    }, 200);
-                }
+                // Здесь можно добавить любую другую логику при клике
+                // например, открытие галереи или переход на другую страницу
             });
         });
     });

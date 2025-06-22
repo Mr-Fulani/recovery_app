@@ -280,94 +280,33 @@
         {% endfor %}
     </div>
 
-    <!-- Mobile version - все картинки с возможностью свайпа -->
-    <div class="sm:hidden space-y-8">
-        <!-- First row slider (moves right) -->
-        <div class="relative overflow-hidden">
-            <div class="flex space-x-4 auto-slide-right mobile-slider" id="mobile-slider-1">
+    <!-- Mobile version - Instagram-style slider -->
+    <div class="sm:hidden">
+        <div class="relative">
+            <div class="flex space-x-3 overflow-x-auto snap-x snap-mandatory scrollbar-hide instagram-slider px-4" id="instagram-slider">
                 {% for photo in work_photos %}
-                <div class="flex-shrink-0 w-72 h-52 bg-white rounded-lg shadow-md overflow-hidden relative work-photo-card">
+                <div class="flex-shrink-0 w-80 h-80 bg-white rounded-xl shadow-lg overflow-hidden relative snap-center">
                     {% if photo.image %}
-                    {% image photo.image fill-400x300 as photo_img %}
+                    {% image photo.image fill-500x500 as photo_img %}
                     <img src="{{ photo_img.url }}" alt="{{ photo.title }}"
-                        class="w-full h-full object-cover transition-transform duration-300">
-                    <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
-                        <div class="text-white text-center p-2">
-                            <h3 class="text-sm font-bold">{{ photo.title }}</h3>
-                            <p class="text-xs">{{ photo.description|truncatewords:10 }}</p>
-                        </div>
+                        class="w-full h-full object-cover">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                        <h3 class="text-white font-bold text-lg mb-1">{{ photo.title }}</h3>
+                        <p class="text-white/90 text-sm">{{ photo.description|truncatewords:15 }}</p>
                     </div>
                     {% else %}
-                    <div class="w-full h-full bg-gray-200 flex items-center justify-center rounded-lg">
-                        <p class="text-gray-500 text-sm">Image not available</p>
-                    </div>
-                    {% endif %}
-                </div>
-                {% endfor %}
-                <!-- Duplicate для бесшовного цикла -->
-                {% for photo in work_photos %}
-                <div class="flex-shrink-0 w-72 h-52 bg-white rounded-lg shadow-md overflow-hidden relative work-photo-card">
-                    {% if photo.image %}
-                    {% image photo.image fill-400x300 as photo_img %}
-                    <img src="{{ photo_img.url }}" alt="{{ photo.title }}"
-                        class="w-full h-full object-cover transition-transform duration-300">
-                    <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
-                        <div class="text-white text-center p-2">
-                            <h3 class="text-sm font-bold">{{ photo.title }}</h3>
-                            <p class="text-xs">{{ photo.description|truncatewords:10 }}</p>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="w-full h-full bg-gray-200 flex items-center justify-center rounded-lg">
-                        <p class="text-gray-500 text-sm">Image not available</p>
+                    <div class="w-full h-full bg-gray-200 flex items-center justify-center rounded-xl">
+                        <p class="text-gray-500">Image not available</p>
                     </div>
                     {% endif %}
                 </div>
                 {% endfor %}
             </div>
-        </div>
-        
-        <!-- Second row slider (moves left) -->
-        <div class="relative overflow-hidden">
-            <div class="flex space-x-4 auto-slide-left mobile-slider" id="mobile-slider-2">
+            
+            <!-- Dots indicator -->
+            <div class="flex justify-center mt-4 space-x-2">
                 {% for photo in work_photos %}
-                <div class="flex-shrink-0 w-72 h-52 bg-white rounded-lg shadow-md overflow-hidden relative work-photo-card">
-                    {% if photo.image %}
-                    {% image photo.image fill-400x300 as photo_img %}
-                    <img src="{{ photo_img.url }}" alt="{{ photo.title }}"
-                        class="w-full h-full object-cover transition-transform duration-300">
-                    <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
-                        <div class="text-white text-center p-2">
-                            <h3 class="text-sm font-bold">{{ photo.title }}</h3>
-                            <p class="text-xs">{{ photo.description|truncatewords:10 }}</p>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="w-full h-full bg-gray-200 flex items-center justify-center rounded-lg">
-                        <p class="text-gray-500 text-sm">Image not available</p>
-                    </div>
-                    {% endif %}
-                </div>
-                {% endfor %}
-                <!-- Duplicate для бесшовного цикла -->
-                {% for photo in work_photos %}
-                <div class="flex-shrink-0 w-72 h-52 bg-white rounded-lg shadow-md overflow-hidden relative work-photo-card">
-                    {% if photo.image %}
-                    {% image photo.image fill-400x300 as photo_img %}
-                    <img src="{{ photo_img.url }}" alt="{{ photo.title }}"
-                        class="w-full h-full object-cover transition-transform duration-300">
-                    <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center opacity-0 hover:opacity-100">
-                        <div class="text-white text-center p-2">
-                            <h3 class="text-sm font-bold">{{ photo.title }}</h3>
-                            <p class="text-xs">{{ photo.description|truncatewords:10 }}</p>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="w-full h-full bg-gray-200 flex items-center justify-center rounded-lg">
-                        <p class="text-gray-500 text-sm">Image not available</p>
-                    </div>
-                    {% endif %}
-                </div>
+                <button class="w-2 h-2 rounded-full bg-gray-300 transition-colors duration-200 slider-dot" data-index="{{ forloop.counter0 }}"></button>
                 {% endfor %}
             </div>
         </div>
@@ -458,47 +397,44 @@
     <script src="{% static 'recovery_app/js/animated-order-button.js' %}"></script>
     <script src="{% static 'recovery_app/js/main.js' %}"></script>
     <script>
-    // JavaScript для улучшенного свайпа
+    // Instagram-style slider with dots
     document.addEventListener('DOMContentLoaded', function() {
-        const sliders = document.querySelectorAll('.mobile-slider');
+        const slider = document.getElementById('instagram-slider');
+        const dots = document.querySelectorAll('.slider-dot');
         
-        sliders.forEach(slider => {
-            let isDown = false;
-            let startX;
-            let scrollLeft;
+        if (!slider || !dots.length) return;
+        
+        // Update active dot based on scroll position
+        function updateActiveDot() {
+            const scrollLeft = slider.scrollLeft;
+            const itemWidth = slider.children[0].offsetWidth + 12; // width + gap
+            const activeIndex = Math.round(scrollLeft / itemWidth);
             
-            slider.addEventListener('mousedown', (e) => {
-                isDown = true;
-                slider.style.animationPlayState = 'paused';
-                startX = e.pageX - slider.offsetLeft;
-                scrollLeft = slider.scrollLeft;
+            dots.forEach((dot, index) => {
+                if (index === activeIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
             });
-            
-            slider.addEventListener('mouseleave', () => {
-                isDown = false;
-                slider.style.animationPlayState = 'running';
-            });
-            
-            slider.addEventListener('mouseup', () => {
-                isDown = false;
-                slider.style.animationPlayState = 'running';
-            });
-            
-            slider.addEventListener('mousemove', (e) => {
-                if (!isDown) return;
-                e.preventDefault();
-                const x = e.pageX - slider.offsetLeft;
-                const walk = (x - startX) * 2;
-                slider.scrollLeft = scrollLeft - walk;
-            });
-            
-            // Touch events для мобильных устройств
-            slider.addEventListener('touchstart', () => {
-                slider.style.animationPlayState = 'paused';
-            });
-            
-            slider.addEventListener('touchend', () => {
-                slider.style.animationPlayState = 'running';
+        }
+        
+        // Set first dot as active initially
+        if (dots[0]) {
+            dots[0].classList.add('active');
+        }
+        
+        // Listen to scroll events
+        slider.addEventListener('scroll', updateActiveDot);
+        
+        // Handle dot clicks
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                const itemWidth = slider.children[0].offsetWidth + 12; // width + gap
+                slider.scrollTo({
+                    left: index * itemWidth,
+                    behavior: 'smooth'
+                });
             });
         });
     });

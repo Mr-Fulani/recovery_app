@@ -246,6 +246,8 @@ YANDEX_METRICA_ID = os.getenv('YANDEX_METRICA_ID', '12345678')
 SITE_DOMAIN = os.getenv('SITE_DOMAIN', 'dynamixrecoverynorthampton.uk')
 CANONICAL_URL = os.getenv('CANONICAL_URL', 'https://dynamixrecoverynorthampton.uk')
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Wagtail settings
 WAGTAIL_SITE_NAME = 'Эвакуатор'
 WAGTAILADMIN_BASE_URL = 'https://dynamixrecoverynorthampton.uk'

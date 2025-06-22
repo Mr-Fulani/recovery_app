@@ -3,6 +3,7 @@
     position: relative;
     width: 100%;
     z-index: 1; /* Ensure container has stacking context */
+    isolation: isolate; /* Create new stacking context */
 }
 
 .datetime-picker-input {
@@ -46,26 +47,23 @@
 }
 
 .datetime-picker-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
+    position: fixed !important;
     background: white;
     border: 2px solid #e5e7eb;
     border-radius: 12px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    z-index: 999999;
+    z-index: 2147483647 !important;
     opacity: 0;
-    transform: translateY(-10px);
     visibility: hidden;
     transition: all 0.3s ease;
     overflow: visible;
     min-width: 350px;
     max-width: 400px;
-    margin-top: 5px;
+    pointer-events: auto;
 }
 
 .datetime-picker-dropdown.show-above {
+    position: fixed !important;
     top: auto !important;
     bottom: 100% !important;
     transform: translateY(10px) !important;
@@ -77,27 +75,27 @@
     transform: translateY(0) !important;
 }
 
-/* Стили для desktop позиционирования относительно input поля */
+/* Убираем show-fixed для мобильных - используем обычные стили */
 @media (min-width: 641px) {
     .datetime-picker-dropdown.show-fixed {
         position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
         right: auto !important;
         bottom: auto !important;
+        transform: translate(-50%, -50%) !important;
         margin: 0 !important;
+        width: 90vw !important;
         max-width: 400px !important;
         max-height: 80vh !important;
         overflow-y: auto !important;
-        z-index: 999999 !important;
+        z-index: 2147483647 !important;
     }
 
     .datetime-picker-dropdown.show-fixed.active {
+        transform: translate(-50%, -50%) !important;
         opacity: 1 !important;
         visibility: visible !important;
-    }
-    
-    /* Дополнительные стили для правильного позиционирования */
-    .datetime-picker-dropdown.show-fixed.show-above {
-        transform: translateY(0) !important;
     }
 }
 
@@ -118,19 +116,24 @@
 }
 
 .datetime-picker-nav-btn {
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 16px;
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: none !important;
+    color: white !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-size: 16px !important;
+    min-height: 36px !important;
+    min-width: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .datetime-picker-nav-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: scale(1.05) !important;
 }
 
 .datetime-picker-month-year {
@@ -282,43 +285,50 @@
 }
 
 .datetime-picker-clear-btn {
-    background: transparent;
-    border: 2px solid #ef4444;
-    color: #ef4444;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
+    background: white !important;
+    border: 2px solid #ef4444 !important;
+    color: #ef4444 !important;
+    padding: 10px 16px !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    min-height: 40px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
 .datetime-picker-clear-btn:hover {
-    background: #ef4444;
-    color: white;
-    transform: translateY(-1px);
+    background: #ef4444 !important;
+    color: white !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3) !important;
 }
 
 .datetime-picker-confirm-btn {
-    background: linear-gradient(135deg, #10b981, #059669);
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    border: none !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    min-height: 40px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
 .datetime-picker-confirm-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;
 }
 
 .datetime-picker-confirm-btn:disabled {
-    background: #d1d5db;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+    background: #d1d5db !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Quick options */
@@ -342,21 +352,101 @@
 }
 
 .datetime-picker-quick-btn {
-    background: white;
-    border: 1px solid #e5e7eb;
-    color: #374151;
-    padding: 6px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 12px;
-    font-weight: 500;
+    background: white !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+    padding: 8px 12px !important;
+    border-radius: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    min-height: 32px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
 }
 
 .datetime-picker-quick-btn:hover {
-    border-color: #10b981;
-    color: #10b981;
-    background: #f0fdf4;
+    border-color: #10b981 !important;
+    color: #10b981 !important;
+    background: #f0fdf4 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Специальные стили для десктопа */
+@media (min-width: 641px) {
+    .datetime-picker-dropdown {
+        position: fixed !important;
+        z-index: 2147483647 !important;
+        background: white !important;
+        border: 2px solid #e5e7eb !important;
+        border-radius: 12px !important;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        min-width: 380px !important;
+        max-width: 380px !important;
+        width: 380px !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    .datetime-picker-dropdown.active {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    .datetime-picker-quick-options {
+        flex-shrink: 0 !important;
+    }
+    
+    .datetime-picker-header {
+        flex-shrink: 0 !important;
+    }
+    
+    .datetime-picker-body {
+        flex: 1 !important;
+        overflow-y: auto !important;
+        min-height: 0 !important;
+    }
+    
+    .datetime-picker-actions {
+        flex-shrink: 0 !important;
+        padding: 15px 20px !important;
+        border-top: 1px solid #e5e7eb !important;
+        background: #f9fafb !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 15px !important;
+    }
+    
+    .datetime-picker-clear-btn,
+    .datetime-picker-confirm-btn {
+        flex: 1 !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+    }
+    
+    /* Стили скроллбара для webkit браузеров */
+    .datetime-picker-dropdown::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .datetime-picker-dropdown::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+    
+    .datetime-picker-dropdown::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+    
+    .datetime-picker-dropdown::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
 }
 
 /* Animations */
@@ -384,7 +474,7 @@
         width: 90vw !important;
         height: 80vh !important;
         max-height: 80vh !important;
-        z-index: 999999 !important;
+        z-index: 2147483647 !important;
         background: white !important;
         border: 1px solid #e5e7eb !important;
         border-radius: 12px !important;
@@ -540,7 +630,7 @@
         cursor: pointer !important;
         -webkit-tap-highlight-color: rgba(16, 185, 129, 0.3) !important;
         position: relative !important;
-        z-index: 1000000 !important; /* Очень высокий z-index для кнопок */
+        z-index: 10000000 !important; /* Очень высокий z-index для кнопок */
     }
     
     /* Prevent text selection on touch */
@@ -577,33 +667,33 @@
     }
 }
 
-/* Dark overlay only for mobile */
+/* Overlay для блокировки фона */
 .datetime-picker-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999997; /* Lower than calendar */
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    display: none; /* Hide on desktop by default */
-    pointer-events: none; /* Don't block clicks when inactive */
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+    z-index: 2147483646 !important; /* Just below calendar */
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: all 0.3s ease !important;
+    pointer-events: none !important; /* Don't block clicks when inactive */
+    cursor: pointer !important;
 }
 
 .datetime-picker-overlay.active {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto; /* Enable clicks when active */
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important; /* Enable clicks when active */
 }
 
 /* Show overlay on mobile - ИСПРАВЛЕННАЯ версия */
 @media (max-width: 640px) {
     .datetime-picker-overlay {
         display: block !important;
-        z-index: 999998 !important; /* Ниже календаря */
+        z-index: 9999998 !important; /* Ниже календаря */
         pointer-events: auto !important; /* Можно кликать для закрытия */
     }
     
@@ -616,6 +706,6 @@
 /* Always show overlay when calendar is in fixed position */
 .datetime-picker-overlay.show-for-fixed {
     display: block !important;
-    z-index: 999997 !important; /* Lower than calendar */
+    z-index: 9999997 !important; /* Lower than calendar */
     pointer-events: auto !important; /* Allow clicks to close */
 } 

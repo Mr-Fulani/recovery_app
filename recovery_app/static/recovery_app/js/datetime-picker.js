@@ -81,14 +81,19 @@ class DateTimePicker {
         dropdown.className = 'datetime-picker-dropdown';
         dropdown.innerHTML = this.getDropdownHTML();
         
-        this.container.appendChild(dropdown);
+        // ВСЕГДА добавляем в body для полной изоляции от родительских элементов
+        document.body.appendChild(dropdown);
         this.dropdown = dropdown;
         
-        // Create overlay for mobile
+        // Create overlay - всегда создаем для блокировки фона
         const overlay = document.createElement('div');
         overlay.className = 'datetime-picker-overlay';
         document.body.appendChild(overlay);
         this.overlay = overlay;
+        
+        // Добавляем ID для уникальности
+        dropdown.id = 'datetime-picker-' + Date.now();
+        console.log('Dropdown created with ID:', dropdown.id);
     }
     
     getDropdownHTML() {
@@ -112,6 +117,7 @@ class DateTimePicker {
                 <button type="button" class="datetime-picker-nav-btn" data-action="next-month">
                     <i class="fas fa-chevron-right"></i>
                 </button>
+                <button type="button" class="datetime-picker-close-btn" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-left: 10px;">×</button>
             </div>
             
             <div class="datetime-picker-body">
@@ -177,20 +183,37 @@ class DateTimePicker {
     }
     
     bindEvents() {
-        // Input click
+        // Input click - разная логика для десктопа и мобильных
         this.input.addEventListener('click', (e) => {
             e.preventDefault();
-            e.stopPropagation(); 
-            this.toggle();
+            e.stopPropagation();
+            console.log('Input clicked, current state:', this.isOpen(), 'viewport width:', window.innerWidth); // Debug log
+            
+            // На десктопе всегда открываем, на мобильных - toggle
+            if (window.innerWidth > 640) {
+                if (!this.isOpen()) {
+                    console.log('Desktop: Opening calendar');
+                    this.open();
+                }
+            } else {
+                // Мобильная логика остается прежней
+                if (this.isOpen()) {
+                    this.close();
+                } else {
+                    this.open();
+                }
+            }
         });
         
         // Dropdown clicks with better event handling
         this.dropdown.addEventListener('click', (e) => {
             e.stopPropagation();
+            console.log('Dropdown clicked, target:', e.target, 'closest clear:', e.target.closest('.datetime-picker-clear-btn'), 'closest confirm:', e.target.closest('.datetime-picker-confirm-btn'));
             
             // Handle navigation buttons (including icons inside)
             const navBtn = e.target.closest('.datetime-picker-nav-btn');
             if (navBtn) {
+                e.preventDefault();
                 this.handleNavigation(navBtn.dataset.action);
                 return;
             }
@@ -198,6 +221,7 @@ class DateTimePicker {
             // Handle date selection
             const dateEl = e.target.closest('.datetime-picker-date');
             if (dateEl && !dateEl.classList.contains('disabled')) {
+                e.preventDefault();
                 this.selectDate(dateEl.dataset.date);
                 return;
             }
@@ -205,6 +229,7 @@ class DateTimePicker {
             // Handle time slot selection
             const timeEl = e.target.closest('.datetime-picker-time-slot');
             if (timeEl && !timeEl.classList.contains('disabled')) {
+                e.preventDefault();
                 this.selectTime(timeEl.dataset.time);
                 return;
             }
@@ -212,19 +237,35 @@ class DateTimePicker {
             // Handle quick options
             const quickBtn = e.target.closest('.datetime-picker-quick-btn');
             if (quickBtn) {
+                e.preventDefault();
                 this.handleQuickOption(quickBtn.dataset.action);
                 return;
             }
             
             // Handle clear button
-            if (e.target.matches('.datetime-picker-clear-btn')) {
+            const clearBtn = e.target.closest('.datetime-picker-clear-btn');
+            if (clearBtn) {
+                e.preventDefault();
+                console.log('Clear button clicked');
                 this.clear();
                 return;
             }
             
             // Handle confirm button
-            if (e.target.matches('.datetime-picker-confirm-btn')) {
+            const confirmBtn = e.target.closest('.datetime-picker-confirm-btn');
+            if (confirmBtn) {
+                e.preventDefault();
+                console.log('Confirm button clicked');
                 this.confirm();
+                return;
+            }
+            
+            // Handle close button (X)
+            const closeBtn = e.target.closest('.datetime-picker-close-btn');
+            if (closeBtn) {
+                e.preventDefault();
+                console.log('Close X button clicked');
+                this.close();
                 return;
             }
         });
@@ -243,23 +284,79 @@ class DateTimePicker {
             });
         }
         
-        // Outside click - close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!this.container.contains(e.target) && this.isOpen()) {
-                console.log('Outside click detected, closing calendar');
-                this.close();
-            }
+        // Удаляем ненужный флаг isOpening
+        
+        // Дополнительные обработчики для кнопок на десктопе
+        if (window.innerWidth > 640) {
+            // Используем mousedown для более надежной обработки кликов на десктопе
+            this.dropdown.addEventListener('mousedown', (e) => {
+                const clearBtn = e.target.closest('.datetime-picker-clear-btn');
+                const confirmBtn = e.target.closest('.datetime-picker-confirm-btn');
+                const closeBtn = e.target.closest('.datetime-picker-close-btn');
+                
+                if (clearBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Desktop: Clear button mousedown');
+                    this.clear();
+                    return;
+                }
+                
+                if (confirmBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Desktop: Confirm button mousedown');
+                    this.confirm();
+                    return;
+                }
+                
+                if (closeBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Desktop: Close X button mousedown');
+                    this.close();
+                    return;
+                }
+            });
+        }
+        
+        // Overlay click - закрываем календарь - НЕСКОЛЬКО обработчиков для надежности
+        this.overlay.addEventListener('click', (e) => {
+            console.log('Overlay clicked - closing dropdown');
+            e.preventDefault();
+            e.stopPropagation();
+            this.close();
         });
         
-        // Overlay click (mobile only)
-        this.overlay.addEventListener('click', () => {
-            console.log('Overlay clicked, closing calendar');
+        this.overlay.addEventListener('mousedown', (e) => {
+            console.log('Overlay mousedown - closing dropdown');
+            e.preventDefault();
+            e.stopPropagation();
+            this.close();
+        });
+        
+        this.overlay.addEventListener('touchstart', (e) => {
+            console.log('Overlay touchstart - closing dropdown');
+            e.preventDefault();
+            e.stopPropagation();
             this.close();
         });
         
         // Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.isOpen()) {
+                this.close();
+            }
+        });
+        
+        // Клик вне модального окна для закрытия - ТОЛЬКО для десктопа
+        document.addEventListener('click', (e) => {
+            if (this.isOpen() && 
+                window.innerWidth > 640 && // Только на десктопе
+                !this.dropdown.contains(e.target) && 
+                !this.input.contains(e.target) &&
+                !this.overlay.contains(e.target)) {
+                console.log('Desktop: Clicked outside modal - closing');
                 this.close();
             }
         });
@@ -281,65 +378,174 @@ class DateTimePicker {
     
     open() {
         console.log('Opening calendar, window width:', window.innerWidth); // Debug log
+        console.log('Dropdown element:', this.dropdown);
         
-        // Smart positioning - check if there's enough space below
+        // Сначала устанавливаем позиционирование
         this.adjustPosition();
         
+        // Принудительно устанавливаем стили для видимости ПЕРЕД добавлением класса active
+        this.dropdown.style.display = 'block';
+        this.dropdown.style.visibility = 'visible';
+        this.dropdown.style.opacity = '1';
+        
+        // Потом добавляем класс active
         this.dropdown.classList.add('active');
         
-        // Временно отключаем overlay - он блокирует клики
-        // if (window.innerWidth <= 640) {
-        //     this.overlay.classList.add('active');
-        // }
+        // Показываем overlay БЕЗ задержки для десктопа, с задержкой для мобильных
+        if (window.innerWidth <= 640) {
+            setTimeout(() => {
+                this.overlay.classList.add('active');
+            }, 50);
+        } else {
+            this.overlay.classList.add('active');
+        }
         
         // Update calendar for current month
         this.updateCalendar();
+        
+        console.log('Dropdown styles after open:', {
+            position: this.dropdown.style.position,
+            zIndex: this.dropdown.style.zIndex,
+            top: this.dropdown.style.top,
+            left: this.dropdown.style.left,
+            display: this.dropdown.style.display,
+            visibility: this.dropdown.style.visibility,
+            opacity: this.dropdown.style.opacity
+        });
         
         // Calendar opened successfully
     }
     
     close() {
+        console.log('Closing calendar - removing all styles and classes');
+        
+        // Убираем все классы
         this.dropdown.classList.remove('active');
         this.dropdown.classList.remove('show-above');
         this.dropdown.classList.remove('show-fixed');
         this.overlay.classList.remove('active');
+        
+        // ПРИНУДИТЕЛЬНО сбрасываем все стили для скрытия
+        this.dropdown.style.display = 'none';
+        this.dropdown.style.visibility = 'hidden';
+        this.dropdown.style.opacity = '0';
+        
+        // Скрываем overlay
+        this.overlay.style.display = 'none';
+        this.overlay.style.visibility = 'hidden';
+        this.overlay.style.opacity = '0';
+        
+        console.log('Calendar closed - all styles reset');
+    }
+    
+    // Cleanup method for proper removal
+    destroy() {
+        if (this.dropdown && this.dropdown.parentNode) {
+            this.dropdown.parentNode.removeChild(this.dropdown);
+        }
+        if (this.overlay && this.overlay.parentNode) {
+            this.overlay.parentNode.removeChild(this.overlay);
+        }
     }
     
     adjustPosition() {
         const viewportWidth = window.innerWidth;
         
+        // ВСЕГДА используем position: fixed и максимальный z-index
+        this.dropdown.style.position = 'fixed';
+        this.dropdown.style.zIndex = '2147483647';
+        
         if (viewportWidth > 640) {
-            // Desktop: используем fixed позиционирование для правильного z-index
-            this.dropdown.classList.add('show-above');
-            this.dropdown.classList.add('show-fixed');
-            
-            const inputRect = this.input.getBoundingClientRect();
-            const dropdownHeight = this.dropdown.offsetHeight || 400;
-            const topPosition = inputRect.top - dropdownHeight - 10;
-            
-            // Используем fixed позиционирование для корректного отображения поверх других элементов
-            this.dropdown.style.position = 'fixed';
-            this.dropdown.style.top = `${Math.max(10, topPosition)}px`;
-            this.dropdown.style.left = `${inputRect.left}px`;
-            this.dropdown.style.width = `${Math.max(300, inputRect.width)}px`;
-            this.dropdown.style.zIndex = '999999';
-        } else {
-            // Mobile: полностью полагаемся на CSS
-            this.dropdown.classList.remove('show-above');
+            // Desktop: умное позиционирование
             this.dropdown.classList.remove('show-fixed');
             
-            // Убираем все inline стили - пусть CSS решает
-            this.dropdown.style.position = '';
-            this.dropdown.style.top = '';
-            this.dropdown.style.left = '';
-            this.dropdown.style.right = '';
-            this.dropdown.style.bottom = '';
-            this.dropdown.style.width = '';
-            this.dropdown.style.height = '';
-            this.dropdown.style.transform = '';
-            this.dropdown.style.zIndex = '';
+            const inputRect = this.input.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            const viewportWidth = window.innerWidth;
             
-            // Mobile styles cleared
+            // Фиксированные размеры для предсказуемости
+            const dropdownWidth = 380;
+            const dropdownHeight = 500;
+            
+            // Проверяем где больше места - сверху или снизу от input
+            const spaceAbove = inputRect.top;
+            const spaceBelow = viewportHeight - inputRect.bottom;
+            
+            let topPosition, leftPosition;
+            
+            // Позиционирование по вертикали - улучшенная логика
+            if (spaceBelow >= 400) {
+                // Достаточно места снизу - позиционируем под input
+                topPosition = inputRect.bottom + 10;
+                this.dropdown.classList.remove('show-above');
+                this.dropdown.style.maxHeight = `${Math.min(dropdownHeight, spaceBelow - 30)}px`;
+            } else if (spaceAbove >= 400) {
+                // Достаточно места сверху - позиционируем над input
+                topPosition = inputRect.top - Math.min(dropdownHeight, spaceAbove - 30) - 10;
+                this.dropdown.classList.add('show-above');
+                this.dropdown.style.maxHeight = `${Math.min(dropdownHeight, spaceAbove - 30)}px`;
+            } else {
+                // Мало места и сверху и снизу - размещаем там где больше места
+                if (spaceBelow > spaceAbove) {
+                    // Снизу больше места
+                    topPosition = inputRect.bottom + 10;
+                    this.dropdown.style.maxHeight = `${Math.max(300, spaceBelow - 30)}px`;
+                    this.dropdown.classList.remove('show-above');
+                } else {
+                    // Сверху больше места
+                    topPosition = 20;
+                    this.dropdown.style.maxHeight = `${Math.max(300, spaceAbove - 30)}px`;
+                    this.dropdown.classList.add('show-above');
+                }
+            }
+            
+            // Всегда добавляем скролл если контент не помещается
+            this.dropdown.style.overflowY = 'auto';
+            
+            // Позиционирование по горизонтали
+            leftPosition = inputRect.left;
+            
+            // Проверяем, не выходит ли за правую границу экрана
+            if (leftPosition + dropdownWidth > viewportWidth - 20) {
+                leftPosition = Math.max(20, viewportWidth - dropdownWidth - 20);
+            }
+            
+            // Применяем стили
+            this.dropdown.style.position = 'fixed';
+            this.dropdown.style.top = `${topPosition}px`;
+            this.dropdown.style.left = `${leftPosition}px`;
+            this.dropdown.style.width = `${dropdownWidth}px`;
+            this.dropdown.style.height = 'auto';
+            this.dropdown.style.right = 'auto';
+            this.dropdown.style.bottom = 'auto';
+            this.dropdown.style.transform = 'none';
+            this.dropdown.style.margin = '0';
+            
+            console.log('Desktop positioning:', {
+                inputRect,
+                viewportHeight,
+                viewportWidth,
+                spaceAbove,
+                spaceBelow,
+                finalTop: topPosition,
+                finalLeft: leftPosition,
+                finalWidth: dropdownWidth,
+                finalHeight: this.dropdown.style.maxHeight || 'auto'
+            });
+        } else {
+            // Mobile: по центру экрана
+            this.dropdown.classList.remove('show-above');
+            this.dropdown.classList.add('show-fixed');
+            
+            this.dropdown.style.top = '50%';
+            this.dropdown.style.left = '50%';
+            this.dropdown.style.transform = 'translate(-50%, -50%)';
+            this.dropdown.style.width = '90vw';
+            this.dropdown.style.maxWidth = '400px';
+            this.dropdown.style.height = 'auto';
+            this.dropdown.style.maxHeight = '80vh';
+            
+            console.log('Mobile positioning applied');
         }
     }
     
@@ -559,6 +765,23 @@ class DateTimePicker {
 console.log('DateTime Picker script loaded!');
 console.log('Touch support:', 'ontouchstart' in window);
 console.log('User agent:', navigator.userAgent);
+
+// Глобальная функция аварийного закрытия
+window.forceCloseDatetimePicker = function() {
+    console.log('EMERGENCY: Force closing all datetime pickers');
+    document.querySelectorAll('.datetime-picker-dropdown').forEach(dropdown => {
+        dropdown.style.display = 'none';
+        dropdown.style.visibility = 'hidden';
+        dropdown.style.opacity = '0';
+        dropdown.classList.remove('active');
+    });
+    document.querySelectorAll('.datetime-picker-overlay').forEach(overlay => {
+        overlay.style.display = 'none';
+        overlay.style.visibility = 'hidden';
+        overlay.style.opacity = '0';
+        overlay.classList.remove('active');
+    });
+};
 
 // Initialize datetime pickers when DOM is loaded  
 document.addEventListener('DOMContentLoaded', function() {

@@ -1016,6 +1016,74 @@ video {
         background-color: #3b82f6;
         transform: scale(1.2);
     }
+    
+    .clickable-photo {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .clickable-photo:hover {
+        transform: scale(1.02);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    }
+    
+    .clickable-photo:hover .ripple-effect {
+        opacity: 1;
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+    
+    .clickable-photo:hover img {
+        transform: scale(1.05);
+    }
+    
+    .clickable-photo:active {
+        transform: scale(0.98);
+    }
+    
+    .ripple-effect {
+        backdrop-filter: blur(2px);
+    }
+    
+    .ripple-effect div {
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 0.7;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+    
+    /* Click ripple effect */
+    .click-ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        pointer-events: none;
+        transform: scale(0);
+        animation: ripple-animation 0.6s linear;
+        z-index: 10;
+    }
+    
+    @keyframes ripple-animation {
+        0% {
+            transform: scale(0);
+            opacity: 0.6;
+        }
+        100% {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
 }
 
 .desktop-only {
@@ -1036,4 +1104,19 @@ video {
 
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
+}
+
+/* Story height for 9:16 aspect ratio */
+.story-height {
+    height: 32rem; /* 512px for w-72 (288px) to maintain 9:16 ratio */
+}
+
+@media (max-width: 380px) {
+    .story-height {
+        height: 28rem; /* 448px for smaller screens */
+    }
+    
+    .instagram-slider .flex-shrink-0 {
+        width: 16rem; /* w-64 = 256px for smaller screens */
+    }
 }

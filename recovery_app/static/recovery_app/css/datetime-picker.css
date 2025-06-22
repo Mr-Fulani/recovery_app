@@ -54,7 +54,7 @@
     border: 2px solid #e5e7eb;
     border-radius: 12px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    z-index: 99999;
+    z-index: 999999;
     opacity: 0;
     transform: translateY(-10px);
     visibility: hidden;
@@ -77,17 +77,13 @@
     transform: translateY(0) !important;
 }
 
-/* Убираем show-fixed для мобильных - используем обычные стили */
+/* Стили для desktop позиционирования относительно input поля */
 @media (min-width: 641px) {
     .datetime-picker-dropdown.show-fixed {
         position: fixed !important;
-        top: 50% !important;
-        left: 50% !important;
         right: auto !important;
         bottom: auto !important;
-        transform: translate(-50%, -50%) !important;
         margin: 0 !important;
-        width: 90vw !important;
         max-width: 400px !important;
         max-height: 80vh !important;
         overflow-y: auto !important;
@@ -95,9 +91,13 @@
     }
 
     .datetime-picker-dropdown.show-fixed.active {
-        transform: translate(-50%, -50%) !important;
         opacity: 1 !important;
         visibility: visible !important;
+    }
+    
+    /* Дополнительные стили для правильного позиционирования */
+    .datetime-picker-dropdown.show-fixed.show-above {
+        transform: translateY(0) !important;
     }
 }
 

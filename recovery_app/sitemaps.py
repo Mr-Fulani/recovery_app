@@ -2,6 +2,8 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 from .models import Review, ServiceRequest, WorkPhoto, HomePage # Импортируем ваши модели, если они нужны в Sitemap
+from django.contrib.sitemaps.views import sitemap
+
 
 
 
@@ -31,12 +33,19 @@ class HomePageSitemap(Sitemap):
 
 
 # Если вы хотите включить другие динамические страницы, например, отдельные отзывы
-# class ReviewSitemap(Sitemap):
-#     changefreq = "monthly"
-#     priority = 0.6
-#
-#     def items(self):
-#         return Review.objects.filter(is_approved=True)
-#
-#     def lastmod(self, obj):
-#         return obj.created_at # Если у вас есть поле даты изменения
+class ReviewSitemap(Sitemap):
+    changefreq = "monthly"
+    priority = 0.6
+
+    def items(self):
+        return Review.objects.filter(is_approved=True)
+
+    def lastmod(self, obj):
+        return obj.created_at # Если у вас есть поле даты изменения
+    
+
+sitemaps = {
+    'static': StaticViewSitemap,
+    'homepages': HomePageSitemap,
+    'reviews': ReviewSitemap,
+}

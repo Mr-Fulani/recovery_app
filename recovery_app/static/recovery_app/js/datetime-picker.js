@@ -309,17 +309,20 @@ class DateTimePicker {
         const viewportWidth = window.innerWidth;
         
         if (viewportWidth > 640) {
-            // Desktop: всегда выше input поля
+            // Desktop: используем fixed позиционирование для правильного z-index
             this.dropdown.classList.add('show-above');
-            this.dropdown.classList.remove('show-fixed');
+            this.dropdown.classList.add('show-fixed');
             
             const inputRect = this.input.getBoundingClientRect();
             const dropdownHeight = this.dropdown.offsetHeight || 400;
             const topPosition = inputRect.top - dropdownHeight - 10;
             
+            // Используем fixed позиционирование для корректного отображения поверх других элементов
+            this.dropdown.style.position = 'fixed';
             this.dropdown.style.top = `${Math.max(10, topPosition)}px`;
             this.dropdown.style.left = `${inputRect.left}px`;
             this.dropdown.style.width = `${Math.max(300, inputRect.width)}px`;
+            this.dropdown.style.zIndex = '999999';
         } else {
             // Mobile: полностью полагаемся на CSS
             this.dropdown.classList.remove('show-above');
@@ -334,6 +337,7 @@ class DateTimePicker {
             this.dropdown.style.width = '';
             this.dropdown.style.height = '';
             this.dropdown.style.transform = '';
+            this.dropdown.style.zIndex = '';
             
             // Mobile styles cleared
         }

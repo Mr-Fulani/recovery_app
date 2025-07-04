@@ -8,6 +8,13 @@ class AnalyticsTracker {
         this.isGoogleAnalyticsLoaded = typeof gtag !== 'undefined';
         this.isYandexMetricaLoaded = typeof ym !== 'undefined';
         this.yandexMetricaId = this.getYandexMetricaId();
+        
+        console.log('AnalyticsTracker initialized:', {
+            gtagLoaded: this.isGoogleAnalyticsLoaded,
+            ymLoaded: this.isYandexMetricaLoaded,
+            ymId: this.yandexMetricaId
+        });
+        
         this.init();
     }
 
@@ -45,6 +52,17 @@ class AnalyticsTracker {
             custom1: 'page_load',
             custom2: window.location.pathname
         });
+        
+        // Отправляем тестовое событие для проверки работы
+        setTimeout(() => {
+            this.sendEvent('analytics_test', {
+                category: 'Test',
+                label: 'Analytics Test Event',
+                custom1: 'test',
+                custom2: 'working',
+                value: 1
+            });
+        }, 2000);
     }
 
     /**
@@ -62,13 +80,18 @@ class AnalyticsTracker {
         // Google Analytics 4
         if (this.isGoogleAnalyticsLoaded) {
             gtag('event', eventName, {
-                event_category: finalData.category || 'User Interaction',
-                event_label: finalData.label || '',
+                category: finalData.category || 'User Interaction',
+                label: finalData.label || '',
                 value: finalData.value || 0,
-                custom_parameter_1: finalData.custom1 || '',
-                custom_parameter_2: finalData.custom2 || '',
+                custom1: finalData.custom1 || '',
+                custom2: finalData.custom2 || '',
                 page_location: finalData.page_url,
-                page_title: finalData.page_title
+                page_title: finalData.page_title,
+                // Добавляем дополнительные параметры для лучшего отслеживания
+                service_type: finalData.custom1 || '',
+                urgency: finalData.custom2 || '',
+                page_path: window.location.pathname,
+                timestamp: finalData.timestamp
             });
         }
 
@@ -84,7 +107,13 @@ class AnalyticsTracker {
         }
 
         // Логирование для отладки
-        console.log('Analytics Event Sent:', eventName, finalData);
+        console.log('Analytics Event Sent:', {
+            eventName,
+            data: finalData,
+            gtagLoaded: this.isGoogleAnalyticsLoaded,
+            ymLoaded: this.isYandexMetricaLoaded,
+            ymId: this.yandexMetricaId
+        });
     }
 
     /**
@@ -95,11 +124,19 @@ class AnalyticsTracker {
             const phoneLink = e.target.closest('a[href^="tel:"]');
             if (phoneLink) {
                 const phoneNumber = phoneLink.getAttribute('href').replace('tel:', '');
+                const linkText = phoneLink.textContent.trim();
+                
                 this.sendEvent('phone_call', {
                     category: 'Contact',
-                    label: phoneNumber,
+                    label: linkText || phoneNumber,
                     custom1: 'phone_click',
                     custom2: phoneNumber
+                });
+                
+                console.log('Phone call detected:', {
+                    number: phoneNumber,
+                    text: linkText,
+                    element: phoneLink
                 });
             }
         });
@@ -110,14 +147,22 @@ class AnalyticsTracker {
      */
     trackWhatsAppClicks() {
         document.addEventListener('click', (e) => {
-            const whatsappLink = e.target.closest('a[href*="wa.me"], a[href*="whatsapp.com"], a[href*="api.whatsapp.com"]');
+            const whatsappLink = e.target.closest('a[href*="wa.me"], a[href*="whatsapp.com"], a[href*="api.whatsapp.com"], a[href*="whatsapp"]');
             if (whatsappLink) {
                 const whatsappUrl = whatsappLink.getAttribute('href');
+                const linkText = whatsappLink.textContent.trim();
+                
                 this.sendEvent('whatsapp_click', {
                     category: 'Contact',
-                    label: 'WhatsApp',
+                    label: linkText || 'WhatsApp',
                     custom1: 'whatsapp_click',
                     custom2: whatsappUrl
+                });
+                
+                console.log('WhatsApp click detected:', {
+                    url: whatsappUrl,
+                    text: linkText,
+                    element: whatsappLink
                 });
             }
         });
@@ -127,40 +172,48 @@ class AnalyticsTracker {
      * Отслеживание отправки форм
      */
     trackFormSubmissions() {
-        // Форма заявки на эвакуацию
-        const contactForm = document.querySelector('form[action*="contact"]');
-        if (contactForm) {
-            contactForm.addEventListener('submit', (e) => {
-                const formData = new FormData(contactForm);
-                const serviceType = formData.get('service_type') || 'not_specified';
-                const urgency = formData.get('urgency') || 'medium';
-                
-                this.sendEvent('service_request_submitted', {
-                    category: 'Form Submission',
-                    label: 'Contact Form',
-                    custom1: serviceType,
-                    custom2: urgency,
-                    value: 1
-                });
+        // Отслеживаем все формы на странице
+        document.addEventListener('submit', (e) => {
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            // Определяем тип формы
+            let formType = 'general';
+            let serviceType = 'not_specified';
+            let urgency = 'medium';
+            let rating = '0';
+            
+            // Проверяем различные селекторы для определения типа формы
+            if (form.action.includes('contact') || form.id.includes('contact') || form.className.includes('contact')) {
+                formType = 'contact';
+                serviceType = formData.get('service_type') || formData.get('service') || 'not_specified';
+                urgency = formData.get('urgency') || formData.get('priority') || 'medium';
+            } else if (form.action.includes('review') || form.id.includes('review') || form.className.includes('review')) {
+                formType = 'review';
+                rating = formData.get('rating') || '0';
+            } else if (form.action.includes('order') || form.id.includes('order') || form.className.includes('order')) {
+                formType = 'order';
+                serviceType = formData.get('service_type') || formData.get('service') || 'not_specified';
+            }
+            
+            // Отправляем событие
+            this.sendEvent(`${formType}_form_submitted`, {
+                category: 'Form Submission',
+                label: `${formType.charAt(0).toUpperCase() + formType.slice(1)} Form`,
+                custom1: serviceType,
+                custom2: formType === 'review' ? rating : urgency,
+                value: formType === 'review' ? parseInt(rating) : 1
             });
-        }
-
-        // Форма отзывов
-        const reviewForm = document.querySelector('form[action*="review"]');
-        if (reviewForm) {
-            reviewForm.addEventListener('submit', (e) => {
-                const formData = new FormData(reviewForm);
-                const rating = formData.get('rating') || '0';
-                
-                this.sendEvent('review_submitted', {
-                    category: 'Form Submission',
-                    label: 'Review Form',
-                    custom1: 'review',
-                    custom2: rating,
-                    value: parseInt(rating)
-                });
+            
+            console.log(`Form submitted: ${formType}`, {
+                serviceType,
+                urgency,
+                rating,
+                formAction: form.action,
+                formId: form.id,
+                formClass: form.className
             });
-        }
+        });
     }
 
     /**
@@ -199,10 +252,11 @@ class AnalyticsTracker {
      */
     trackServiceCTAButtons() {
         document.addEventListener('click', (e) => {
-            const ctaButton = e.target.closest('.cta-button, .order-button, .call-now-button, button[type="submit"]');
+            const ctaButton = e.target.closest('.cta-button, .order-button, .call-now-button, .btn-primary, .btn-success, button[type="submit"], a[href*="contact"], a[href*="order"]');
             if (ctaButton) {
                 const buttonText = ctaButton.textContent.trim();
                 const currentService = this.getCurrentServiceType();
+                const buttonHref = ctaButton.getAttribute('href') || '';
                 
                 this.sendEvent('service_cta_clicked', {
                     category: 'CTA Interaction',
@@ -210,6 +264,13 @@ class AnalyticsTracker {
                     custom1: currentService,
                     custom2: buttonText.toLowerCase().replace(/\s+/g, '_'),
                     value: 1
+                });
+                
+                console.log('CTA button clicked:', {
+                    text: buttonText,
+                    service: currentService,
+                    href: buttonHref,
+                    element: ctaButton
                 });
             }
         });
@@ -331,6 +392,8 @@ document.addEventListener('DOMContentLoaded', () => {
 window.trackEvent = function(eventName, eventData = {}) {
     if (window.analyticsTracker) {
         window.analyticsTracker.sendEvent(eventName, eventData);
+    } else {
+        console.warn('AnalyticsTracker not initialized');
     }
 };
 
@@ -343,5 +406,50 @@ window.trackConversion = function(conversionType, value = 0) {
             custom2: conversionType,
             value: value
         });
+    } else {
+        console.warn('AnalyticsTracker not initialized');
     }
+};
+
+// Функция для тестирования всех событий
+window.testAnalytics = function() {
+    if (!window.analyticsTracker) {
+        console.warn('AnalyticsTracker not initialized');
+        return;
+    }
+    
+    console.log('Testing analytics events...');
+    
+    // Тестируем различные события
+    window.analyticsTracker.sendEvent('test_phone_call', {
+        category: 'Contact',
+        label: '+1234567890',
+        custom1: 'phone_click',
+        custom2: '+1234567890'
+    });
+    
+    window.analyticsTracker.sendEvent('test_whatsapp_click', {
+        category: 'Contact',
+        label: 'WhatsApp',
+        custom1: 'whatsapp_click',
+        custom2: 'https://wa.me/1234567890'
+    });
+    
+    window.analyticsTracker.sendEvent('test_form_submission', {
+        category: 'Form Submission',
+        label: 'Contact Form',
+        custom1: 'car_towing',
+        custom2: 'urgent',
+        value: 1
+    });
+    
+    window.analyticsTracker.sendEvent('test_cta_click', {
+        category: 'CTA Interaction',
+        label: 'Call Now',
+        custom1: 'car_towing',
+        custom2: 'call_now',
+        value: 1
+    });
+    
+    console.log('Analytics test events sent. Check Google Analytics in 24-48 hours.');
 }; 

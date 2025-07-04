@@ -6,7 +6,10 @@
 class AnimatedSlider {
     constructor(containerId) {
         this.container = document.getElementById(containerId);
-        if (!this.container) return;
+        if (!this.container) {
+            console.warn(`AnimatedSlider: Container with id "${containerId}" not found`);
+            return;
+        }
 
         this.sliderContainer = this.container.querySelector('#sliderContainer');
         this.preloader = this.container.querySelector('#sliderPreloader');
@@ -16,6 +19,12 @@ class AnimatedSlider {
         this.nextBtn = this.container.querySelector('#nextBtn');
         this.playPauseBtn = this.container.querySelector('#playPauseBtn');
         this.indicatorsContainer = this.container.querySelector('#sliderIndicators');
+
+        // Проверяем наличие основных элементов
+        if (!this.sliderTrack) {
+            console.warn('AnimatedSlider: #sliderTrack not found in container');
+            return;
+        }
 
         this.currentSlide = 0;
         this.totalSlides = this.slides.length;
@@ -287,10 +296,11 @@ class AnimatedSlider {
         testImage.onerror = () => {
             // В случае ошибки предполагаем медленное соединение
             this.isSlowConnection = true;
+            console.warn('Connection speed test image failed to load');
         };
         
         // Маленькое тестовое изображение (1x1 пиксель)
-        testImage.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7?t=' + Date.now();
+        testImage.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
     }
 
     hidePreloader() {
@@ -312,6 +322,11 @@ class AnimatedSlider {
     }
 
     createIndicators() {
+        if (!this.indicatorsContainer) {
+            console.warn('AnimatedSlider: indicatorsContainer not found');
+            return;
+        }
+        
         this.indicatorsContainer.innerHTML = '';
         
         for (let i = 0; i < this.totalSlides; i++) {
@@ -323,9 +338,16 @@ class AnimatedSlider {
     }
 
     bindEvents() {
-        this.prevBtn?.addEventListener('click', () => this.prevSlide());
-        this.nextBtn?.addEventListener('click', () => this.nextSlide());
-        this.playPauseBtn?.addEventListener('click', () => this.toggleAutoPlay());
+        // Привязываем события кнопок только если они существуют
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => this.prevSlide());
+        }
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => this.nextSlide());
+        }
+        if (this.playPauseBtn) {
+            this.playPauseBtn.addEventListener('click', () => this.toggleAutoPlay());
+        }
 
         // Добавляем поддержку клавиатуры
         document.addEventListener('keydown', (e) => {
@@ -348,56 +370,68 @@ class AnimatedSlider {
         });
 
         // Поддержка touch-событий для мобильных устройств
-        let startX = null;
-        let currentX = null;
+        if (this.sliderTrack) {
+            let startX = null;
+            let currentX = null;
 
-        this.sliderTrack.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-            this.pauseAutoPlay();
-        });
+            this.sliderTrack.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                this.pauseAutoPlay();
+            });
 
-        this.sliderTrack.addEventListener('touchmove', (e) => {
-            if (!startX) return;
-            currentX = e.touches[0].clientX;
-        });
+            this.sliderTrack.addEventListener('touchmove', (e) => {
+                if (!startX) return;
+                currentX = e.touches[0].clientX;
+            });
 
-        this.sliderTrack.addEventListener('touchend', () => {
-            if (!startX || !currentX) return;
-            
-            const diff = startX - currentX;
-            const threshold = 50;
+            this.sliderTrack.addEventListener('touchend', () => {
+                if (!startX || !currentX) return;
+                
+                const diff = startX - currentX;
+                const threshold = 50;
 
-            if (Math.abs(diff) > threshold) {
-                if (diff > 0) {
-                    this.nextSlide();
-                } else {
-                    this.prevSlide();
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0) {
+                        this.nextSlide();
+                    } else {
+                        this.prevSlide();
+                    }
                 }
-            }
 
-            startX = null;
-            currentX = null;
-            
-            if (this.isPlaying) {
-                setTimeout(() => this.startAutoPlay(), 1000);
-            }
-        });
+                startX = null;
+                currentX = null;
+                
+                if (this.isPlaying) {
+                    setTimeout(() => this.startAutoPlay(), 1000);
+                }
+            });
+        }
     }
 
     isSliderVisible() {
+        if (!this.container) return false;
+        
         const rect = this.container.getBoundingClientRect();
         return rect.top < window.innerHeight && rect.bottom > 0;
     }
 
     updateSlider() {
+        // Проверяем, что sliderTrack существует
+        if (!this.sliderTrack) {
+            console.warn('AnimatedSlider: sliderTrack not found');
+            return;
+        }
+        
         const translateX = -this.currentSlide * 100;
         this.sliderTrack.style.transform = `translateX(${translateX}%)`;
 
         // Обновляем индикаторы
-        const indicators = this.indicatorsContainer.querySelectorAll('.indicator');
-        indicators.forEach((indicator, index) => {
-            indicator.classList.toggle('active', index === this.currentSlide);
-        });
+        if (this.indicatorsContainer) {
+            const indicators = this.indicatorsContainer.querySelectorAll('.indicator');
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === this.currentSlide);
+            });
+        }
 
         // Добавляем класс активности к текущему слайду
         this.slides.forEach((slide, index) => {
@@ -448,11 +482,13 @@ class AnimatedSlider {
 
     addSlideAnimation(animationClass) {
         const currentSlideElement = this.slides[this.currentSlide];
-        currentSlideElement.classList.add(animationClass);
-        
-        setTimeout(() => {
-            currentSlideElement.classList.remove(animationClass);
-        }, 600);
+        if (currentSlideElement) {
+            currentSlideElement.classList.add(animationClass);
+            
+            setTimeout(() => {
+                currentSlideElement.classList.remove(animationClass);
+            }, 600);
+        }
     }
 
     startAutoPlay() {
@@ -473,28 +509,48 @@ class AnimatedSlider {
     toggleAutoPlay() {
         this.isPlaying = !this.isPlaying;
         
-        const icon = this.playPauseBtn.querySelector('i');
-        if (this.isPlaying) {
-            this.startAutoPlay();
-            icon.className = 'fas fa-pause';
+        if (this.playPauseBtn) {
+            const icon = this.playPauseBtn.querySelector('i');
+            if (icon) {
+                if (this.isPlaying) {
+                    this.startAutoPlay();
+                    icon.className = 'fas fa-pause';
+                } else {
+                    this.pauseAutoPlay();
+                    icon.className = 'fas fa-play';
+                }
+            }
         } else {
-            this.pauseAutoPlay();
-            icon.className = 'fas fa-play';
+            // Если кнопки нет, просто переключаем состояние
+            if (this.isPlaying) {
+                this.startAutoPlay();
+            } else {
+                this.pauseAutoPlay();
+            }
         }
     }
 
     // Метод для обновления слайдера при изменении размера окна
     handleResize() {
-        this.updateSlider();
+        // Проверяем, что слайдер существует и инициализирован
+        if (this.container && this.sliderTrack) {
+            this.updateSlider();
+        }
     }
 
     // Метод для уничтожения слайдера
     destroy() {
         this.pauseAutoPlay();
         // Удаляем все обработчики событий
-        this.prevBtn?.removeEventListener('click', this.prevSlide);
-        this.nextBtn?.removeEventListener('click', this.nextSlide);
-        this.playPauseBtn?.removeEventListener('click', this.toggleAutoPlay);
+        if (this.prevBtn) {
+            this.prevBtn.removeEventListener('click', this.prevSlide);
+        }
+        if (this.nextBtn) {
+            this.nextBtn.removeEventListener('click', this.nextSlide);
+        }
+        if (this.playPauseBtn) {
+            this.playPauseBtn.removeEventListener('click', this.toggleAutoPlay);
+        }
     }
 }
 
@@ -503,13 +559,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Создаем экземпляр слайдера
     const slider = new AnimatedSlider('animated-slider');
     
-    // Добавляем обработчик изменения размера окна
-    window.addEventListener('resize', () => {
-        if (slider) slider.handleResize();
-    });
+    // Добавляем обработчик изменения размера окна только если слайдер создан успешно
+    if (slider && slider.container) {
+        window.addEventListener('resize', () => {
+            if (slider) slider.handleResize();
+        });
 
-    // Сохраняем ссылку на слайдер для глобального доступа
-    window.animatedSlider = slider;
+        // Сохраняем ссылку на слайдер для глобального доступа
+        window.animatedSlider = slider;
+    }
 });
 
 // Дополнительные функции для улучшения производительности
@@ -563,9 +621,17 @@ window.addEventListener('load', createSliderObserver);
 class BackgroundSlider {
     constructor(containerId) {
         this.container = document.getElementById(containerId);
-        if (!this.container) return;
+        if (!this.container) {
+            console.warn(`BackgroundSlider: Container with id "${containerId}" not found`);
+            return;
+        }
 
         this.sliderTrack = this.container.querySelector('#backgroundSliderTrack');
+        if (!this.sliderTrack) {
+            console.warn('BackgroundSlider: #backgroundSliderTrack not found in container');
+            return;
+        }
+        
         this.slides = this.container.querySelectorAll('.background-slide');
 
         this.currentSlide = 0;
@@ -577,7 +643,10 @@ class BackgroundSlider {
     }
 
     init() {
-        if (this.totalSlides === 0) return;
+        if (this.totalSlides === 0) {
+            console.warn('BackgroundSlider: No slides found');
+            return;
+        }
 
         this.updateSlider();
         this.startAutoPlay();
@@ -607,6 +676,12 @@ class BackgroundSlider {
     }
 
     updateSlider() {
+        // Проверяем, что sliderTrack существует
+        if (!this.sliderTrack) {
+            console.warn('BackgroundSlider: sliderTrack not found');
+            return;
+        }
+        
         const translateX = -this.currentSlide * 100;
         this.sliderTrack.style.transform = `translateX(${translateX}%)`;
 
@@ -663,7 +738,10 @@ class BackgroundSlider {
 
     // Метод для обновления слайдера при изменении размера окна
     handleResize() {
-        this.updateSlider();
+        // Проверяем, что слайдер существует и инициализирован
+        if (this.container && this.sliderTrack) {
+            this.updateSlider();
+        }
     }
 
     // Метод для уничтожения слайдера
@@ -677,11 +755,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Создаем экземпляр фонового слайдера если он есть на странице
     const backgroundSlider = new BackgroundSlider('background-slider');
     
-    // Добавляем обработчик изменения размера окна
-    window.addEventListener('resize', () => {
-        if (backgroundSlider) backgroundSlider.handleResize();
-    });
+    // Добавляем обработчик изменения размера окна только если слайдер создан успешно
+    if (backgroundSlider && backgroundSlider.container) {
+        window.addEventListener('resize', () => {
+            if (backgroundSlider) backgroundSlider.handleResize();
+        });
 
-    // Сохраняем ссылку на фоновый слайдер для глобального доступа
-    window.backgroundSlider = backgroundSlider;
+        // Сохраняем ссылку на фоновый слайдер для глобального доступа
+        window.backgroundSlider = backgroundSlider;
+    }
 }); 

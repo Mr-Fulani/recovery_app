@@ -2,20 +2,54 @@
 
 <!-- Анимированный слайдер с видео и фотографиями -->
 <section class="animated-slider-section" id="animated-slider">
-    <!-- Preloader для слайдера -->
+    <!-- Улучшенный Preloader для слайдера -->
     <div class="slider-preloader" id="sliderPreloader">
-        <div class="preloader-spinner">
-            <div class="spinner-circle"></div>
+        <!-- Skeleton для слайдера -->
+        <div class="slider-skeleton">
+            <div class="skeleton-slide">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-overlay">
+                    <div class="skeleton-text-large"></div>
+                    <div class="skeleton-text-small"></div>
+                </div>
+            </div>
         </div>
-        <p class="preloader-text">Loading content...</p>
+        
+        <!-- Анимированный логотип -->
+        <div class="preloader-logo">
+            <div class="logo-animation">
+                <div class="truck-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="loading-dots">
+                    <span class="dot dot-1"></span>
+                    <span class="dot dot-2"></span>
+                    <span class="dot dot-3"></span>
+                </div>
+            </div>
+            <p class="preloader-text">Подготавливаем контент...</p>
+        </div>
+        
+        <!-- Прогресс-бар -->
+        <div class="loading-progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
     </div>
     
     <div class="slider-container" id="sliderContainer" style="opacity: 0; transition: opacity 0.5s ease-in-out;">
         <div class="slider-track" id="sliderTrack">
-            <!-- Видео элементы -->
+            <!-- Видео элементы с fallback -->
             {% if slider_video %}
-            <div class="slide video-slide">
-                <video autoplay muted loop playsinline preload="metadata" class="slide-video">
+            <div class="slide video-slide" data-media-type="video">
+                <!-- Fallback изображение -->
+                <div class="video-fallback">
+                    <img src="{% static 'recovery_app/images/towing-hero-fallback.svg' %}" 
+                         alt="Professional Towing Service" 
+                         class="fallback-image">
+                </div>
+                
+                <video autoplay muted loop playsinline preload="none" class="slide-video" 
+                       poster="{% static 'recovery_app/images/towing-hero-poster.svg' %}">
                     <source src="{{ slider_video.url }}" type="video/mp4">
                     Your browser does not support video.
                 </video>
@@ -28,10 +62,18 @@
             </div>
             {% endif %}
 
-            <!-- Мобильное видео -->
+            <!-- Мобильное видео с fallback -->
             {% if slider_video_mobile %}
-            <div class="slide video-slide mobile-video">
-                <video autoplay muted loop playsinline preload="metadata" class="slide-video">
+            <div class="slide video-slide mobile-video" data-media-type="video-mobile">
+                <!-- Fallback изображение для мобильных -->
+                <div class="video-fallback mobile-fallback">
+                    <img src="{% static 'recovery_app/images/towing-mobile-fallback.svg' %}" 
+                         alt="Mobile Towing Service" 
+                         class="fallback-image">
+                </div>
+                
+                <video autoplay muted loop playsinline preload="none" class="slide-video"
+                       poster="{% static 'recovery_app/images/towing-mobile-poster.svg' %}">
                     <source src="{{ slider_video_mobile.url }}" type="video/mp4">
                     Your browser does not support video.
                 </video>

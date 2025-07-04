@@ -23,6 +23,9 @@ class AnimatedSlider {
         this.autoPlayInterval = null;
         this.autoPlayDelay = 5000; // 5 секунд
         this.isLoaded = false;
+        this.progressBar = this.container.querySelector('#progressBar');
+        this.loadedMedia = 0;
+        this.totalMedia = 0;
 
         this.init();
     }
@@ -33,6 +36,12 @@ class AnimatedSlider {
             return;
         }
 
+        // Инициализируем fallback изображения
+        this.initializeFallbacks();
+        
+        // Определяем скорость соединения
+        this.detectConnectionSpeed();
+        
         // Ждем загрузки всех медиа-элементов
         this.preloadMedia().then(() => {
             this.createIndicators();
@@ -60,30 +69,49 @@ class AnimatedSlider {
     }
 
     async preloadMedia() {
-        const mediaElements = [];
+        // Подсчитываем общее количество медиа-элементов
+        this.slides.forEach(slide => {
+            const video = slide.querySelector('video');
+            const image = slide.querySelector('img');
+            
+            if (video) this.totalMedia++;
+            if (image) this.totalMedia++;
+        });
+
+        // Показываем минимальный прогресс
+        this.updateProgress(0);
+        
+        const mediaPromises = [];
         
         this.slides.forEach(slide => {
             const video = slide.querySelector('video');
             const image = slide.querySelector('img');
             
             if (video) {
-                mediaElements.push(this.loadVideo(video));
+                mediaPromises.push(this.loadVideo(video));
             }
             if (image) {
-                mediaElements.push(this.loadImage(image));
+                mediaPromises.push(this.loadImage(image));
             }
         });
 
-        // Ждем загрузки всех элементов или максимум 5 секунд
+        // Добавляем минимальную задержку для красивого отображения preloader'а
+        const minDelay = new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Ждем загрузки всех элементов или максимум 8 секунд
         return Promise.race([
-            Promise.all(mediaElements),
-            new Promise(resolve => setTimeout(resolve, 5000))
+            Promise.all([...mediaPromises, minDelay]),
+            new Promise(resolve => setTimeout(() => {
+                this.updateProgress(100);
+                resolve();
+            }, 8000))
         ]);
     }
 
     loadVideo(video) {
         return new Promise(resolve => {
             if (video.readyState >= 3) {
+                this.onMediaLoaded();
                 resolve();
                 return;
             }
@@ -91,26 +119,62 @@ class AnimatedSlider {
             const onLoadedData = () => {
                 video.removeEventListener('loadeddata', onLoadedData);
                 video.removeEventListener('error', onError);
+                video.removeEventListener('progress', onProgress);
+                this.onVideoLoaded(video);
+                this.onMediaLoaded();
                 resolve();
             };
             
             const onError = () => {
                 video.removeEventListener('loadeddata', onLoadedData);
                 video.removeEventListener('error', onError);
-                resolve(); // Продолжаем даже если видео не загрузилось
+                video.removeEventListener('progress', onProgress);
+                this.onMediaLoaded(); // Продолжаем даже если видео не загрузилось
+                resolve();
+            };
+            
+            const onProgress = () => {
+                // Частичное обновление прогресса при загрузке видео
+                const buffered = video.buffered;
+                if (buffered.length > 0) {
+                    const loadPercent = (buffered.end(0) / video.duration) * 100;
+                    if (loadPercent > 50) { // Если загружено больше 50%
+                        video.removeEventListener('progress', onProgress);
+                        this.onMediaLoaded();
+                        resolve();
+                    }
+                }
             };
             
             video.addEventListener('loadeddata', onLoadedData);
             video.addEventListener('error', onError);
+            video.addEventListener('progress', onProgress);
             
-            // Форсируем загрузку
-            video.load();
+            // Улучшенная стратегия загрузки для мобильных
+            if (this.isMobile()) {
+                video.preload = 'metadata';
+                video.load();
+                // На мобильных ждем только metadata
+                setTimeout(() => {
+                    if (video.readyState >= 1) {
+                        video.removeEventListener('loadeddata', onLoadedData);
+                        video.removeEventListener('error', onError);
+                        video.removeEventListener('progress', onProgress);
+                        this.onMediaLoaded();
+                        resolve();
+                    }
+                }, 2000);
+            } else {
+                video.preload = 'auto';
+                video.load();
+            }
         });
     }
 
     loadImage(image) {
         return new Promise(resolve => {
             if (image.complete) {
+                this.onMediaLoaded();
                 resolve();
                 return;
             }
@@ -118,13 +182,15 @@ class AnimatedSlider {
             const onLoad = () => {
                 image.removeEventListener('load', onLoad);
                 image.removeEventListener('error', onError);
+                this.onMediaLoaded();
                 resolve();
             };
             
             const onError = () => {
                 image.removeEventListener('load', onLoad);
                 image.removeEventListener('error', onError);
-                resolve(); // Продолжаем даже если изображение не загрузилось
+                this.onMediaLoaded(); // Продолжаем даже если изображение не загрузилось
+                resolve();
             };
             
             image.addEventListener('load', onLoad);
@@ -132,17 +198,117 @@ class AnimatedSlider {
         });
     }
 
-    hidePreloader() {
-        if (this.preloader) {
-            this.preloader.classList.add('hidden');
+    onMediaLoaded() {
+        this.loadedMedia++;
+        const progress = (this.loadedMedia / this.totalMedia) * 100;
+        this.updateProgress(Math.min(progress, 95)); // Максимум 95% до полной загрузки
+    }
+    
+    onVideoLoaded(video) {
+        // Находим родительский слайд
+        const slide = video.closest('.slide');
+        if (slide && !slide.classList.contains('slow-connection')) {
+            slide.classList.add('video-loaded');
+            
+            // Плавно показываем видео и скрываем fallback
             setTimeout(() => {
-                this.preloader.style.display = 'none';
-            }, 500);
+                video.style.opacity = '1';
+                const fallback = slide.querySelector('.video-fallback');
+                if (fallback) {
+                    fallback.style.opacity = '0';
+                }
+            }, 100);
+        }
+    }
+    
+    updateProgress(percent) {
+        if (this.progressBar) {
+            this.progressBar.style.width = `${percent}%`;
+        }
+    }
+    
+    isMobile() {
+        return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+    
+    initializeFallbacks() {
+        // Показываем fallback изображения по умолчанию
+        this.slides.forEach(slide => {
+            const video = slide.querySelector('video');
+            const fallback = slide.querySelector('.video-fallback');
+            
+            if (video && fallback) {
+                fallback.style.opacity = '1';
+                video.style.opacity = '0';
+            }
+        });
+    }
+    
+    detectConnectionSpeed() {
+        // Проверяем API Network Information если доступно
+        if ('connection' in navigator) {
+            const connection = navigator.connection;
+            const slowConnections = ['slow-2g', '2g', '3g'];
+            
+            if (slowConnections.includes(connection.effectiveType)) {
+                this.isSlowConnection = true;
+                this.slides.forEach(slide => {
+                    if (slide.querySelector('video')) {
+                        slide.classList.add('slow-connection');
+                    }
+                });
+                return;
+            }
         }
         
-        if (this.sliderContainer) {
-            this.sliderContainer.style.opacity = '1';
-        }
+        // Fallback: простой тест скорости
+        this.testConnectionSpeed();
+    }
+    
+    testConnectionSpeed() {
+        const startTime = Date.now();
+        const testImage = new Image();
+        
+        testImage.onload = () => {
+            const endTime = Date.now();
+            const duration = endTime - startTime;
+            
+            // Если загрузка небольшого изображения занимает больше 3 секунд
+            if (duration > 3000) {
+                this.isSlowConnection = true;
+                this.slides.forEach(slide => {
+                    if (slide.querySelector('video')) {
+                        slide.classList.add('slow-connection');
+                    }
+                });
+            }
+        };
+        
+        testImage.onerror = () => {
+            // В случае ошибки предполагаем медленное соединение
+            this.isSlowConnection = true;
+        };
+        
+        // Маленькое тестовое изображение (1x1 пиксель)
+        testImage.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7?t=' + Date.now();
+    }
+
+    hidePreloader() {
+        // Завершаем прогресс-бар
+        this.updateProgress(100);
+        
+        setTimeout(() => {
+            if (this.preloader) {
+                this.preloader.classList.add('hidden');
+                setTimeout(() => {
+                    this.preloader.style.display = 'none';
+                }, 800);
+            }
+            
+            if (this.sliderContainer) {
+                this.sliderContainer.style.opacity = '1';
+            }
+        }, 300);
     }
 
     createIndicators() {

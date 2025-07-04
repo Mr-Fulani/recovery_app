@@ -277,12 +277,16 @@
         <a href="https://wa.me/{{ whatsapp_number }}"
            class="widget-button whatsapp-button"
            target="_blank"
-           aria-label="Contact us on WhatsApp">
+           aria-label="Contact us on WhatsApp"
+           data-analytics-action="whatsapp"
+           data-analytics-location="mobile_widget">
             <i class="fab fa-whatsapp text-2xl text-white"></i>
         </a>
         <a href="tel:{{ whatsapp_number }}"
            class="widget-button call-button"
-           aria-label="Call us now">
+           aria-label="Call us now"
+           data-analytics-action="phone"
+           data-analytics-location="mobile_widget">
             <i class="fas fa-phone text-xl text-white"></i>
         </a>
     </div>
@@ -292,12 +296,16 @@
         <a href="https://wa.me/{{ whatsapp_number }}"
            class="widget-button whatsapp-button"
            target="_blank"
-           aria-label="Contact us on WhatsApp">
+           aria-label="Contact us on WhatsApp"
+           data-analytics-action="whatsapp"
+           data-analytics-location="desktop_widget">
             <i class="fab fa-whatsapp text-2xl text-white"></i>
         </a>
         <a href="tel:{{ whatsapp_number }}"
            class="widget-button call-button"
-           aria-label="Call us now">
+           aria-label="Call us now"
+           data-analytics-action="phone"
+           data-analytics-location="desktop_widget">
             <i class="fas fa-phone text-xl text-white"></i>
         </a>
     </div>
@@ -351,6 +359,10 @@
     <script src="{% static 'recovery_app/js/animated-slider.js' %}"></script>
     <script src="{% static 'recovery_app/js/datetime-picker.js' %}"></script>
     <script src="{% static 'recovery_app/js/enhanced-form.js' %}"></script>
+    
+    <!-- Analytics Events Tracking -->
+    <script src="{% static 'recovery_app/js/analytics-events.js' %}"></script>
+    
     {% block extra_js %}{% endblock %}
 </body>
 </html>

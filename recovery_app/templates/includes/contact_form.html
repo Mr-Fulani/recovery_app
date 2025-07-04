@@ -4,7 +4,7 @@
 <div class="order-form-wrapper">
     <h2 class="text-3xl font-bold text-center mb-8">Order a Tow Truck</h2>
 
-    <form method="post" action="{% url 'recovery_app:contact' %}" class="form-container" id="orderForm">
+    <form method="post" action="{% url 'recovery_app:contact' %}" class="form-container" id="orderForm" data-analytics-form="contact">
         {% csrf_token %}
 
         <div class="form-group">
@@ -87,4 +87,76 @@
         </button>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('orderForm');
+    let formStarted = false;
+    let fieldsInteracted = new Set();
+    
+    if (contactForm) {
+        // Отслеживание начала заполнения формы
+        contactForm.addEventListener('focusin', function(e) {
+            if (!formStarted) {
+                formStarted = true;
+                if (window.trackEvent) {
+                    window.trackEvent('form_started', {
+                        category: 'Form Interaction',
+                        label: 'Contact Form Started',
+                        custom1: 'form_engagement',
+                        custom2: 'contact_form'
+                    });
+                }
+            }
+        });
+        
+        // Отслеживание взаимодействия с полями формы
+        const formFields = contactForm.querySelectorAll('input, select, textarea');
+        formFields.forEach(field => {
+            field.addEventListener('blur', function() {
+                if (this.value && !fieldsInteracted.has(this.name)) {
+                    fieldsInteracted.add(this.name);
+                    if (window.trackEvent) {
+                        window.trackEvent('form_field_completed', {
+                            category: 'Form Interaction',
+                            label: `Field: ${this.name}`,
+                            custom1: 'field_completion',
+                            custom2: this.name,
+                            value: fieldsInteracted.size
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Отслеживание отправки формы с дополнительными данными
+        contactForm.addEventListener('submit', function(e) {
+            const formData = new FormData(this);
+            const serviceType = formData.get('service_type') || 'not_specified';
+            const urgency = formData.get('urgency') || 'medium';
+            const hasPickupLocation = formData.get('pickup_location') ? 'yes' : 'no';
+            const hasDestination = formData.get('destination') ? 'yes' : 'no';
+            
+            if (window.trackEvent) {
+                window.trackEvent('contact_form_submitted', {
+                    category: 'Conversion',
+                    label: 'Service Request',
+                    custom1: serviceType,
+                    custom2: urgency,
+                    value: 100 // Ценность конверсии
+                });
+                
+                // Дополнительное событие для анализа качества лидов
+                window.trackEvent('lead_quality_analysis', {
+                    category: 'Lead Quality',
+                    label: `Fields: ${fieldsInteracted.size}/9`,
+                    custom1: `pickup_${hasPickupLocation}_dest_${hasDestination}`,
+                    custom2: serviceType,
+                    value: fieldsInteracted.size
+                });
+            }
+        });
+    }
+});
+</script>
 
